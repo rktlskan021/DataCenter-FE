@@ -181,25 +181,25 @@ export default function Home() {
                 <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
                     {cohortType === 'atlas' ? 'ATLAS' : 'Bento'} 코호트 목록
                 </h1>
-                <table className="w-full divide-y divide-gray-200">
+                <table className="w-full table-fixed divide-y divide-gray-200">
                     <thead>
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[20%]">
                                 코호트 이름
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[30%]">
                                 설명
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
                                 환자 수
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
                                 작성자
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
                                 생성일
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
                                 수정일
                             </th>
                         </tr>
@@ -214,25 +214,25 @@ export default function Home() {
                                     <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
                                         {cohort.name}
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 line-clamp-2">
+                                    <td className="px-6 py-4 text-sm text-gray-800 truncate">
                                         {cohort.description}
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
                                         {cohort.patientCount}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                    <td className="px-6 py-4 text-sm text-gray-800">
                                         <div className="flex items-center gap-2">
                                             <FaUser />
                                             <span>{cohort.author}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                    <td className="px-6 py-4 text-sm text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <FaRegCalendarAlt />
                                             <span>{cohort.createdDate}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                    <td className="px-6 py-4 text-sm text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <FaRegCalendarAlt />
                                             <span>{cohort.modifiedDate}</span>
@@ -249,6 +249,7 @@ export default function Home() {
                         )}
                     </tbody>
                 </table>
+
                 {/* ✅ 페이지네이션 버튼 */}
                 <div className="flex justify-center items-center gap-2 py-4">
                     <button

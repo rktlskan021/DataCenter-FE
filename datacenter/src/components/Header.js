@@ -7,7 +7,9 @@ export default function Header() {
     return (
         <header className="font-sans flex justify-center items-center h-24 w-full shadow-sm border-b border-gray-200 bg-white">
             <div className="flex max-w-[90%] w-full justify-between">
-                <h1 className="text-4xl font-bold text-gray-900">Data Center</h1>
+                <h1 className="text-4xl font-bold text-gray-900">
+                    <Link to="/">Data Center</Link>
+                </h1>
                 {isLoggedIn ? (
                     <div className="flex gap-3 items-center">
                         <span className="">안녕하세요, {name}님</span>
