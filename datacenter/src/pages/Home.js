@@ -1,5 +1,5 @@
-import { useState, Fragment } from 'react';
-import { FaSearch, FaUser, FaChevronDown } from 'react-icons/fa';
+import { useState, Fragment, useEffect } from 'react';
+import { FaSearch, FaUser, FaChevronDown, FaRegCalendarAlt } from 'react-icons/fa';
 import {
     Listbox,
     ListboxButton,
@@ -7,6 +7,8 @@ import {
     ListboxOption,
     Transition,
 } from '@headlessui/react';
+import { fetchAtlasCohorts } from '../api/fetchAtlasCohorts';
+import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 
 // import atlasLogo from '../assets/imgs/atlas_logo.png';
 // import bentoLogo from '../assets/imgs/bento_logo.svg';
@@ -17,11 +19,66 @@ const filters = [
     { id: 3, name: '작성자', value: 'author' },
 ];
 
+// 샘플 코호트 데이터 (Atlas/Bento 구분 추가)
+const atlasCohorts = Array.from({ length: 42 }, (_, i) => ({
+    id: i + 1,
+    name: `코호트 ${i + 1}`,
+    description: `설명 ${i + 1}`,
+    patientCount: Math.floor(Math.random() * 1000),
+    author: `작성자 ${i + 1}`,
+    createdDate: '2024-07-10',
+    modifiedDate: '2024-07-10',
+}));
+
+// 샘플 코호트 데이터 (Atlas/Bento 구분 추가)
+const bentoCohorts = Array.from({ length: 42 }, (_, i) => ({
+    id: i + 1,
+    name: `코호트 ${i + 1}`,
+    description: `설명 ${i + 1}`,
+    patientCount: Math.floor(Math.random() * 1000),
+    author: `작성자 ${i + 1}`,
+    createdDate: '2024-07-10',
+    modifiedDate: '2024-07-10',
+}));
+
 export default function Home() {
     const [cohortType, setCohortType] = useState('atlas');
     const [searchTerm, setSearchTerm] = useState('');
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [selected, setSelected] = useState(filters[0]);
+    const [cohorts, setCohorts] = useState([]);
+    const [bentoCohorts, setBentoCohorts] = useState([]);
+    const [atlasCohorts, setAtlasCohorts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentCohorts, setCurrentCohorts] = useState([]);
+    const itemsPerPage = 10;
+
+    useEffect(() => {
+        fetchAtlasCohorts().then((data) => {
+            setCohorts(data);
+            setAtlasCohorts(data);
+        });
+
+        fetchBentoCohorts().then((data) => setBentoCohorts(data));
+    }, []);
+
+    useEffect(() => {
+        const newTotalPages = Math.ceil(cohorts.length / itemsPerPage);
+        setTotalPages(newTotalPages);
+        setCurrentCohorts(
+            cohorts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+        );
+    }, [cohorts, currentPage, itemsPerPage]);
+
+    function clickToggle(e) {
+        if (e === cohortType) return;
+
+        setCohortType(e);
+        if (e === 'atlas') setCohorts(atlasCohorts);
+        else setCohorts(bentoCohorts);
+        setCurrentPage(1); // 페이지도 처음으로 돌려야 안전해
+    }
 
     return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
@@ -36,9 +93,7 @@ export default function Home() {
                             ? 'bg-blue-600 hover:bg-blue-700 text-white'
                             : 'bg-gray-300 hover:bg-gray-400'
                     }`}
-                    onClick={() => {
-                        setCohortType('atlas');
-                    }}
+                    onClick={() => clickToggle('atlas')}
                 >
                     Atlas
                 </button>
@@ -48,9 +103,7 @@ export default function Home() {
                             ? 'bg-blue-600 hover:bg-blue-700 text-white'
                             : 'bg-gray-300 hover:bg-gray-400'
                     }`}
-                    onClick={() => {
-                        setCohortType('bento');
-                    }}
+                    onClick={() => clickToggle('bento')}
                 >
                     Bento
                 </button>
@@ -62,7 +115,7 @@ export default function Home() {
             <div className="flex jusfify-between items-center gap-5 bg-gray-150 shadow-sm border border-gray-200 p-6">
                 {/* 검색창 */}
                 <div
-                    className={`flex border border-gray-50 rounded-md w-full items-center py-2 px-5 transition duration-300 bg-gray-50 ${
+                    className={`flex border border-gray-200 rounded-md w-full h-[42px] items-center py-2 px-5 transition duration-300 bg-gray-50 ${
                         isInputFocused ? 'border-blue-500' : 'border-gray-100'
                     }`}
                 >
@@ -80,7 +133,7 @@ export default function Home() {
                 {/* 유저 아이콘 + Select Box */}
                 <Listbox value={selected} onChange={setSelected}>
                     <div className="relative">
-                        <ListboxButton className="relative w-32 cursor-default rounded-md bg-gray-50 border border-gray-50 py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:border-blue-500 text-sm">
+                        <ListboxButton className="relative w-32 h-[42px] cursor-default rounded-md bg-gray-50 border border-gray-200 py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:border-blue-500 text-sm">
                             <div className="flex items-center gap-2">
                                 <FaUser />
                                 <span className="block truncate">{selected.name}</span>
@@ -130,6 +183,107 @@ export default function Home() {
                         </Transition>
                     </div>
                 </Listbox>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
+                    {cohortType === 'atlas' ? 'ATLAS' : 'Bento'} 코호트 목록
+                </h1>
+                <table className="w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                                코호트 이름
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                                설명
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                                환자 수
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                                작성자
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                                생성일
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                                수정일
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentCohorts.map((cohort) => (
+                            <tr
+                                key={cohort.id}
+                                className="hover:bg-gray-50 cursor-pointer border-b border-gray-200"
+                            >
+                                <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
+                                    {cohort.name}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-800 line-clamp-2">
+                                    {cohort.description}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                    {cohort.patientCount}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                    <div className="flex items-center gap-2">
+                                        <FaUser />
+                                        <span>{cohort.author}</span>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                    <div className="flex items-center gap-2">
+                                        <FaRegCalendarAlt />
+                                        <span>{cohort.createdDate}</span>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                    <div className="flex items-center gap-2">
+                                        <FaRegCalendarAlt />
+                                        <span>{cohort.modifiedDate}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {/* ✅ 페이지네이션 버튼 */}
+                <div className="flex justify-center items-center gap-2 py-4">
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+                        disabled={currentPage === 1}
+                    >
+                        이전
+                    </button>
+
+                    {[...Array(totalPages)].map((_, index) => {
+                        const page = index + 1;
+                        return (
+                            <button
+                                key={page}
+                                onClick={() => setCurrentPage(page)}
+                                className={`px-3 py-1 border rounded-md ${
+                                    page === currentPage
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-100 hover:bg-gray-200'
+                                }`}
+                            >
+                                {page}
+                            </button>
+                        );
+                    })}
+
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+                        disabled={currentPage === totalPages}
+                    >
+                        다음
+                    </button>
+                </div>
             </div>
         </div>
     );
