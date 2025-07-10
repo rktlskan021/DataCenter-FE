@@ -14,32 +14,10 @@ import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 // import bentoLogo from '../assets/imgs/bento_logo.svg';
 
 const filters = [
-    { id: 1, name: '이름', value: 'name' },
+    { id: 1, name: '코호트 이름', value: 'name' },
     { id: 2, name: '설명', value: 'description' },
     { id: 3, name: '작성자', value: 'author' },
 ];
-
-// 샘플 코호트 데이터 (Atlas/Bento 구분 추가)
-const atlasCohorts = Array.from({ length: 42 }, (_, i) => ({
-    id: i + 1,
-    name: `코호트 ${i + 1}`,
-    description: `설명 ${i + 1}`,
-    patientCount: Math.floor(Math.random() * 1000),
-    author: `작성자 ${i + 1}`,
-    createdDate: '2024-07-10',
-    modifiedDate: '2024-07-10',
-}));
-
-// 샘플 코호트 데이터 (Atlas/Bento 구분 추가)
-const bentoCohorts = Array.from({ length: 42 }, (_, i) => ({
-    id: i + 1,
-    name: `코호트 ${i + 1}`,
-    description: `설명 ${i + 1}`,
-    patientCount: Math.floor(Math.random() * 1000),
-    author: `작성자 ${i + 1}`,
-    createdDate: '2024-07-10',
-    modifiedDate: '2024-07-10',
-}));
 
 export default function Home() {
     const [cohortType, setCohortType] = useState('atlas');
@@ -70,6 +48,20 @@ export default function Home() {
             cohorts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
         );
     }, [cohorts, currentPage, itemsPerPage]);
+
+    useEffect(() => {
+        const filtered = cohorts.filter((cohort) => {
+            const field = selected.value;
+            const value = cohort[field]?.toString().toLowerCase();
+            return value.includes(searchTerm.toLowerCase());
+        });
+
+        const newTotalPages = Math.ceil(filtered.length / itemsPerPage);
+        setTotalPages(newTotalPages);
+        setCurrentCohorts(
+            filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+        );
+    }, [cohorts, currentPage, selected, searchTerm, itemsPerPage]);
 
     function clickToggle(e) {
         if (e === cohortType) return;
@@ -115,8 +107,8 @@ export default function Home() {
             <div className="flex jusfify-between items-center gap-5 bg-gray-150 shadow-sm border border-gray-200 p-6">
                 {/* 검색창 */}
                 <div
-                    className={`flex border border-gray-200 rounded-md w-full h-[42px] items-center py-2 px-5 transition duration-300 bg-gray-50 ${
-                        isInputFocused ? 'border-blue-500' : 'border-gray-100'
+                    className={`flex border rounded-md w-full h-[42px] items-center py-2 px-5 transition duration-300 bg-gray-50 ${
+                        isInputFocused ? 'border-blue-500' : 'border-gray-200'
                     }`}
                 >
                     <FaSearch />
@@ -133,7 +125,7 @@ export default function Home() {
                 {/* 유저 아이콘 + Select Box */}
                 <Listbox value={selected} onChange={setSelected}>
                     <div className="relative">
-                        <ListboxButton className="relative w-32 h-[42px] cursor-default rounded-md bg-gray-50 border border-gray-200 py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:border-blue-500 text-sm">
+                        <ListboxButton className="relative w-[150px] h-[42px] cursor-default rounded-md bg-gray-50 border border-gray-200 py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:border-blue-500 text-sm">
                             <div className="flex items-center gap-2">
                                 <FaUser />
                                 <span className="block truncate">{selected.name}</span>
@@ -213,40 +205,48 @@ export default function Home() {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentCohorts.map((cohort) => (
-                            <tr
-                                key={cohort.id}
-                                className="hover:bg-gray-50 cursor-pointer border-b border-gray-200"
-                            >
-                                <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
-                                    {cohort.name}
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-800 line-clamp-2">
-                                    {cohort.description}
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-500">
-                                    {cohort.patientCount}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                                    <div className="flex items-center gap-2">
-                                        <FaUser />
-                                        <span>{cohort.author}</span>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                                    <div className="flex items-center gap-2">
-                                        <FaRegCalendarAlt />
-                                        <span>{cohort.createdDate}</span>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                                    <div className="flex items-center gap-2">
-                                        <FaRegCalendarAlt />
-                                        <span>{cohort.modifiedDate}</span>
-                                    </div>
+                        {currentCohorts.length > 0 ? (
+                            currentCohorts.map((cohort) => (
+                                <tr
+                                    key={cohort.id}
+                                    className="hover:bg-gray-50 cursor-pointer border-b border-gray-200"
+                                >
+                                    <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
+                                        {cohort.name}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-800 line-clamp-2">
+                                        {cohort.description}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                        {cohort.patientCount}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                        <div className="flex items-center gap-2">
+                                            <FaUser />
+                                            <span>{cohort.author}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                        <div className="flex items-center gap-2">
+                                            <FaRegCalendarAlt />
+                                            <span>{cohort.createdDate}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                        <div className="flex items-center gap-2">
+                                            <FaRegCalendarAlt />
+                                            <span>{cohort.modifiedDate}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={6} className="text-center text-gray-500 py-4">
+                                    검색 결과가 없습니다.
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
                 {/* ✅ 페이지네이션 버튼 */}
