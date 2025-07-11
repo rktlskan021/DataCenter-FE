@@ -6,11 +6,13 @@ const useAuthStore = create((set) => ({
     name: Cookies.get('name') || null,
     token: Cookies.get('token') || null, // 쿠키에서 초기값 읽음
     isLoggedIn: !!Cookies.get('token'),
+    isAdmin: !!Cookies.get('isAdmin'),
 
     login: (userInfo, token) => {
         Cookies.set('token', token, { expires: 7 }); // 쿠키 저장 (7일 유효)
         Cookies.set('name', userInfo.name, { expires: 7 }); // 쿠키 저장 (7일 유효)
-        set({ user: userInfo.id, name: userInfo.name, token, isLoggedIn: true });
+        Cookies.set('isAdmin', userInfo.isAdmin, { expires: 7 }); // 쿠키 저장 (7일 유효)
+        set({ name: userInfo.name, token, isLoggedIn: true, admin: userInfo.isAdmin });
     },
 
     logout: () => {

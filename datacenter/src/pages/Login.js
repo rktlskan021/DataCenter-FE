@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
 import bmiLogo from '../assets/imgs/bmiLabLogo.svg';
+import { loginAPI } from '../api/dummyAuthAPI';
 
 export default function Login() {
     const [userId, setUserId] = useState('');
@@ -22,15 +23,19 @@ export default function Login() {
         setError('');
 
         try {
-            const dummyUser = { id: 1, name: '홍길동' };
-            const dummyToken = 'fake-jwt-token-123';
-            login(dummyUser, dummyToken);
-            console.log('로그인 됨');
+            const response = await loginAPI(userId, userPw);
+            const user = response.user;
+            const userInfo = {
+                name: user.name,
+                isAdmin: user.role === 'admin',
+            };
+            const token = user.token;
+            login(userInfo, token);
+            navigate('/');
         } catch (err) {
             setError(err.message || '로그인에 실패했습니다.');
         } finally {
             setLoading(false);
-            navigate('/');
         }
     };
 

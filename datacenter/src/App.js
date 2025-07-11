@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Header from './components/Header';
 import Login from './pages/Login';
 import CohortDetail from './pages/CohortDetail';
+import AdminPage from './pages/AdminPage';
 
 const App = () => {
     return (
@@ -10,12 +11,9 @@ const App = () => {
             <Header />
             <Routes>
                 <Route path="/" element={<Home />} />
-            </Routes>
-            <Routes>
                 <Route path="/login" element={<Login />} />
-            </Routes>
-            <Routes>
                 <Route path="/cohort/:id" element={<CohortDetail />} />
+                <Route path="/admin" element={<AdminPage />} />
             </Routes>
         </BrowserRouter>
     );
