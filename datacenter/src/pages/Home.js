@@ -1,5 +1,6 @@
 import { useState, Fragment, useEffect } from 'react';
 import { FaSearch, FaUser, FaChevronDown, FaRegCalendarAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import {
     Listbox,
     ListboxButton,
@@ -9,6 +10,7 @@ import {
 } from '@headlessui/react';
 import { fetchAtlasCohorts } from '../api/fetchAtlasCohorts';
 import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
+import useAuthStore from '../stores/useAuthStore';
 
 // import atlasLogo from '../assets/imgs/atlas_logo.png';
 // import bentoLogo from '../assets/imgs/bento_logo.svg';
@@ -30,7 +32,9 @@ export default function Home() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [currentCohorts, setCurrentCohorts] = useState([]);
+    const { isLoggedIn } = useAuthStore();
     const itemsPerPage = 10;
+    const navigator = useNavigate();
 
     useEffect(() => {
         fetchAtlasCohorts().then((data) => {
@@ -210,6 +214,7 @@ export default function Home() {
                                 <tr
                                     key={cohort.id}
                                     className="hover:bg-gray-50 cursor-pointer border-b border-gray-200"
+                                    onClick={() => navigator(`/cohort/${cohort.id}`)}
                                 >
                                     <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
                                         {cohort.name}
