@@ -5,6 +5,7 @@ import { LuUser } from 'react-icons/lu';
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
 import { FaRegTimesCircle } from 'react-icons/fa';
+import { IoEyeOutline } from 'react-icons/io5';
 
 // 간소화된 사용자 정보 (이름과 ID만)
 const userInfo = {
@@ -209,14 +210,20 @@ export default function Home() {
                                         key={app.id}
                                         className="flex flex-col gap-2 border border-emerald-200 bg-emerald-50/30 rounded-lg p-6 text-gray-900"
                                     >
-                                        <div className="flex gap-2">
-                                            <h1 className="text-lg font-semibold">
-                                                {app.cohortName}
-                                            </h1>
-                                            <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
-                                                <IoMdCheckmarkCircleOutline />
-                                                <span className="text-xs">승인됨</span>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex gap-2">
+                                                <h1 className="text-lg font-semibold">
+                                                    {app.cohortName}
+                                                </h1>
+                                                <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
+                                                    <IoMdCheckmarkCircleOutline />
+                                                    <span className="text-xs">승인됨</span>
+                                                </div>
                                             </div>
+                                            <button className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200">
+                                                <span>{'< >'}</span>
+                                                <span>접속 정보</span>
+                                            </button>
                                         </div>
                                         <span className="text-sm">{app.cohortDescription}</span>
                                         <div className="grid grid-cols-3 gap-4 text-sm">
@@ -263,20 +270,32 @@ export default function Home() {
                                     key={app.id}
                                     className={`flex flex-col gap-2 border rounded-lg p-6 text-gray-900 ${app.status === 'rejected' ? 'border-red-200 bg-red-50/30' : 'border-blue-200 bg-blue-50/30'}`}
                                 >
-                                    <div className="flex gap-2">
-                                        <h1 className="text-lg font-semibold">{app.cohortName}</h1>
-                                        <div
-                                            className={`flex gap-1 font-bold items-center px-2 rounded-xl ${app.status === 'rejected' ? 'text-red-900 bg-red-100' : 'text-blue-900 bg-blue-100'}`}
-                                        >
-                                            {app.status === 'rejected' ? (
-                                                <FaRegTimesCircle />
-                                            ) : (
-                                                <GoClock />
-                                            )}
-                                            <span className="text-xs">
-                                                {app.status === 'rejected' ? '반려됨' : '대기중'}
-                                            </span>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex gap-2">
+                                            <h1 className="text-lg font-semibold">
+                                                {app.cohortName}
+                                            </h1>
+                                            <div
+                                                className={`flex gap-1 font-bold items-center px-2 rounded-xl ${app.status === 'rejected' ? 'text-red-900 bg-red-100' : 'text-blue-900 bg-blue-100'}`}
+                                            >
+                                                {app.status === 'rejected' ? (
+                                                    <FaRegTimesCircle />
+                                                ) : (
+                                                    <GoClock />
+                                                )}
+                                                <span className="text-xs">
+                                                    {app.status === 'rejected'
+                                                        ? '반려됨'
+                                                        : '대기중'}
+                                                </span>
+                                            </div>
                                         </div>
+                                        {app.status === 'rejected' && (
+                                            <button className="flex gap-3 items-center border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200">
+                                                <IoEyeOutline className="h-4 w-4" />
+                                                <span>반려 사유</span>
+                                            </button>
+                                        )}
                                     </div>
                                     <span className="text-sm">{app.cohortDescription}</span>
                                     <div className="grid grid-cols-3 gap-4 text-sm">
