@@ -31,7 +31,7 @@ export default function Login() {
             };
             const token = user.token;
             login(userInfo, token);
-            navigate('/');
+            navigate('/home');
         } catch (err) {
             setError(err.message || '로그인에 실패했습니다.');
         } finally {
