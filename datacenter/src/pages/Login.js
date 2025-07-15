@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
 import bmiLogo from '../assets/imgs/bmiLabLogo.svg';
@@ -9,8 +9,15 @@ export default function Login() {
     const [userPw, setuserPw] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login } = useAuthStore();
+    const { login, logout, isLoggedIn } = useAuthStore();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            logout();
+            alert('로그아웃 되었습니다.');
+        }
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();

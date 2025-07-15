@@ -2,9 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import AdminRoute from './AdminRoute';
 import Login from '../pages/Login';
-import Home from '../pages/Home';
+import Structured from '../pages/Structured';
 import AdminPage from '../pages/AdminPage';
-import Mypage from '../pages/Mypage';
+import Home from '../pages/Home';
 import CohortDetail from '../pages/CohortDetail';
 
 export default function AppRoutes() {
@@ -28,10 +28,10 @@ export default function AppRoutes() {
                 }
             />
             <Route
-                path="/mypage"
+                path="/structured"
                 element={
                     <PrivateRoute>
-                        <Mypage />
+                        <Structured />
                     </PrivateRoute>
                 }
             />

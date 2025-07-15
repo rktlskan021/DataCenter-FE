@@ -244,15 +244,6 @@ export default function CohortDetail() {
         console.log('신청됨');
     };
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            setIsLoading(false);
-        } else {
-            alert('로그인을 먼저 진행해주세요.');
-            navigator('/login');
-        }
-    }, []);
-
     return (
         <div>
             {isLoading ? (
