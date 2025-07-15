@@ -8,9 +8,9 @@ import { BsCheck2Circle } from 'react-icons/bs';
 import MultiFileUpload from '../components/MultiFileUpload';
 import InfoModal from '../components/InfoModal';
 import { FiInfo } from 'react-icons/fi';
+import { LuUser } from 'react-icons/lu';
 
-// OMOP CDM 테이블 정의
-const omopTables = [
+const omopTablesWithPersonId = [
     {
         id: 'person',
         name: 'PERSON',
@@ -86,21 +86,11 @@ const omopTables = [
     },
     { id: 'specimen', name: 'SPECIMEN', description: '검체 정보', recordCount: '1,234,567' },
     {
-        id: 'fact_relationship',
-        name: 'FACT_RELATIONSHIP',
-        description: '사실 관계 데이터',
-        recordCount: '123,456',
-    },
-    { id: 'location', name: 'LOCATION', description: '위치 정보', recordCount: '12,345' },
-    { id: 'care_site', name: 'CARE_SITE', description: '진료 기관 정보', recordCount: '5,678' },
-    { id: 'provider', name: 'PROVIDER', description: '의료진 정보', recordCount: '23,456' },
-    {
         id: 'payer_plan_period',
         name: 'PAYER_PLAN_PERIOD',
         description: '보험 및 지불 계획 기간',
         recordCount: '345,678',
     },
-    { id: 'cost', name: 'COST', description: '비용 정보', recordCount: '9,876,543' },
     { id: 'drug_era', name: 'DRUG_ERA', description: '약물 ERA 정보', recordCount: '2,345,678' },
     { id: 'dose_era', name: 'DOSE_ERA', description: '용량 ERA 정보', recordCount: '1,234,567' },
     {
@@ -110,16 +100,12 @@ const omopTables = [
         recordCount: '789,012',
     },
     { id: 'episode', name: 'EPISODE', description: '에피소드 정보', recordCount: '123,456' },
-    {
-        id: 'episode_event',
-        name: 'EPISODE_EVENT',
-        description: '에피소드 이벤트 정보',
-        recordCount: '234,567',
-    },
+];
+
+const omopTablesWithoutPersonId = [
     { id: 'metadata', name: 'METADATA', description: '메타데이터 테이블', recordCount: '345' },
-    { id: 'cdm_source', name: 'CDM_SOURCE', description: 'CDM 소스 정보', recordCount: '1' },
-    { id: 'concept', name: 'CONCEPT', description: '표준 용어 정보', recordCount: '9,876' },
     { id: 'vocabulary', name: 'VOCABULARY', description: '용어집 정보', recordCount: '456' },
+    { id: 'concept', name: 'CONCEPT', description: '표준 용어 정보', recordCount: '9,876' },
     { id: 'domain', name: 'DOMAIN', description: '도메인 정보', recordCount: '123' },
     {
         id: 'concept_class',
@@ -151,12 +137,7 @@ const omopTables = [
         description: '소스-개념 매핑 정보',
         recordCount: '234',
     },
-    {
-        id: 'drug_strength',
-        name: 'DRUG_STRENGTH',
-        description: '약물 강도 정보',
-        recordCount: '345',
-    },
+    { id: 'care_site', name: 'CARE_SITE', description: '진료 기관 정보', recordCount: '5,678' },
     { id: 'cohort', name: 'COHORT', description: '코호트 정보', recordCount: '123,456' },
     {
         id: 'cohort_definition',
@@ -164,7 +145,31 @@ const omopTables = [
         description: '코호트 정의 정보',
         recordCount: '789',
     },
+    { id: 'provider', name: 'PROVIDER', description: '의료진 정보', recordCount: '23,456' },
+    {
+        id: 'drug_strength',
+        name: 'DRUG_STRENGTH',
+        description: '약물 강도 정보',
+        recordCount: '345',
+    },
+    { id: 'cdm_source', name: 'CDM_SOURCE', description: 'CDM 소스 정보', recordCount: '1' },
+    {
+        id: 'episode_event',
+        name: 'EPISODE_EVENT',
+        description: '에피소드 이벤트 정보',
+        recordCount: '234,567',
+    },
+    { id: 'cost', name: 'COST', description: '비용 정보', recordCount: '9,876,543' },
+    { id: 'location', name: 'LOCATION', description: '위치 정보', recordCount: '12,345' },
+    {
+        id: 'fact_relationship',
+        name: 'FACT_RELATIONSHIP',
+        description: '사실 관계 데이터',
+        recordCount: '123,456',
+    },
 ];
+
+const allTables = [...omopTablesWithPersonId, ...omopTablesWithoutPersonId];
 
 export default function CohortDetail() {
     const [isLoading, setIsLoading] = useState(true);
@@ -172,6 +177,8 @@ export default function CohortDetail() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [isFileUploadOpen, setFileUploadOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+    const [countWithPersonIdTable, setCountWithPersonIdTable] = useState(0);
+    const [countWithOutPersonIdTable, setCountWithOutPersonIdTable] = useState(0);
     const { id } = useParams();
     const { isLoggedIn } = useAuthStore();
     const navigator = useNavigate();
@@ -185,11 +192,51 @@ export default function CohortDetail() {
         );
     };
 
-    const handleSelectAll = () => {
-        if (selectedTables.length === omopTables.length) {
-            setSelectedTables([]);
+    const handleSelectWithPersonIdTableAll = () => {
+        const withPersonIdTableIds = omopTablesWithPersonId.map((table) => table.id);
+        const currentWithPersonIdTable = selectedTables.filter((id) =>
+            withPersonIdTableIds.includes(id)
+        );
+        if (currentWithPersonIdTable.length === omopTablesWithPersonId.length) {
+            setSelectedTables(selectedTables.filter((id) => !withPersonIdTableIds.includes(id)));
+            setCountWithPersonIdTable(0);
         } else {
-            setSelectedTables(omopTables.map((table) => table.id));
+            const newSelections = [
+                ...selectedTables.filter((id) => !withPersonIdTableIds.includes(id)),
+                ...withPersonIdTableIds,
+            ];
+            setSelectedTables(newSelections);
+            setCountWithPersonIdTable(omopTablesWithPersonId.length);
+        }
+    };
+
+    const handleSelectWithOutPersoIdTableAll = () => {
+        const withOutPersonIdTableIds = omopTablesWithoutPersonId.map((table) => table.id);
+        const currentWithOutPersonIdTable = selectedTables.filter((id) =>
+            withOutPersonIdTableIds.includes(id)
+        );
+        if (currentWithOutPersonIdTable.length === omopTablesWithoutPersonId.length) {
+            setSelectedTables(selectedTables.filter((id) => !withOutPersonIdTableIds.includes(id)));
+            setCountWithOutPersonIdTable(0);
+        } else {
+            const newSelections = [
+                ...selectedTables.filter((id) => !withOutPersonIdTableIds.includes(id)),
+                ...withOutPersonIdTableIds,
+            ];
+            setSelectedTables(newSelections);
+            setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
+        }
+    };
+
+    const handleSelectAll = () => {
+        if (selectedTables.length === allTables.length) {
+            setSelectedTables([]);
+            setCountWithOutPersonIdTable(0);
+            setCountWithPersonIdTable(0);
+        } else {
+            setSelectedTables(allTables.map((table) => table.id));
+            setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
+            setCountWithPersonIdTable(omopTablesWithPersonId.length);
         }
     };
 
@@ -223,28 +270,38 @@ export default function CohortDetail() {
                             <span>수정일: 2024-01-15</span>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-3 bg-white border border-gray-200 px-5 py-6 rounded-xl">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h1 className="text-2xl font-black font-normal">
-                                    데이터 테이블 선택
-                                </h1>
-                                <span className="text-sm text-gray-900 font-medium">
-                                    접근 권한을 신청할 CDM 테이블을 선택하세요.
-                                </span>
+                    <div className="flex flex-col bg-white border border-blue-200 bg-blue-50/30 rounded-xl">
+                        <div className="flex items-center justify-between bg-blue-50 border-b px-5 py-6 border-blue-200">
+                            <div className="flex gap-3 items-center">
+                                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                                    <LuUser className="h-5 w-5 text-white" />
+                                </div>
+                                <div>
+                                    <h1 className="text-lg text-blue-900 font-bold">
+                                        환자 데이터 테이블
+                                    </h1>
+                                    <span className="text-blue-700 font-regular">
+                                        person id가 포함된 환자별 임상 데이터 테이블 (
+                                        {omopTablesWithPersonId.length}개)
+                                    </span>
+                                </div>
                             </div>
                             <button
-                                className="font-medium text-sm border border-gray-300 px-4 py-3 rounded-lg hover:bg-gray-200 transition duration-200 ease-in-out"
-                                onClick={handleSelectAll}
+                                className="font-medium text-sm bg-transparent border border-gray-300 px-4 py-3 rounded-lg text-blue-700 hover:bg-blue-100 transition duration-200 ease-in-out"
+                                onClick={handleSelectWithPersonIdTableAll}
                             >
-                                전체 선택
+                                {selectedTables.filter((id) =>
+                                    omopTablesWithPersonId.map((table) => table.id).includes(id)
+                                ).length === omopTablesWithPersonId.length
+                                    ? '전체 해제'
+                                    : '전체 선택'}
                             </button>
                         </div>
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            {omopTables.map((table) => (
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4 py-5">
+                            {omopTablesWithPersonId.map((table) => (
                                 <div
                                     key={table.id}
-                                    className={`flex gap-3 items-start border rounded-lg p-4 cursor-pointer transition-colors ${selectedTables.includes(table.id) ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}
+                                    className={`flex gap-3 items-start border rounded-lg p-4 cursor-pointer transition-all duration-200 ${selectedTables.includes(table.id) ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-gray-300 hover:border-blue-400 hover:shadow-sm bg-white'}`}
                                     onClick={() => handleCheckboxChange(table.id)}
                                 >
                                     <div
@@ -278,13 +335,101 @@ export default function CohortDetail() {
                                 </div>
                             ))}
                         </div>
-                        {selectedTables.length > 0 && (
-                            <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                                <p className="text-sm text-blue-800">
-                                    선택된 테이블: {selectedTables.length}개
-                                </p>
+                        <div className="mx-5 mb-6 p-3 bg-blue-100 rounded-lg border border-blue-200">
+                            <p className="text-sm text-blue-800 font-bold">
+                                선택된 환자 데이터 테이블: {countWithPersonIdTable}개
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex flex-col bg-white border border-emerald-200 bg-emerald-50/30 rounded-xl">
+                        <div className="flex items-center justify-between bg-emerald-50 border-b px-5 py-6 border-blue-200">
+                            <div className="flex gap-3 items-center">
+                                <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
+                                    <LuUser className="h-5 w-5 text-white" />
+                                </div>
+                                <div>
+                                    <h1 className="text-lg text-emerald-900 font-bold">
+                                        참조/메타데이터 테이블
+                                    </h1>
+                                    <span className="text-emerald-700 font-regular">
+                                        용어집, 코드 매핑, 시스템 정보 등 참조용 테이블 (
+                                        {omopTablesWithoutPersonId.length}개)
+                                    </span>
+                                </div>
                             </div>
-                        )}
+                            <button
+                                className="font-medium text-sm bg-transparent border border-gray-300 px-4 py-3 rounded-lg text-emerald-700 hover:bg-emerald-100 transition duration-200 ease-in-out"
+                                onClick={handleSelectWithOutPersoIdTableAll}
+                            >
+                                {selectedTables.filter((id) =>
+                                    omopTablesWithoutPersonId.map((table) => table.id).includes(id)
+                                ).length === omopTablesWithoutPersonId.length
+                                    ? '전체 해제'
+                                    : '전체 선택'}
+                            </button>
+                        </div>
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4 py-5">
+                            {omopTablesWithoutPersonId.map((table) => (
+                                <div
+                                    key={table.id}
+                                    className={`flex gap-3 items-start border rounded-lg p-4 cursor-pointer transition-colors ${selectedTables.includes(table.id) ? 'border-emerald-600 bg-emerald-50 shadow-md' : 'border-gray-300 hover:border-emerald-400 hover:shadow-sm bg-white'}`}
+                                    onClick={() => handleCheckboxChange(table.id)}
+                                >
+                                    <div
+                                        type="button"
+                                        className={`w-4 h-4 border border-black rounded-sm flex items-center justify-center transition mt-1
+                                                ${selectedTables.includes(table.id) ? 'bg-black' : null}`}
+                                    >
+                                        {selectedTables.includes(table.id) && (
+                                            <svg
+                                                className="w-5 h-5 text-white"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <h3 className="font-semibold text-xm align-middle">
+                                            {table.name}
+                                        </h3>
+                                        <p className="text-xs text-gray-600 mb-2">
+                                            {table.description}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            레코드 수 : {table.recordCount}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mx-5 mb-6 p-3 bg-emerald-100 rounded-lg border border-emerald-200">
+                            <p className="text-sm text-emerald-800 font-bold">
+                                선택된 환자 데이터 테이블: {countWithOutPersonIdTable}개
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center bg-white justify-between text-lg border border-gray-200 px-5 py-6 rounded-xl">
+                        <div className="flex gap-5 font-bold">
+                            <span className="text-gray-600">
+                                전체 선택될 테이블: {selectedTables.length}개
+                            </span>
+                            <span className="text-blue-600">
+                                환자 테이블: {countWithPersonIdTable}개
+                            </span>
+                            <span className="text-emerald-600">
+                                참조 테이블: {countWithOutPersonIdTable}개
+                            </span>
+                        </div>
+                        <button
+                            className="font-medium text-sm bg-transparent border border-gray-300 px-4 py-2 rounded-lg text-gray-900 hover:bg-gray-100 transition duration-200 ease-in-out"
+                            onClick={handleSelectAll}
+                        >
+                            {selectedTables.length === allTables.length ? '전체 해제' : '전체 선택'}
+                        </button>
                     </div>
                     <div className="flex flex-col gap-5 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                         <div>
