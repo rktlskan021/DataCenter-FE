@@ -7,6 +7,7 @@ import InfoModal from '../components/modals/InfoModal';
 import { FiInfo } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
 import CheckboxCard from '../components/table/CheckboxCard';
+import { Textarea } from '@headlessui/react';
 
 const omopTablesWithPersonId = [
     {
@@ -175,8 +176,14 @@ export default function CohortDetail() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [isFileUploadOpen, setFileUploadOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+    const [schemaName, setSchemaName] = useState('');
+    const [schemaDescription, setSchemaDescription] = useState('');
 
-    const canSubmitRequest = selectedTables.length > 0 && selectedFiles.length > 0;
+    const canSubmitRequest =
+        selectedTables.length > 0 &&
+        selectedFiles.length > 0 &&
+        schemaName.trim() !== '' &&
+        schemaDescription.trim() !== '';
 
     const countWithPersonIdTable = useMemo(
         () => omopTablesWithPersonId.filter((item) => selectedTables.includes(item.id)).length,
@@ -219,26 +226,20 @@ export default function CohortDetail() {
         );
         if (currentWithOutPersonIdTable.length === omopTablesWithoutPersonId.length) {
             setSelectedTables(selectedTables.filter((id) => !withOutPersonIdTableIds.includes(id)));
-            // setCountWithOutPersonIdTable(0);
         } else {
             const newSelections = [
                 ...selectedTables.filter((id) => !withOutPersonIdTableIds.includes(id)),
                 ...withOutPersonIdTableIds,
             ];
             setSelectedTables(newSelections);
-            // setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
         }
     };
 
     const handleSelectAll = () => {
         if (selectedTables.length === allTables.length) {
             setSelectedTables([]);
-            // setCountWithOutPersonIdTable(0);
-            // setCountWithPersonIdTable(0);
         } else {
             setSelectedTables(allTables.map((table) => table.id));
-            // setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
-            // setCountWithPersonIdTable(omopTablesWithPersonId.length);
         }
     };
 
@@ -371,6 +372,52 @@ export default function CohortDetail() {
                         >
                             {selectedTables.length === allTables.length ? '전체 해제' : '전체 선택'}
                         </button>
+                    </div>
+                    <div className="flex flex-col gap-5 bg-white border border-gray-200 px-5 py-6 rounded-xl">
+                        <div>
+                            <h1 className="text-2xl font-black font-normal">스키마 정보</h1>
+                            <span className="font-normal text-gray-700">
+                                생성될 스키마의 이름과 설명을 입력하세요
+                            </span>
+                        </div>
+                        <div>
+                            <label
+                                htmlFor="schemaName"
+                                className="block text-sm font-medium text-gray-800 mb-2"
+                            >
+                                스키마 이름 *
+                            </label>
+                            <input
+                                id="schemaName"
+                                type="text"
+                                onChange={(e) => setSchemaName(e.target.value)}
+                                value={schemaName}
+                                placeholder="예: diabetes_study_2024"
+                                className="max-w-md w-full px-2 py-1.5 border border-gray-200 rounded"
+                                required
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                                영문, 숫자, 언더스코어(_)만 사용 가능합니다.
+                            </p>
+                        </div>
+                        <div>
+                            <label
+                                htmlFor="schemaName"
+                                className="block text-sm font-medium text-gray-800 mb-2"
+                            >
+                                스키마 설명 *
+                            </label>
+                            <textarea
+                                id="schemaDescription"
+                                type="text"
+                                onChange={(e) => setSchemaDescription(e.target.value)}
+                                value={schemaDescription}
+                                placeholder="이 스키마의 목적과 사용 용도를 설명해주세요..."
+                                className="max-w-2xl w-full px-2 py-1.5 border border-gray-200 rounded"
+                                rows={3}
+                                required
+                            />
+                        </div>
                     </div>
                     <div className="flex flex-col gap-5 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                         <div>
