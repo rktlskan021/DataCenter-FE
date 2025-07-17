@@ -6,6 +6,7 @@ import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
+import RejectionModal from '../components/RejectionModal';
 
 // 간소화된 사용자 정보 (이름과 ID만)
 const userInfo = {
@@ -117,6 +118,9 @@ const userCohortApplications = [
 export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
+    const [isRejectionModalOpen, setIsRejectionModalOpen] = useState(false);
+    const [selectRejectionApp, setSelectRejectionApp] = useState(null);
+
     const { isLoggedIn } = useAuthStore();
 
     const approvedApplications = userCohortApplications.filter((app) => app.status === 'approved');
@@ -291,7 +295,13 @@ export default function Home() {
                                             </div>
                                         </div>
                                         {app.status === 'rejected' && (
-                                            <button className="flex gap-3 items-center border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200">
+                                            <button
+                                                className="flex gap-3 items-center border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                onClick={() => {
+                                                    setIsRejectionModalOpen(true);
+                                                    setSelectRejectionApp(app);
+                                                }}
+                                            >
                                                 <IoEyeOutline className="h-4 w-4" />
                                                 <span>반려 사유</span>
                                             </button>
@@ -337,6 +347,11 @@ export default function Home() {
                             ))
                         )}
                     </div>
+                    <RejectionModal
+                        isModalOpen={isRejectionModalOpen}
+                        setIsModalOpen={setIsRejectionModalOpen}
+                        app={selectRejectionApp}
+                    />
                 </div>
             )}
         </div>
