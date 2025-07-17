@@ -1,14 +1,15 @@
 import { useParams } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import { BsCheck2Circle } from 'react-icons/bs';
-import MultiFileUpload from '../components/MultiFileUpload';
-import InfoModal from '../components/InfoModal';
+import FileUploadModal from '../components/modals/FileUploadModal';
+import InfoModal from '../components/modals/InfoModal';
 import { FiInfo } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
+import CheckboxCard from '../components/table/CheckboxCard';
 
 const omopTablesWithPersonId = [
     {
@@ -177,12 +178,18 @@ export default function CohortDetail() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [isFileUploadOpen, setFileUploadOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-    const [countWithPersonIdTable, setCountWithPersonIdTable] = useState(0);
-    const [countWithOutPersonIdTable, setCountWithOutPersonIdTable] = useState(0);
-    const { id } = useParams();
-    const { isLoggedIn } = useAuthStore();
-    const navigator = useNavigate();
+
     const canSubmitRequest = selectedTables.length > 0 && selectedFiles.length > 0;
+
+    const countWithPersonIdTable = useMemo(
+        () => omopTablesWithPersonId.filter((item) => selectedTables.includes(item.id)).length,
+        [selectedTables]
+    );
+
+    const countWithOutPersonIdTable = useMemo(
+        () => omopTablesWithoutPersonId.filter((item) => selectedTables.includes(item.id)).length,
+        [selectedTables]
+    );
 
     const handleCheckboxChange = (id) => {
         setSelectedTables((prevSelected) =>
@@ -199,14 +206,12 @@ export default function CohortDetail() {
         );
         if (currentWithPersonIdTable.length === omopTablesWithPersonId.length) {
             setSelectedTables(selectedTables.filter((id) => !withPersonIdTableIds.includes(id)));
-            setCountWithPersonIdTable(0);
         } else {
             const newSelections = [
                 ...selectedTables.filter((id) => !withPersonIdTableIds.includes(id)),
                 ...withPersonIdTableIds,
             ];
             setSelectedTables(newSelections);
-            setCountWithPersonIdTable(omopTablesWithPersonId.length);
         }
     };
 
@@ -217,26 +222,26 @@ export default function CohortDetail() {
         );
         if (currentWithOutPersonIdTable.length === omopTablesWithoutPersonId.length) {
             setSelectedTables(selectedTables.filter((id) => !withOutPersonIdTableIds.includes(id)));
-            setCountWithOutPersonIdTable(0);
+            // setCountWithOutPersonIdTable(0);
         } else {
             const newSelections = [
                 ...selectedTables.filter((id) => !withOutPersonIdTableIds.includes(id)),
                 ...withOutPersonIdTableIds,
             ];
             setSelectedTables(newSelections);
-            setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
+            // setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
         }
     };
 
     const handleSelectAll = () => {
         if (selectedTables.length === allTables.length) {
             setSelectedTables([]);
-            setCountWithOutPersonIdTable(0);
-            setCountWithPersonIdTable(0);
+            // setCountWithOutPersonIdTable(0);
+            // setCountWithPersonIdTable(0);
         } else {
             setSelectedTables(allTables.map((table) => table.id));
-            setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
-            setCountWithPersonIdTable(omopTablesWithPersonId.length);
+            // setCountWithOutPersonIdTable(omopTablesWithoutPersonId.length);
+            // setCountWithPersonIdTable(omopTablesWithPersonId.length);
         }
     };
 
@@ -294,40 +299,12 @@ export default function CohortDetail() {
                         </div>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4 py-5">
                             {omopTablesWithPersonId.map((table) => (
-                                <div
-                                    key={table.id}
-                                    className={`flex gap-3 items-start border rounded-lg p-4 cursor-pointer transition-all duration-200 ${selectedTables.includes(table.id) ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-gray-300 hover:border-blue-400 hover:shadow-sm bg-white'}`}
+                                <CheckboxCard
+                                    table={table}
+                                    isSelected={selectedTables.includes(table.id)}
                                     onClick={() => handleCheckboxChange(table.id)}
-                                >
-                                    <div
-                                        type="button"
-                                        className={`w-4 h-4 border border-black rounded-sm flex items-center justify-center transition mt-1
-                                                ${selectedTables.includes(table.id) ? 'bg-black' : null}`}
-                                    >
-                                        {selectedTables.includes(table.id) && (
-                                            <svg
-                                                className="w-5 h-5 text-white"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <h3 className="font-semibold text-xm align-middle">
-                                            {table.name}
-                                        </h3>
-                                        <p className="text-xs text-gray-600 mb-2">
-                                            {table.description}
-                                        </p>
-                                        <p className="text-xs text-gray-500">
-                                            레코드 수 : {table.recordCount}
-                                        </p>
-                                    </div>
-                                </div>
+                                    color={'blue'}
+                                />
                             ))}
                         </div>
                         <div className="mx-5 mb-6 p-3 bg-blue-100 rounded-lg border border-blue-200">
@@ -365,40 +342,12 @@ export default function CohortDetail() {
                         </div>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4 py-5">
                             {omopTablesWithoutPersonId.map((table) => (
-                                <div
-                                    key={table.id}
-                                    className={`flex gap-3 items-start border rounded-lg p-4 cursor-pointer transition-colors ${selectedTables.includes(table.id) ? 'border-emerald-600 bg-emerald-50 shadow-md' : 'border-gray-300 hover:border-emerald-400 hover:shadow-sm bg-white'}`}
+                                <CheckboxCard
+                                    table={table}
+                                    isSelected={selectedTables.includes(table.id)}
                                     onClick={() => handleCheckboxChange(table.id)}
-                                >
-                                    <div
-                                        type="button"
-                                        className={`w-4 h-4 border border-black rounded-sm flex items-center justify-center transition mt-1
-                                                ${selectedTables.includes(table.id) ? 'bg-black' : null}`}
-                                    >
-                                        {selectedTables.includes(table.id) && (
-                                            <svg
-                                                className="w-5 h-5 text-white"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <h3 className="font-semibold text-xm align-middle">
-                                            {table.name}
-                                        </h3>
-                                        <p className="text-xs text-gray-600 mb-2">
-                                            {table.description}
-                                        </p>
-                                        <p className="text-xs text-gray-500">
-                                            레코드 수 : {table.recordCount}
-                                        </p>
-                                    </div>
-                                </div>
+                                    color={'emerald'}
+                                />
                             ))}
                         </div>
                         <div className="mx-5 mb-6 p-3 bg-emerald-100 rounded-lg border border-emerald-200">
@@ -492,7 +441,7 @@ export default function CohortDetail() {
                 />
             )}
             {isFileUploadOpen ? (
-                <MultiFileUpload
+                <FileUploadModal
                     isOpen={isFileUploadOpen}
                     setIsOpen={setFileUploadOpen}
                     selectedFiles={selectedFiles}

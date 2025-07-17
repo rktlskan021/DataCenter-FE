@@ -6,8 +6,8 @@ import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
-import RejectionModal from '../components/RejectionModal';
-import ConnectionInfoModal from '../components/ConnectionInfoModal';
+import RejectionModal from '../components/modals/RejectionModal';
+import ConnectionInfoModal from '../components/modals/ConnectionInfoModal';
 
 // 간소화된 사용자 정보 (이름과 ID만)
 const userInfo = {
