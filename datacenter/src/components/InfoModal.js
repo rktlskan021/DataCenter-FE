@@ -1,4 +1,16 @@
+import { useEffect } from 'react';
+
 export default function InfoModal({ isModalOpen, setIsModalOpen, files }) {
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') {
+                setIsModalOpen(false);
+            }
+        };
+
+        document.addEventListener('keydown', handleEsc);
+        return () => document.removeEventListener('keydown', handleEsc);
+    }, [setIsModalOpen]);
     return (
         <div className="flex items-center gap-2 text-sm">
             {/* 모달 */}

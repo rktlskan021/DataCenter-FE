@@ -244,6 +244,10 @@ export default function CohortDetail() {
         console.log('신청됨');
     };
 
+    useEffect(() => {
+        setIsLoading(false);
+    });
+
     return (
         <div>
             {isLoading ? (

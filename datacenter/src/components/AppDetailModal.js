@@ -1,6 +1,17 @@
+import { useEffect } from 'react';
 import { FaFileAlt, FaTimes } from 'react-icons/fa';
 
 export default function AppDetailModal({ isModalOpen, setIsModalOpen, application }) {
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') {
+                setIsModalOpen(false);
+            }
+        };
+
+        document.addEventListener('keydown', handleEsc);
+        return () => document.removeEventListener('keydown', handleEsc);
+    }, [setIsModalOpen]);
     return (
         <div className="flex items-center gap-2 text-sm font-sans">
             {isModalOpen && (
