@@ -210,6 +210,12 @@ export default function AdminPage() {
         },
     ];
 
+    const summaries = {
+        'cohort-requests': summaryList,
+        'schema-requests': summarySchemaList,
+        'unstructured-data': summaryUnstructuredList,
+    };
+
     const statusButtons = [
         { label: '전체', value: 'all' },
         {
@@ -258,27 +264,11 @@ export default function AdminPage() {
                             사용자들의 데이터 접근 권한 신청을 검토하고 승인/거부할 수 있습니다.
                         </span>
                     </div>
-                    {activeTab === 'cohort-requests' && (
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
-                            {summaryList.map((item) => (
-                                <SummaryBox key={item.label} {...item} />
-                            ))}
-                        </div>
-                    )}
-                    {activeTab === 'schema-requests' && (
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
-                            {summarySchemaList.map((item) => (
-                                <SummaryBox key={item.label} {...item} />
-                            ))}
-                        </div>
-                    )}
-                    {activeTab === 'unstructured-data' && (
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
-                            {summaryUnstructuredList.map((item) => (
-                                <SummaryBox key={item.label} {...item} />
-                            ))}
-                        </div>
-                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
+                        {summaries[activeTab]?.map((item) => (
+                            <SummaryBox key={item.label} {...item} />
+                        ))}
+                    </div>
 
                     {/* Tab Navigation */}
                     <div className="mb-6">

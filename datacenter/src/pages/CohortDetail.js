@@ -1,7 +1,4 @@
-import { useParams } from 'react-router-dom';
-import useAuthStore from '../stores/useAuthStore';
 import { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import { BsCheck2Circle } from 'react-icons/bs';

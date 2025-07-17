@@ -29,7 +29,6 @@ export default function Structured() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [currentCohorts, setCurrentCohorts] = useState([]);
-    const { isLoggedIn } = useAuthStore();
     const itemsPerPage = 10;
     const navigator = useNavigate();
 
@@ -69,7 +68,11 @@ export default function Structured() {
 
         setCohortType(e);
         if (e === 'atlas') setCohorts(atlasCohorts);
-        else setCohorts(bentoCohorts);
+        else if (e === 'bento') setCohorts(bentoCohorts);
+        else if (e === 'all') setCohorts([...atlasCohorts, ...bentoCohorts]);
+        else {
+            console.log('내가 만든 코호트 필터링');
+        }
         setCurrentPage(1); // 페이지도 처음으로 돌려야 안전해
     }
 
@@ -91,7 +94,7 @@ export default function Structured() {
                     Atlas
                 </button>
                 <button
-                    className={`flex items-center gap-2 rounded-r-lg px-3 py-2 transition duration-200 ease-in-out ${
+                    className={`flex items-center gap-2 px-3 py-2 transition duration-200 ease-in-out ${
                         cohortType === 'bento'
                             ? 'bg-blue-600 hover:bg-blue-700 text-white'
                             : 'bg-gray-300 hover:bg-gray-400'
@@ -100,9 +103,26 @@ export default function Structured() {
                 >
                     Bento
                 </button>
-                <div className="text-sm text-gray-600 ml-10">
-                    {cohortType === 'atlas' ? 'ATLAS 기반 코호트' : 'BENTO 기반 코호트'}
-                </div>
+                <button
+                    className={`flex items-center gap-2 px-3 py-2 transition duration-200 ease-in-out ${
+                        cohortType === 'all'
+                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                            : 'bg-gray-300 hover:bg-gray-400'
+                    }`}
+                    onClick={() => clickToggle('all')}
+                >
+                    All
+                </button>
+                <button
+                    className={`flex items-center gap-2 rounded-r-lg px-3 py-2 transition duration-200 ease-in-out ${
+                        cohortType === 'my'
+                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                            : 'bg-gray-300 hover:bg-gray-400'
+                    }`}
+                    onClick={() => clickToggle('my')}
+                >
+                    My
+                </button>
             </div>
 
             <div className="flex jusfify-between items-center gap-5 bg-gray-150 shadow-sm border border-gray-200 p-6">
@@ -180,7 +200,14 @@ export default function Structured() {
 
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
-                    {cohortType === 'atlas' ? 'ATLAS' : 'Bento'} 코호트 목록
+                    {cohortType === 'atlas'
+                        ? 'ATLAS '
+                        : cohortType === 'bento'
+                          ? 'Bento '
+                          : cohortType === 'all'
+                            ? 'All '
+                            : 'My '}
+                    코호트 목록
                 </h1>
                 <table className="w-full table-fixed divide-y divide-gray-200">
                     <thead>
