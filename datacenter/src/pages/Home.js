@@ -7,6 +7,7 @@ import { GoClock } from 'react-icons/go';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import RejectionModal from '../components/RejectionModal';
+import ConnectionInfoModal from '../components/ConnectionInfoModal';
 
 // 간소화된 사용자 정보 (이름과 ID만)
 const userInfo = {
@@ -47,24 +48,7 @@ const userCohortApplications = [
         cohortId: 3,
         cohortName: 'Atlas Cohort 3',
         cohortDescription: '프리미엄 플랜을 구독한 사용자들의 사용 패턴 및 만족도 조사',
-        selectedTables: [
-            'PERSON',
-            'OBSERVATION_PERIOD',
-            'DRUG_EXPOSURE',
-            'PROCEDURE_OCCURRENCE',
-            'PERSON',
-            'OBSERVATION_PERIOD',
-            'DRUG_EXPOSURE',
-            'PROCEDURE_OCCURRENCE',
-            'PERSON',
-            'OBSERVATION_PERIOD',
-            'DRUG_EXPOSURE',
-            'PROCEDURE_OCCURRENCE',
-            'PERSON',
-            'OBSERVATION_PERIOD',
-            'DRUG_EXPOSURE',
-            'PROCEDURE_OCCURRENCE',
-        ],
+        selectedTables: ['PERSON', 'OBSERVATION_PERIOD', 'DRUG_EXPOSURE', 'PROCEDURE_OCCURRENCE'],
         applicationDate: '2024-02-20',
         status: 'approved',
         approvedDate: '2024-02-25',
@@ -119,7 +103,8 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
     const [isRejectionModalOpen, setIsRejectionModalOpen] = useState(false);
-    const [selectRejectionApp, setSelectRejectionApp] = useState(null);
+    const [isConnectionInfoModalOpen, setIsConnectionInfoModalOpen] = useState(false);
+    const [selectApp, setSelectApp] = useState(null);
 
     const { isLoggedIn } = useAuthStore();
 
@@ -224,7 +209,13 @@ export default function Home() {
                                                     <span className="text-xs">승인됨</span>
                                                 </div>
                                             </div>
-                                            <button className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200">
+                                            <button
+                                                className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                onClick={() => {
+                                                    setSelectApp(app);
+                                                    setIsConnectionInfoModalOpen(true);
+                                                }}
+                                            >
                                                 <span>{'< >'}</span>
                                                 <span>접속 정보</span>
                                             </button>
@@ -299,7 +290,7 @@ export default function Home() {
                                                 className="flex gap-3 items-center border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
                                                 onClick={() => {
                                                     setIsRejectionModalOpen(true);
-                                                    setSelectRejectionApp(app);
+                                                    setSelectApp(app);
                                                 }}
                                             >
                                                 <IoEyeOutline className="h-4 w-4" />
@@ -350,7 +341,12 @@ export default function Home() {
                     <RejectionModal
                         isModalOpen={isRejectionModalOpen}
                         setIsModalOpen={setIsRejectionModalOpen}
-                        app={selectRejectionApp}
+                        app={selectApp}
+                    />
+                    <ConnectionInfoModal
+                        isModalOpen={isConnectionInfoModalOpen}
+                        setIsModalOpen={setIsConnectionInfoModalOpen}
+                        app={selectApp}
                     />
                 </div>
             )}
