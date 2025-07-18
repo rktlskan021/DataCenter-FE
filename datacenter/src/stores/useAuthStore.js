@@ -8,14 +8,16 @@ const useAuthStore = create((set) => ({
     isLoggedIn: !!Cookies.get('token'),
     isAdmin: Cookies.get('isAdmin') === 'true',
 
-    login: (userInfo, token) => {
+    login: (id, userInfo, token) => {
+        Cookies.set('id', id, { expires: 7 });
         Cookies.set('token', token, { expires: 7 }); // 쿠키 저장 (7일 유효)
         Cookies.set('name', userInfo.name, { expires: 7 }); // 쿠키 저장 (7일 유효)
         Cookies.set('isAdmin', userInfo.isAdmin ? 'true' : 'false', { expires: 7 }); // 쿠키 저장 (7일 유효)
-        set({ name: userInfo.name, token, isLoggedIn: true, isAdmin: userInfo.isAdmin });
+        set({ id, name: userInfo.name, token, isLoggedIn: true, isAdmin: userInfo.isAdmin });
     },
 
     logout: () => {
+        Cookies.remove('id'); // 쿠키 삭제
         Cookies.remove('token'); // 쿠키 삭제
         Cookies.remove('name'); // 쿠키 삭제
         Cookies.remove('isAdmin'); // 쿠키 삭제

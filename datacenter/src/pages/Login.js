@@ -33,6 +33,7 @@ export default function Login() {
             const response = await loginAPI(userId, userPw);
             const user = response.user;
             const userInfo = {
+                id: user.id,
                 name: user.name,
                 isAdmin: user.role === 'admin',
             };

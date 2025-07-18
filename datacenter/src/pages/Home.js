@@ -199,7 +199,7 @@ export default function Home() {
                                         key={app.id}
                                         className="flex flex-col gap-2 border border-emerald-200 bg-emerald-50/30 rounded-lg p-6 text-gray-900"
                                     >
-                                        <div className="flex items-center justify-between">
+                                        <div className="relative flex items-center justify-between">
                                             <div className="flex gap-2">
                                                 <h1 className="text-lg font-semibold">
                                                     {app.cohortName}
@@ -210,7 +210,7 @@ export default function Home() {
                                                 </div>
                                             </div>
                                             <button
-                                                className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                className="absolute top-0 right-0 flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
                                                 onClick={() => {
                                                     setSelectApp(app);
                                                     setIsConnectionInfoModalOpen(true);
@@ -265,7 +265,7 @@ export default function Home() {
                                     key={app.id}
                                     className={`flex flex-col gap-2 border rounded-lg p-6 text-gray-900 ${app.status === 'rejected' ? 'border-red-200 bg-red-50/30' : 'border-blue-200 bg-blue-50/30'}`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="relative flex items-center justify-between">
                                         <div className="flex gap-2">
                                             <h1 className="text-lg font-semibold">
                                                 {app.cohortName}
@@ -287,7 +287,7 @@ export default function Home() {
                                         </div>
                                         {app.status === 'rejected' && (
                                             <button
-                                                className="flex gap-3 items-center border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                className="absolute top-0 right-0 flex gap-3 items-center border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
                                                 onClick={() => {
                                                     setIsRejectionModalOpen(true);
                                                     setSelectApp(app);

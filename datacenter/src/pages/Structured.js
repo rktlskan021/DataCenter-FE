@@ -19,62 +19,63 @@ const filters = [
 ];
 
 export default function Structured() {
-    const [cohortType, setCohortType] = useState('atlas');
-    const [searchTerm, setSearchTerm] = useState('');
     const [isInputFocused, setIsInputFocused] = useState(false);
-    const [selected, setSelected] = useState(filters[0]);
-    const [cohorts, setCohorts] = useState([]);
-    const [bentoCohorts, setBentoCohorts] = useState([]);
+
+    // fetch atlas & bento data
     const [atlasCohorts, setAtlasCohorts] = useState([]);
+    const [bentoCohorts, setBentoCohorts] = useState([]);
+
+    // 상태 선언
+    const [cohortType, setCohortType] = useState('atlas');
+    const [filterType, setFilterType] = useState('all'); // all | my
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selected, setSelected] = useState(filters[0]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
     const [currentCohorts, setCurrentCohorts] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
+
     const itemsPerPage = 10;
+    const { id } = useAuthStore();
     const navigator = useNavigate();
 
     useEffect(() => {
-        fetchAtlasCohorts().then((data) => {
-            setCohorts(data);
-            setAtlasCohorts(data);
-        });
-
-        fetchBentoCohorts().then((data) => setBentoCohorts(data));
+        fetchAtlasCohorts().then(setAtlasCohorts);
+        fetchBentoCohorts().then(setBentoCohorts);
     }, []);
 
     useEffect(() => {
-        const newTotalPages = Math.ceil(cohorts.length / itemsPerPage);
-        setTotalPages(newTotalPages);
-        setCurrentCohorts(
-            cohorts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+        const base = cohortType === 'atlas' ? atlasCohorts : bentoCohorts;
+
+        const filtered = base
+            .filter((c) => (filterType === 'my' ? c.author === id : true))
+            .filter((c) => {
+                const target = c[selected.value]?.toLowerCase?.();
+                return target?.includes(searchTerm.toLowerCase());
+            });
+
+        const total = Math.ceil(filtered.length / itemsPerPage);
+        const paginated = filtered.slice(
+            (currentPage - 1) * itemsPerPage,
+            currentPage * itemsPerPage
         );
-    }, [cohorts, currentPage, itemsPerPage]);
 
-    useEffect(() => {
-        const filtered = cohorts.filter((cohort) => {
-            const field = selected.value;
-            const value = cohort[field]?.toString().toLowerCase();
-            return value.includes(searchTerm.toLowerCase());
-        });
+        setCurrentCohorts(paginated);
+        setTotalPages(total);
+    }, [cohortType, filterType, searchTerm, selected, currentPage, atlasCohorts, bentoCohorts, id]);
 
-        const newTotalPages = Math.ceil(filtered.length / itemsPerPage);
-        setTotalPages(newTotalPages);
-        setCurrentCohorts(
-            filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-        );
-    }, [cohorts, currentPage, selected, searchTerm, itemsPerPage]);
-
-    function clickToggle(e) {
-        if (e === cohortType) return;
-
-        setCohortType(e);
-        if (e === 'atlas') setCohorts(atlasCohorts);
-        else if (e === 'bento') setCohorts(bentoCohorts);
-        else if (e === 'all') setCohorts([...atlasCohorts, ...bentoCohorts]);
-        else {
-            console.log('내가 만든 코호트 필터링');
+    const handleChangeType = (type) => {
+        if (type !== cohortType) {
+            setCohortType(type);
+            setCurrentPage(1);
         }
-        setCurrentPage(1); // 페이지도 처음으로 돌려야 안전해
-    }
+    };
+
+    const handleChangeFilter = (type) => {
+        if (type !== filterType) {
+            setFilterType(type);
+            setCurrentPage(1);
+        }
+    };
 
     return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
@@ -82,49 +83,52 @@ export default function Structured() {
                 <h1 className="font-bold text-4xl mb-5">코호트 리스트</h1>
                 <p className="text-xl">코호트 사용 권한을 신청할 수 있습니다.</p>
             </div>
-            <div className="flex font-bold jusfify-between items-center">
-                <button
-                    className={`flex items-center gap-2 rounded-l-lg px-3 py-2 transition duration-200 ease-in-out ${
-                        cohortType === 'atlas'
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                            : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    onClick={() => clickToggle('atlas')}
-                >
-                    Atlas
-                </button>
-                <button
-                    className={`flex items-center gap-2 px-3 py-2 transition duration-200 ease-in-out ${
-                        cohortType === 'bento'
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                            : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    onClick={() => clickToggle('bento')}
-                >
-                    Bento
-                </button>
-                <button
-                    className={`flex items-center gap-2 px-3 py-2 transition duration-200 ease-in-out ${
-                        cohortType === 'all'
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                            : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    onClick={() => clickToggle('all')}
-                >
-                    All
-                </button>
-                <button
-                    className={`flex items-center gap-2 rounded-r-lg px-3 py-2 transition duration-200 ease-in-out ${
-                        cohortType === 'my'
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                            : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    onClick={() => clickToggle('my')}
-                >
-                    My
-                </button>
+            <div className="flex gap-5">
+                <div className="flex font-bold jusfify-between items-center">
+                    <button
+                        className={`flex items-center gap-2 rounded-l-lg px-3 py-2 transition duration-200 ease-in-out ${
+                            cohortType === 'atlas'
+                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        onClick={() => handleChangeType('atlas')}
+                    >
+                        Atlas
+                    </button>
+                    <button
+                        className={`flex items-center gap-2 px-3 py-2 rounded-r-lg transition duration-200 ease-in-out ${
+                            cohortType === 'bento'
+                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        onClick={() => handleChangeType('bento')}
+                    >
+                        Bento
+                    </button>
+                </div>
+                <div className="flex font-bold jusfify-between items-center">
+                    <button
+                        className={`flex items-center gap-2 px-3 py-2 rounded-l-lg transition duration-200 ease-in-out ${
+                            filterType === 'all'
+                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        onClick={() => handleChangeFilter('all')}
+                    >
+                        All
+                    </button>
+                    <button
+                        className={`flex items-center gap-2 rounded-r-lg px-3 py-2 transition duration-200 ease-in-out ${
+                            filterType === 'my'
+                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        onClick={() => handleChangeFilter('my')}
+                    >
+                        My
+                    </button>
+                </div>
             </div>
-
             <div className="flex jusfify-between items-center gap-5 bg-gray-150 shadow-sm border border-gray-200 p-6">
                 {/* 검색창 */}
                 <div
