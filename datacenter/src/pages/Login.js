@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
 import bmiLogo from '../assets/imgs/bmiLabLogo.svg';
-import { loginAPI } from '../api/dummyAuthAPI';
+import { postLogin } from '../api/users/users';
 
 export default function Login() {
     const [userId, setUserId] = useState('');
@@ -30,15 +30,17 @@ export default function Login() {
         setError('');
 
         try {
-            const response = await loginAPI(userId, userPw);
-            const user = response.user;
+            const response = await postLogin(userId, userPw);
+            // const user = JSON.parse(response);
+            const user = response;
+            console.log(user.role === 'admin');
             const userInfo = {
                 id: user.id,
                 name: user.name,
+                token: user.token,
                 isAdmin: user.role === 'admin',
             };
-            const token = user.token;
-            login(userInfo, token);
+            login(userInfo);
             navigate('/home');
         } catch (err) {
             setError(err.message || '로그인에 실패했습니다.');

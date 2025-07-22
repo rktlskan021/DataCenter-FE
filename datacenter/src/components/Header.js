@@ -39,6 +39,7 @@ export default function Header() {
                         <button
                             className="font-bold bg-white hover:bg-gray-100 border border-gray-200 rounded-md text-black text-xm px-5 py-3 transition duration-200 ease-in-out"
                             onClick={() => {
+                                logout();
                                 navigator('/');
                             }}
                         >

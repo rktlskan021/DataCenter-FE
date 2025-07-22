@@ -9,12 +9,6 @@ import { IoEyeOutline } from 'react-icons/io5';
 import RejectionModal from '../components/modals/RejectionModal';
 import ConnectionInfoModal from '../components/modals/ConnectionInfoModal';
 
-// 간소화된 사용자 정보 (이름과 ID만)
-const userInfo = {
-    id: 'user001',
-    name: '김연구자',
-};
-
 // 사용자의 코호트 신청 데이터
 const userCohortApplications = [
     {
@@ -106,7 +100,7 @@ export default function Home() {
     const [isConnectionInfoModalOpen, setIsConnectionInfoModalOpen] = useState(false);
     const [selectApp, setSelectApp] = useState(null);
 
-    const { isLoggedIn } = useAuthStore();
+    const { isLoggedIn, id, name } = useAuthStore();
 
     const approvedApplications = userCohortApplications.filter((app) => app.status === 'approved');
     const pendingApplications = userCohortApplications.filter((app) => app.status !== 'approved');
@@ -127,16 +121,14 @@ export default function Home() {
                 <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
                     <div className="flex gap-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <div className="w-16 h-16 rounded-full bg-cyan-600 flex items-center justify-center shadow-sm border border-gray-200">
-                            <span className="text-xl font-bold text-white">
-                                {userInfo.name.charAt(0)}
-                            </span>
+                            <span className="text-xl font-bold text-white">{name.charAt(0)}</span>
                         </div>
                         <div className="flex-1">
-                            <h1 className="text-2xl font-bold text-gray-900">{userInfo.name}</h1>
+                            <h1 className="text-2xl font-bold text-gray-900">{name}</h1>
                             <div className="flex items-center gap-2 text-gray-900">
                                 <LuUser className="h-4 w-4" />
                                 <span className="text-sm font-regular bg-gray-100 px-2 py-1 rounded">
-                                    {userInfo.id}
+                                    {id}
                                 </span>
                             </div>
                         </div>

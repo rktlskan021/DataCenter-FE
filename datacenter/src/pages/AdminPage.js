@@ -399,13 +399,12 @@ export default function AdminPage() {
                                                 {application.applicationDate}
                                             </td>
                                             <td>
-                                                {() => {
+                                                {(() => {
                                                     const statusInfo = statusButtons.find(
                                                         (status) =>
                                                             status.value === application.status
                                                     );
                                                     if (!statusInfo) return null;
-
                                                     return (
                                                         <StatusBadge
                                                             icon={statusInfo.icon}
@@ -413,7 +412,7 @@ export default function AdminPage() {
                                                             className={statusInfo.className}
                                                         />
                                                     );
-                                                }}
+                                                })()}
                                                 {/* <div className="flex gap-1 items-center">
                                                     {(() => {
                                                         const statusInfo = statusButtons.find(

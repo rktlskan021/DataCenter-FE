@@ -20,7 +20,7 @@ export default function AppRoutes() {
                 }
             />
             <Route
-                path="/cohort/:id"
+                path="/structured/:id"
                 element={
                     <PrivateRoute>
                         <CohortDetail />

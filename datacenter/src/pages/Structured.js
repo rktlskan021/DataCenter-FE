@@ -11,6 +11,8 @@ import {
 import { fetchAtlasCohorts } from '../api/fetchAtlasCohorts';
 import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 import useAuthStore from '../stores/useAuthStore';
+import { useUserCohorts } from '../hooks/queries/useUsers';
+import { useCohorts } from '../hooks/queries/useCohorts';
 
 const filters = [
     { id: 1, name: '코호트 이름', value: 'name' },
@@ -24,6 +26,11 @@ export default function Structured() {
     // fetch atlas & bento data
     const [atlasCohorts, setAtlasCohorts] = useState([]);
     const [bentoCohorts, setBentoCohorts] = useState([]);
+    // const { data: myCohorts, isLoading } = useUserCohorts();
+
+    // if (!isLoading) {
+    //     console.log(myCohorts);
+    // }
 
     // 상태 선언
     const [cohortType, setCohortType] = useState('atlas');
@@ -204,13 +211,7 @@ export default function Structured() {
 
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
-                    {cohortType === 'atlas'
-                        ? 'ATLAS '
-                        : cohortType === 'bento'
-                          ? 'Bento '
-                          : cohortType === 'all'
-                            ? 'All '
-                            : 'My '}
+                    {cohortType === 'atlas' ? 'ATLAS ' : 'Bento '}
                     코호트 목록
                 </h1>
                 <table className="w-full table-fixed divide-y divide-gray-200">
@@ -242,7 +243,7 @@ export default function Structured() {
                                 <tr
                                     key={cohort.id}
                                     className="hover:bg-gray-50 cursor-pointer border-b border-gray-200"
-                                    onClick={() => navigator(`/cohort/${cohort.id}`)}
+                                    onClick={() => navigator(`/structured/${cohort.id}`)}
                                 >
                                     <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
                                         {cohort.name}
