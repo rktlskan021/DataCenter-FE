@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
+const expires = new Date(new Date().getTime() + 30 * 60 * 1000);
+
 const useAuthStore = create((set) => ({
     id: Cookies.get('id') || null,
     name: Cookies.get('name') || null,
@@ -9,10 +11,10 @@ const useAuthStore = create((set) => ({
     isAdmin: Cookies.get('isAdmin') === 'true',
 
     login: (userInfo) => {
-        Cookies.set('id', userInfo.id, { expires: 7 });
-        Cookies.set('token', userInfo.token, { expires: 7 }); // 쿠키 저장 (7일 유효)
-        Cookies.set('name', userInfo.name, { expires: 7 }); // 쿠키 저장 (7일 유효)
-        Cookies.set('isAdmin', userInfo.isAdmin ? 'true' : 'false', { expires: 7 }); // 쿠키 저장 (7일 유효)
+        Cookies.set('id', userInfo.id, { expires: expires }); // 쿠키 저장 (30분 유효)
+        Cookies.set('token', userInfo.token, { expires: expires });
+        Cookies.set('name', userInfo.name, { expires: expires });
+        Cookies.set('isAdmin', userInfo.isAdmin ? 'true' : 'false', { expires: expires });
         set({
             id: userInfo.id,
             name: userInfo.name,

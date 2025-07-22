@@ -8,10 +8,8 @@ import {
     ListboxOption,
     Transition,
 } from '@headlessui/react';
-import { fetchAtlasCohorts } from '../api/fetchAtlasCohorts';
 import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 import useAuthStore from '../stores/useAuthStore';
-import { useUserCohorts } from '../hooks/queries/useUsers';
 import { useCohorts } from '../hooks/queries/useCohorts';
 
 const filters = [
@@ -24,13 +22,9 @@ export default function Structured() {
     const [isInputFocused, setIsInputFocused] = useState(false);
 
     // fetch atlas & bento data
-    const [atlasCohorts, setAtlasCohorts] = useState([]);
+    // const [atlasCohorts, setAtlasCohorts] = useState([]);
+    const { data: atlasCohorts, isLoading } = useCohorts();
     const [bentoCohorts, setBentoCohorts] = useState([]);
-    // const { data: myCohorts, isLoading } = useUserCohorts();
-
-    // if (!isLoading) {
-    //     console.log(myCohorts);
-    // }
 
     // 상태 선언
     const [cohortType, setCohortType] = useState('atlas');
@@ -46,11 +40,11 @@ export default function Structured() {
     const navigator = useNavigate();
 
     useEffect(() => {
-        fetchAtlasCohorts().then(setAtlasCohorts);
         fetchBentoCohorts().then(setBentoCohorts);
     }, []);
 
     useEffect(() => {
+        if (isLoading) return;
         const base = cohortType === 'atlas' ? atlasCohorts : bentoCohorts;
 
         const filtered = base
@@ -68,7 +62,17 @@ export default function Structured() {
 
         setCurrentCohorts(paginated);
         setTotalPages(total);
-    }, [cohortType, filterType, searchTerm, selected, currentPage, atlasCohorts, bentoCohorts, id]);
+    }, [
+        cohortType,
+        filterType,
+        searchTerm,
+        selected,
+        currentPage,
+        atlasCohorts,
+        bentoCohorts,
+        id,
+        isLoading,
+    ]);
 
     const handleChangeType = (type) => {
         if (type !== cohortType) {
