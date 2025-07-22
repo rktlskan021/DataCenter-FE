@@ -8,6 +8,7 @@ const sampleCohorts = Array.from({ length: 42 }, (_, i) => ({
     author: `작성자 ${i + 1}`,
     createdDate: '2024-07-10',
     modifiedDate: '2024-07-10',
+    origin: 'BENTO',
 }));
 
 export function fetchBentoCohorts() {
