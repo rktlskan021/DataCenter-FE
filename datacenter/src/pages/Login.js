@@ -31,9 +31,7 @@ export default function Login() {
 
         try {
             const response = await postLogin(userId, userPw);
-            // const user = JSON.parse(response);
             const user = response;
-            console.log(user.role === 'admin');
             const userInfo = {
                 id: user.id,
                 name: user.name,
@@ -41,7 +39,12 @@ export default function Login() {
                 isAdmin: user.role === 'admin',
             };
             login(userInfo);
-            navigate('/home');
+            if (userInfo.isAdmin) {
+                console.log(userInfo.isAdmin);
+                navigate('/admin');
+            } else {
+                navigate('/home');
+            }
         } catch (err) {
             setError(err.message || '로그인에 실패했습니다.');
         } finally {
