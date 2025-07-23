@@ -8,7 +8,8 @@ import { FiInfo } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
 import CheckboxCard from '../components/table/CheckboxCard';
 import { useParams } from 'react-router-dom';
-import { useCohortDetail } from '../hooks/queries/useCohorts';
+import { useCohortDetail, useApplyCohort } from '../hooks/queries/useCohorts';
+import { fetchIrbDrbData } from '../api/users/users';
 
 const tableMeta = {
     person: { hasPersonId: true },
@@ -62,6 +63,7 @@ export default function CohortDetail() {
     const [schemaDescription, setSchemaDescription] = useState('');
     const cohort_id = useParams().id;
 
+    const { mutate } = useApplyCohort();
     const { data, isLoading } = useCohortDetail(cohort_id);
     const [withPersonId, setWithPersonId] = useState([]);
     const [withoutPersonId, setWithoutPersonId] = useState([]);
@@ -141,7 +143,15 @@ export default function CohortDetail() {
     };
 
     const clickApplyBtn = () => {
-        console.log('신청됨');
+        const cohortData = {
+            cohort_id,
+            schemaName,
+            schemaDescription,
+            selectedTables,
+            selectedFiles,
+        };
+
+        mutate(cohortData); // 한 번에 객체로 전달
     };
 
     useEffect(() => {
@@ -160,6 +170,17 @@ export default function CohortDetail() {
                     description: data.schemaInfo.description,
                 });
             }
+
+            if (data.irb_drb.length) {
+                const filePromies = data.irb_drb.map((file) =>
+                    fetchIrbDrbData(file.path, file.name)
+                );
+
+                Promise.all(filePromies).then((files) => {
+                    setSelectedFiles(files);
+                });
+            }
+
             setWithPersonId(withId);
             setWithoutPersonId(withoutId);
             setAllTables([...withId, ...withoutId]);
@@ -260,6 +281,7 @@ export default function CohortDetail() {
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4 py-5">
                         {withoutPersonId.map((table) => (
                             <CheckboxCard
+                                key={table.name}
                                 table={table}
                                 isSelected={selectedTables.includes(table.name)}
                                 onClick={() => handleCheckboxChange(table.name)}
