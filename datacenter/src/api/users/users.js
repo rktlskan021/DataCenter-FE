@@ -17,3 +17,8 @@ export const fetchIrbDrbData = async (path, name) => {
     const file = new File([res.data], name, { type: res.data.typ });
     return file;
 };
+
+export const fetchSchemas = async () => {
+    const res = await axiosInstance.get('/api/user/schema/');
+    return res.data;
+};
