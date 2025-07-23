@@ -8,6 +8,7 @@ import { FaRegEye } from 'react-icons/fa6';
 import AppDetailModal from '../components/modals/AppDetailModal';
 import SummaryBox from '../components/summary/SummaryBox';
 import StatusBadge from '../components/common/StatusBadge';
+import AppReviewModal from '../components/modals/AppReviewModal';
 
 // 샘플 신청 데이터
 const sampleApplications = [
@@ -136,8 +137,10 @@ export default function AdminPage() {
     const [applications, setApplications] = useState(sampleApplications);
     const [statusFilter, setStatusFilter] = useState('all');
     const [isAppDetailModalOpen, setIsAppDetailModalOpen] = useState(false);
+    const [isAppReviewModalOpen, setIsAppReviewModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [activeTab, setActiveTab] = useState('cohort-requests');
+    const [reviewComment, setReviewComment] = useState('');
 
     const { isLoggedIn } = useAuthStore();
 
@@ -446,7 +449,13 @@ export default function AdminPage() {
                                                         <FaRegEye className="w-4 h-4" />
                                                     </button>
                                                     {application.status === 'pending' && (
-                                                        <button className="border border-gray-200 font-bold py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out">
+                                                        <button
+                                                            className="border border-gray-200 font-bold py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                                                            onClick={() => {
+                                                                setIsAppReviewModalOpen(true);
+                                                                setSelectedApplication(application);
+                                                            }}
+                                                        >
                                                             검토
                                                         </button>
                                                     )}
@@ -462,13 +471,22 @@ export default function AdminPage() {
                     {activeTab === 'unstructured-data' && <div>Test</div>}
                 </div>
             )}
-            {isAppDetailModalOpen ? (
+            {isAppDetailModalOpen && (
                 <AppDetailModal
                     isModalOpen={isAppDetailModalOpen}
                     setIsModalOpen={setIsAppDetailModalOpen}
                     application={selectedApplication}
                 />
-            ) : null}
+            )}
+            {isAppReviewModalOpen && (
+                <AppReviewModal
+                    isModalOpen={isAppReviewModalOpen}
+                    setIsModalOpen={setIsAppReviewModalOpen}
+                    application={selectedApplication}
+                    reviewComment={reviewComment}
+                    setReviewComment={setReviewComment}
+                />
+            )}
         </div>
     );
 }
