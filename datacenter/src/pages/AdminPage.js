@@ -10,6 +10,7 @@ import StatusBadge from '../components/common/StatusBadge';
 import AppReviewModal from '../components/modals/AppReviewModal';
 import { useApplies } from '../hooks/queries/useAdmins';
 import { fetchIrbDrbData } from '../api/users/users';
+import { format } from 'date-fns';
 
 export default function AdminPage() {
     const [isLoading, setIsLoading] = useState(true);
@@ -150,7 +151,6 @@ export default function AdminPage() {
                 })
             );
             setIsLoading(false);
-            console.log(applications);
         }
     }, [localData]);
 
@@ -242,10 +242,10 @@ export default function AdminPage() {
                                 <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
                                     <th className="w-[10%]">신청자</th>
                                     <th className="w-[20%]">코호트</th>
-                                    <th className="w-[25%]">선택 테이블</th>
+                                    <th className="w-[20%]">선택 테이블</th>
                                     <th className="w-[20%]">IRB/DRB</th>
-                                    <th className="w-[7.5%]">신청일</th>
-                                    <th className="w-[7.5%]">상태</th>
+                                    <th className="w-[10%]">신청일</th>
+                                    <th className="w-[10%]">상태</th>
                                     <th className="w-[10%]">액션</th>
                                 </tr>
                             </thead>
@@ -293,7 +293,12 @@ export default function AdminPage() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="font-medium">{application.createdDate}</td>
+                                        <td className="font-medium">
+                                            {format(
+                                                new Date(application.appliedDate),
+                                                'yyyy-MM-dd HH:mm'
+                                            )}
+                                        </td>
                                         <td>
                                             {(() => {
                                                 const statusInfo = statusButtons.find(
