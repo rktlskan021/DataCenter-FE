@@ -164,14 +164,14 @@ export default function CohortDetail() {
             );
             const selectedTableNames = data.tableInfo?.filter((t) => t.checked).map((t) => t.name);
 
-            if (data.schemaInfo.length) {
+            if (data.schemaInfo) {
                 setSchemaInfo({
                     name: data.schemaInfo.name,
                     description: data.schemaInfo.description,
                 });
             }
 
-            if (data.irb_drb.length) {
+            if (data.irb_drb) {
                 const filePromies = data.irb_drb.map((file) =>
                     fetchIrbDrbData(file.path, file.name)
                 );

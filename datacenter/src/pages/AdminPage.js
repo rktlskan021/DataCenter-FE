@@ -123,17 +123,21 @@ export default function AdminPage() {
     ];
 
     useEffect(() => {
-        if (!DataLoading && data) {
-            data.map((item) => {
-                const filePromies = item.irb_drb.map((file) =>
-                    fetchIrbDrbData(file.path, file.name)
-                );
-                Promise.all(filePromies).then((files) => {
-                    const updatedData = { ...item, files: files };
-                    setLocalData([...localData, updatedData]);
+        const fetchAllFiles = async () => {
+            if (!DataLoading && data) {
+                const dataWithFilesPromises = data.map(async (item) => {
+                    const files = await Promise.all(
+                        item.irb_drb.map((file) => fetchIrbDrbData(file.path, file.name))
+                    );
+                    return { ...item, files };
                 });
-            });
-        }
+
+                const allResults = await Promise.all(dataWithFilesPromises);
+                setLocalData(allResults);
+            }
+        };
+
+        fetchAllFiles();
     }, [DataLoading, data]);
 
     useEffect(() => {
@@ -151,7 +155,6 @@ export default function AdminPage() {
     }, [localData]);
 
     if (isLoading) {
-        console.log('로딩중');
         return <LoadingSpinner />;
     }
 
@@ -277,13 +280,14 @@ export default function AdminPage() {
                                                     </p>
                                                     <p>
                                                         total :{' '}
-                                                        {application.files.reduce((total, file) => {
-                                                            console.log(file);
-                                                            const sizeMB = parseFloat(
-                                                                file.size / 1024 / 1024
-                                                            );
-                                                            return (total + sizeMB).toFixed(2);
-                                                        }, 0)}
+                                                        {application.files
+                                                            .reduce((total, file) => {
+                                                                const sizeMB = parseFloat(
+                                                                    file.size / 1024 / 1024
+                                                                );
+                                                                return total + sizeMB;
+                                                            }, 0)
+                                                            .toFixed(2)}
                                                         MB
                                                     </p>
                                                 </div>
@@ -304,26 +308,6 @@ export default function AdminPage() {
                                                     />
                                                 );
                                             })()}
-                                            {/* <div className="flex gap-1 items-center">
-                                                    {(() => {
-                                                        const statusInfo = statusButtons.find(
-                                                            (status) =>
-                                                                status.value === application.status
-                                                        );
-                                                        if (!statusInfo) return null; // 혹시 못찾을 때 방어
-
-                                                        return (
-                                                            <>
-                                                                {statusInfo.icon}
-                                                                <div
-                                                                    className={`${statusInfo.className} px-2 py-1.5 rounded-xl text-xs font-bold cursor-default`}
-                                                                >
-                                                                    {statusInfo.label}
-                                                                </div>
-                                                            </>
-                                                        );
-                                                    })()}
-                                                </div> */}
                                         </td>
                                         <td>
                                             <div className="flex gap-2">
@@ -336,7 +320,7 @@ export default function AdminPage() {
                                                 >
                                                     <FaRegEye className="w-4 h-4" />
                                                 </button>
-                                                {application.status === 'pending' && (
+                                                {application.status === 'applied' && (
                                                     <button
                                                         className="border border-gray-200 font-bold py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
                                                         onClick={() => {
