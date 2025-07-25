@@ -58,7 +58,7 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
                             </p>
                             <input
                                 type="file"
-                                accept=".pdf,.doc,.docx"
+                                accept=".pdf,.doc,.docx,.zip,.hwp,.hwpx"
                                 multiple
                                 onChange={handleFileChange}
                                 className="hidden"
