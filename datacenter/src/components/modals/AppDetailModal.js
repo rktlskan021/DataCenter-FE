@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { FaFileAlt, FaTimes } from 'react-icons/fa';
+import { IoMdDownload } from 'react-icons/io';
 
 export default function AppDetailModal({ isModalOpen, setIsModalOpen, application }) {
     useEffect(() => {
@@ -29,26 +30,26 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         <div>
                             <h1 className="font-bold text-xl">신청 상세 정보</h1>
                             <span className="text-gray-700">
-                                {application.userName}님의 데이터 접근 권한 신청 내용입니다.
+                                {application.author}님의 데이터 접근 권한 신청 내용입니다.
                             </span>
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">신청자 정보</h1>
-                            <span className="text-gray-700">이름 : {application.userName}</span>
+                            <span className="text-gray-700">이름 : {application.author}</span>
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">코호트 정보</h1>
-                            <span className="text-gray-700">이름 : {application.cohortName}</span>
+                            <span className="text-gray-700">이름 : {application.name}</span>
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">
-                                선택된 테이블 ({application.selectedTables.length})
+                                선택된 테이블 ({application.tables.length})
                             </h1>
                             <div className="flex flex-wrap gap-1">
-                                {application.selectedTables.map((table, idx) => (
+                                {application.tables.map((table, idx) => (
                                     <div
                                         key={idx}
                                         className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
@@ -61,19 +62,47 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
 
                         <div>
                             <h1 className="font-bold text-lg">IRB/DRB 파일</h1>
-                            {application.irbFiles.map((file, idx) => (
-                                <div
-                                    key={idx}
-                                    className="flex gap-2 items-center bg-gray-100 px-2 py-1 rounded"
-                                >
-                                    <FaFileAlt className="w-4 h-4" />
-                                    <div>
-                                        <span className="font-medium">{file.name}</span>
-                                        <br />
-                                        <span className="text-gray-500">{file.size}</span>
+                            <div className="flex flex-col gap-2">
+                                {application.files.map((file, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex gap-2 items-center bg-gray-100 px-2 py-1 rounded"
+                                    >
+                                        <FaFileAlt className="w-4 h-4" />
+                                        <div>
+                                            <p
+                                                className="font-medium cursor-pointer underline underline-offset-1"
+                                                onClick={() => {
+                                                    const pdfFile = new File([file], 'sample.pdf', {
+                                                        type: 'application/pdf',
+                                                    });
+                                                    const url = URL.createObjectURL(pdfFile);
+                                                    window.open(url, '_blank');
+                                                }}
+                                            >
+                                                {file.name}
+                                            </p>
+                                            <span className="text-gray-500">
+                                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                                            </span>
+                                        </div>
+                                        <IoMdDownload
+                                            className="ml-auto cursor-pointer"
+                                            size={20}
+                                            onClick={() => {
+                                                const url = URL.createObjectURL(file);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = file.name || 'download_file';
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                document.body.removeChild(a);
+                                                URL.revokeObjectURL(url);
+                                            }}
+                                        />
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
