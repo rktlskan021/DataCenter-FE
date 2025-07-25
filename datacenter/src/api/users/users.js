@@ -19,6 +19,6 @@ export const fetchIrbDrbData = async (path, name) => {
 };
 
 export const fetchSchemas = async () => {
-    const res = await axiosInstance.get('/api/user/schema/');
+    const res = await axiosInstance.get('/api/user/cohort/');
     return res.data;
 };
