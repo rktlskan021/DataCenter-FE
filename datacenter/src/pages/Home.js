@@ -315,12 +315,12 @@ export default function Home() {
                                 <div>
                                     <span className="text-sm text-gray-500">승인된 테이블:</span>
                                     <div className="flex flex-wrap gap-1">
-                                        {app.tables.map((table) => (
+                                        {app.tables.map((table, idx) => (
                                             <div
-                                                key={table}
+                                                key={idx}
                                                 className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
                                             >
-                                                {table}
+                                                {table.name}
                                             </div>
                                         ))}
                                     </div>
