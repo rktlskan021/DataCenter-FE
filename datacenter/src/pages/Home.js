@@ -9,6 +9,7 @@ import { IoEyeOutline } from 'react-icons/io5';
 import RejectionModal from '../components/modals/RejectionModal';
 import ConnectionInfoModal from '../components/modals/ConnectionInfoModal';
 import { useSchemas } from '../hooks/queries/useUsers';
+import { format } from 'date-fns';
 
 // 사용자의 코호트 신청 데이터
 const userCohortApplications = [
@@ -195,9 +196,9 @@ export default function Home() {
                                 </p>
                             </div>
                         ) : (
-                            approvedApplications.map((app) => (
+                            approvedApplications.map((app, idx) => (
                                 <div
-                                    key={app.id}
+                                    key={idx}
                                     className="flex flex-col gap-2 border border-emerald-200 bg-emerald-50/30 rounded-lg p-6 text-gray-900"
                                 >
                                     <div className="relative flex items-center justify-between">
@@ -226,19 +227,25 @@ export default function Home() {
                                         <div>
                                             <span className="text-gray-500">신청일:</span>
                                             <span className="ml-2 font-medium">
-                                                {app.applicationDate}
+                                                {format(
+                                                    new Date(app.appliedDate),
+                                                    'yyyy-MM-dd hh:mm'
+                                                )}
                                             </span>
                                         </div>
                                         <div>
                                             <span className="text-gray-500">승인일:</span>
                                             <span className="ml-2 font-medium">
-                                                {app.approvedDate}
+                                                {format(
+                                                    new Date(app.appliedDate),
+                                                    'yyyy-MM-dd hh:mm'
+                                                )}
                                             </span>
                                         </div>
                                         <div>
                                             <span className="text-gray-500">선택 테이블:</span>
                                             <span className="ml-2 font-medium">
-                                                {app.selectedTables.length}개
+                                                {app.tables.length}개
                                             </span>
                                         </div>
                                     </div>
@@ -247,12 +254,12 @@ export default function Home() {
                                             승인된 테이블:
                                         </span>
                                         <div className="flex flex-wrap gap-1">
-                                            {app.selectedTables.map((table) => (
+                                            {app.tables.map((table, idx) => (
                                                 <div
-                                                    key={table}
+                                                    key={idx}
                                                     className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
                                                 >
-                                                    {table}
+                                                    {table.name}
                                                 </div>
                                             ))}
                                         </div>
@@ -299,11 +306,15 @@ export default function Home() {
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
                                         <span className="text-gray-500">신청일:</span>
-                                        <span className="ml-2 font-medium">{app.createdDate}</span>
+                                        <span className="ml-2 font-medium">
+                                            {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
+                                        </span>
                                     </div>
                                     <div>
                                         <span className="text-gray-500">검토일:</span>
-                                        <span className="ml-2 font-medium">{app.resolvedDate}</span>
+                                        <span className="ml-2 font-medium">
+                                            {format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')}
+                                        </span>
                                     </div>
                                     <div>
                                         <span className="text-gray-500">선택 테이블:</span>
