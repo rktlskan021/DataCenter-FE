@@ -10,6 +10,7 @@ import CheckboxCard from '../components/table/CheckboxCard';
 import { useParams } from 'react-router-dom';
 import { useCohortDetail, useApplyCohort } from '../hooks/queries/useCohorts';
 import { fetchIrbDrbData } from '../api/users/users';
+import { format } from 'date-fns';
 
 const tableMeta = {
     person: { hasPersonId: true },
@@ -203,8 +204,14 @@ export default function CohortDetail() {
                     <span>{data.cohortInfo.description}</span>
                     <div className="flex gap-5">
                         <span>작성자: {data.cohortInfo.author}</span>
-                        <span>생성일: {data.cohortInfo.createdDate}</span>
-                        <span>수정일: {data.cohortInfo.modifiedDate}</span>
+                        <span>
+                            생성일:{' '}
+                            {format(new Date(data.cohortInfo.createdDate), 'yyyy-MM-dd hh:mm')}
+                        </span>
+                        <span>
+                            수정일:{' '}
+                            {format(new Date(data.cohortInfo.modifiedDate), 'yyyy-MM-dd hh:mm')}
+                        </span>
                     </div>
                 </div>
                 <div className="flex flex-col bg-white border border-blue-200 bg-blue-50/30 rounded-xl">

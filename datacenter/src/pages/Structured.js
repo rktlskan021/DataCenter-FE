@@ -11,6 +11,7 @@ import {
 import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 import useAuthStore from '../stores/useAuthStore';
 import { useCohorts } from '../hooks/queries/useCohorts';
+import { format } from 'date-fns';
 
 const filters = [
     { id: 1, name: '코호트 이름', value: 'name' },
@@ -267,13 +268,23 @@ export default function Structured() {
                                     <td className="px-6 py-4 text-sm text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <FaRegCalendarAlt />
-                                            <span>{cohort.createdDate}</span>
+                                            <span>
+                                                {format(
+                                                    new Date(cohort.createdDate),
+                                                    'yyyy-MM-dd hh-mm'
+                                                )}
+                                            </span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <FaRegCalendarAlt />
-                                            <span>{cohort.modifiedDate}</span>
+                                            <span>
+                                                {format(
+                                                    new Date(cohort.modifiedDate),
+                                                    'yyyy-MM-dd hh-mm'
+                                                )}
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
