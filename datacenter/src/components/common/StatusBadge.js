@@ -1,5 +1,4 @@
 export default function StatusBadge({ icon, label, className }) {
-    console.log('실행됨');
     return (
         <div className="flex gap-1 items-center">
             {icon}
