@@ -10,9 +10,9 @@ import RejectionModal from '../components/modals/RejectionModal';
 import ConnectionInfoModal from '../components/modals/ConnectionInfoModal';
 import { useSchemas } from '../hooks/queries/useUsers';
 import { format } from 'date-fns';
-import { TbReload } from 'react-icons/tb';
 import { BiSolidEdit } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
+import { AiFillExclamationCircle } from 'react-icons/ai';
 
 export default function Home() {
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
@@ -128,6 +128,25 @@ export default function Home() {
                                 >
                                     <div className="relative flex items-center justify-between">
                                         <div className="flex gap-2">
+                                            {!app.isSynced && (
+                                                <div className="relative group flex items-center">
+                                                    <AiFillExclamationCircle
+                                                        className="text-red-500"
+                                                        size={20}
+                                                    />
+
+                                                    <div
+                                                        className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 
+                                                            bg-gray-800 text-white text-xs rounded px-2 py-1 
+                                                            opacity-0 group-hover:opacity-100 
+                                                            scale-95 group-hover:scale-100 
+                                                            transition-all duration-200 
+                                                            pointer-events-none z-10 whitespace-nowrap"
+                                                    >
+                                                        동기화가 필요합니다
+                                                    </div>
+                                                </div>
+                                            )}
                                             <h1 className="text-lg font-semibold">{app.name}</h1>
                                             <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                                 <IoMdCheckmarkCircleOutline />
@@ -135,16 +154,6 @@ export default function Home() {
                                             </div>
                                         </div>
                                         <div className="absolute top-0 right-0 flex gap-2">
-                                            <button
-                                                className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
-                                                onClick={() => {
-                                                    setSelectApp(app);
-                                                    setIsConnectionInfoModalOpen(true);
-                                                }}
-                                            >
-                                                <TbReload size={20} />
-                                                <span>동기화</span>
-                                            </button>
                                             <button
                                                 className="flex justify-center items-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
                                                 onClick={() => {
