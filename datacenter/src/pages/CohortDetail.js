@@ -62,6 +62,7 @@ export default function CohortDetail() {
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const [schemaName, setSchemaName] = useState('');
     const [schemaDescription, setSchemaDescription] = useState('');
+    const [isDisabledSchemaInfo, setIsDisabledSchemaInfo] = useState(false);
     const cohort_id = useParams().id;
 
     const { mutate } = useApplyCohort();
@@ -69,11 +70,6 @@ export default function CohortDetail() {
     const [withPersonId, setWithPersonId] = useState([]);
     const [withoutPersonId, setWithoutPersonId] = useState([]);
     const [allTables, setAllTables] = useState([]);
-
-    const [schemaInfo, setSchemaInfo] = useState({
-        name: '',
-        description: '',
-    });
 
     const canSubmitRequest =
         selectedTables.length > 0 &&
@@ -166,10 +162,9 @@ export default function CohortDetail() {
             const selectedTableNames = data.tableInfo?.filter((t) => t.checked).map((t) => t.name);
 
             if (data.schemaInfo) {
-                setSchemaInfo({
-                    name: data.schemaInfo.name,
-                    description: data.schemaInfo.description,
-                });
+                setSchemaName(data.schemaInfo.name);
+                setSchemaDescription(data.schemaInfo.description);
+                setIsDisabledSchemaInfo(true);
             }
 
             if (data.irb_drb) {
@@ -340,12 +335,9 @@ export default function CohortDetail() {
                             type="text"
                             onChange={(e) => setSchemaName(e.target.value)}
                             value={schemaName}
-                            placeholder={
-                                schemaInfo.name.length > 0
-                                    ? schemaInfo.name
-                                    : `예: diabetes_study_2024`
-                            }
+                            placeholder="예: diabetes_study_2024"
                             className="max-w-md w-full px-2 py-1.5 border border-gray-200 rounded"
+                            disabled={isDisabledSchemaInfo}
                             required
                         />
                         <p className="text-xs text-gray-500 mt-1">
@@ -364,13 +356,10 @@ export default function CohortDetail() {
                             type="text"
                             onChange={(e) => setSchemaDescription(e.target.value)}
                             value={schemaDescription}
-                            placeholder={
-                                schemaInfo.description.length > 0
-                                    ? schemaInfo.description
-                                    : `이 스키마의 목적과 사용 용도를 설명해주세요...`
-                            }
+                            placeholder="이 스키마의 목적과 사용 용도를 설명해주세요..."
                             className="max-w-2xl w-full px-2 py-1.5 border border-gray-200 rounded"
                             rows={3}
+                            disabled={isDisabledSchemaInfo}
                             required
                         />
                     </div>
