@@ -124,6 +124,19 @@ export default function AdminPage() {
     ];
 
     useEffect(() => {
+        setApplications(
+            localData
+                .filter((app) => {
+                    if (statusFilter === 'all') return true;
+                    return app.status === statusFilter;
+                })
+                .sort((a, b) => {
+                    return new Date(b.appliedDate) - new Date(a.appliedDate);
+                })
+        );
+    }, [statusFilter]);
+
+    useEffect(() => {
         const fetchAllFiles = async () => {
             if (!DataLoading && data) {
                 const dataWithFilesPromises = data.map(async (item) => {
@@ -143,11 +156,9 @@ export default function AdminPage() {
 
     useEffect(() => {
         if (localData.length > 0) {
-            console.log(localData);
             setApplications(
-                localData.filter((app) => {
-                    if (statusFilter === 'all') return true;
-                    return app.status === statusFilter;
+                localData.sort((a, b) => {
+                    return new Date(b.appliedDate) - new Date(a.appliedDate);
                 })
             );
             setIsLoading(false);
