@@ -10,93 +10,11 @@ import RejectionModal from '../components/modals/RejectionModal';
 import ConnectionInfoModal from '../components/modals/ConnectionInfoModal';
 import { useSchemas } from '../hooks/queries/useUsers';
 import { format } from 'date-fns';
-
-// 사용자의 코호트 신청 데이터
-const userCohortApplications = [
-    {
-        id: 1,
-        cohortId: 1,
-        cohortName: 'Atlas Cohort 1',
-        cohortDescription: '2024년 1분기에 가입한 신규 사용자들의 행동 패턴 분석',
-        selectedTables: [
-            'PERSON',
-            'CONDITION_OCCURRENCE',
-            'DRUG_EXPOSURE',
-            'MEASUREMENT',
-            'VISIT_OCCURRENCE',
-        ],
-        applicationDate: '2024-03-15',
-        status: 'approved',
-        approvedDate: '2024-03-18',
-        schemaName: 'cohort_1_kim_researcher',
-        accessCode: 'COHORT_1_KR_2024',
-        connectionInfo: {
-            host: 'data-center-db.hospital.com',
-            port: '5432',
-            database: 'omop_cdm',
-            schema: 'cohort_1_kim_researcher',
-            username: 'kim_researcher_001',
-            password: 'temp_password_123',
-        },
-    },
-    {
-        id: 2,
-        cohortId: 3,
-        cohortName: 'Atlas Cohort 3',
-        cohortDescription: '프리미엄 플랜을 구독한 사용자들의 사용 패턴 및 만족도 조사',
-        selectedTables: ['PERSON', 'OBSERVATION_PERIOD', 'DRUG_EXPOSURE', 'PROCEDURE_OCCURRENCE'],
-        applicationDate: '2024-02-20',
-        status: 'approved',
-        approvedDate: '2024-02-25',
-        schemaName: 'cohort_3_kim_researcher',
-        accessCode: 'COHORT_3_KR_2024',
-        connectionInfo: {
-            host: 'data-center-db.hospital.com',
-            port: '5432',
-            database: 'omop_cdm',
-            schema: 'cohort_3_kim_researcher',
-            username: 'kim_researcher_003',
-            password: 'temp_password_456',
-        },
-    },
-    {
-        id: 3,
-        cohortId: 2,
-        cohortName: 'Atlas Cohort 2',
-        cohortDescription: '모바일 앱을 통해 서비스를 이용하는 사용자들의 리텐션 분석',
-        selectedTables: ['PERSON', 'VISIT_OCCURRENCE', 'CONDITION_OCCURRENCE', 'NOTE'],
-        applicationDate: '2024-03-10',
-        status: 'pending',
-        reviewDate: null,
-        rejectionReason: '',
-    },
-    {
-        id: 4,
-        cohortId: 4,
-        cohortName: 'Bento Cohort 1',
-        cohortDescription: '최근 활동이 감소한 사용자들을 대상으로 한 이탈 방지 분석',
-        selectedTables: ['PERSON', 'OBSERVATION_PERIOD', 'MEASUREMENT', 'DRUG_EXPOSURE', 'DEATH'],
-        applicationDate: '2024-02-28',
-        status: 'rejected',
-        reviewDate: '2024-03-02',
-        rejectionReason:
-            '제출된 IRB 승인서의 연구 범위가 신청하신 데이터 테이블과 일치하지 않습니다. 특히 DEATH 테이블 접근에 대한 별도 승인이 필요합니다. IRB 승인서를 수정하여 재신청해 주시기 바랍니다.',
-    },
-    {
-        id: 5,
-        cohortId: 5,
-        cohortName: 'Bento Cohort 2',
-        cohortDescription: '서울, 부산, 대구 지역 사용자들의 서비스 이용 패턴 비교 분석',
-        selectedTables: ['PERSON', 'LOCATION', 'CARE_SITE', 'VISIT_OCCURRENCE'],
-        applicationDate: '2024-03-25',
-        status: 'pending',
-        reviewDate: '2024-03-26',
-        rejectionReason: '',
-    },
-];
+import { TbReload } from 'react-icons/tb';
+import { BiSolidEdit } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-    // const [isLoading, setIsLoading] = useState(true);
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
     const [isRejectionModalOpen, setIsRejectionModalOpen] = useState(false);
     const [isConnectionInfoModalOpen, setIsConnectionInfoModalOpen] = useState(false);
@@ -104,20 +22,27 @@ export default function Home() {
     const [approvedApplications, setApprovedApplications] = useState([]);
     const [pendingApplications, setPendingApplications] = useState([]);
 
-    const { isLoggedIn, id, name } = useAuthStore();
+    const { id, name } = useAuthStore();
     const { data, isLoading } = useSchemas();
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            alert('로그인을 먼저 진행해주세요.');
-            navigator('/login');
-        }
-    }, []);
+    const navigator = useNavigate();
 
     useEffect(() => {
         if (!isLoading && data) {
-            setApprovedApplications(data.filter((app) => app.status === 'approved'));
-            setPendingApplications(data.filter((app) => app.status !== 'approved'));
+            setApprovedApplications(
+                data
+                    .filter((app) => app.status === 'approved')
+                    .sort((a, b) => {
+                        return new Date(b.appliedDate) - new Date(a.appliedDate);
+                    })
+            );
+            setPendingApplications(
+                data
+                    .filter((app) => app.status !== 'approved')
+                    .sort((a, b) => {
+                        return new Date(b.appliedDate) - new Date(a.appliedDate);
+                    })
+            );
         }
     }, [isLoading, data]);
 
@@ -203,24 +128,43 @@ export default function Home() {
                                 >
                                     <div className="relative flex items-center justify-between">
                                         <div className="flex gap-2">
-                                            <h1 className="text-lg font-semibold">
-                                                {app.cohortName}
-                                            </h1>
+                                            <h1 className="text-lg font-semibold">{app.name}</h1>
                                             <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                                 <IoMdCheckmarkCircleOutline />
                                                 <span className="text-xs">승인됨</span>
                                             </div>
                                         </div>
-                                        <button
-                                            className="absolute top-0 right-0 flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
-                                            onClick={() => {
-                                                setSelectApp(app);
-                                                setIsConnectionInfoModalOpen(true);
-                                            }}
-                                        >
-                                            <span>{'< >'}</span>
-                                            <span>접속 정보</span>
-                                        </button>
+                                        <div className="absolute top-0 right-0 flex gap-2">
+                                            <button
+                                                className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                onClick={() => {
+                                                    setSelectApp(app);
+                                                    setIsConnectionInfoModalOpen(true);
+                                                }}
+                                            >
+                                                <TbReload size={20} />
+                                                <span>동기화</span>
+                                            </button>
+                                            <button
+                                                className="flex justify-center items-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                onClick={() => {
+                                                    navigator(`/structured/${app.id}`);
+                                                }}
+                                            >
+                                                <BiSolidEdit size={20} />
+                                                <span>수정</span>
+                                            </button>
+                                            <button
+                                                className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                onClick={() => {
+                                                    setSelectApp(app);
+                                                    setIsConnectionInfoModalOpen(true);
+                                                }}
+                                            >
+                                                <span>{'< >'}</span>
+                                                <span>접속 정보</span>
+                                            </button>
+                                        </div>
                                     </div>
                                     <span className="text-sm">{app.cohortDescription}</span>
                                     <div className="grid grid-cols-3 gap-4 text-sm">
