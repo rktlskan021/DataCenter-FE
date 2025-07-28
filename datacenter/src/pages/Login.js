@@ -40,7 +40,6 @@ export default function Login() {
             };
             login(userInfo);
             if (userInfo.isAdmin) {
-                console.log(userInfo.isAdmin);
                 navigate('/admin');
             } else {
                 navigate('/home');
