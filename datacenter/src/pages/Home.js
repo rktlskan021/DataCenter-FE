@@ -291,21 +291,23 @@ export default function Home() {
                                     <div>
                                         <span className="text-gray-500">선택 테이블:</span>
                                         <span className="ml-2 font-medium">
-                                            {app.tables.length}개
+                                            {app.tables.filter((table) => table.checked).length}개
                                         </span>
                                     </div>
                                 </div>
                                 <div>
                                     <span className="text-sm text-gray-500">승인된 테이블:</span>
                                     <div className="flex flex-wrap gap-1">
-                                        {app.tables.map((table, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
-                                            >
-                                                {table.name}
-                                            </div>
-                                        ))}
+                                        {app.tables
+                                            .filter((table) => table.checked)
+                                            .map((table, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
+                                                >
+                                                    {table.name}
+                                                </div>
+                                            ))}
                                     </div>
                                 </div>
                             </div>
