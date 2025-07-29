@@ -140,10 +140,14 @@ export default function AdminPage() {
         const fetchAllFiles = async () => {
             if (!DataLoading && data) {
                 const dataWithFilesPromises = data.map(async (item) => {
-                    const files = await Promise.all(
-                        item.irb_drb.map((file) => fetchIrbDrbData(file.path, file.name))
-                    );
-                    return { ...item, files };
+                    if (Array.isArray(item.irb_drb)) {
+                        const files = await Promise.all(
+                            item.irb_drb.map((file) => fetchIrbDrbData(file.path, file.name))
+                        );
+                        return { ...item, files };
+                    } else {
+                        return { ...item, files: [{ name: 'Hello' }] };
+                    }
                 });
 
                 const allResults = await Promise.all(dataWithFilesPromises);
@@ -252,8 +256,8 @@ export default function AdminPage() {
                             <thead>
                                 <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
                                     <th className="w-[10%]">신청자</th>
-                                    <th className="w-[20%]">코호트</th>
-                                    <th className="w-[20%]">선택 테이블</th>
+                                    <th className="w-[15%]">코호트</th>
+                                    <th className="w-[25%]">선택 테이블</th>
                                     <th className="w-[20%]">IRB/DRB</th>
                                     <th className="w-[10%]">신청일</th>
                                     <th className="w-[10%]">상태</th>
@@ -268,7 +272,7 @@ export default function AdminPage() {
                                     >
                                         <td className="py-4">{application.author}</td>
                                         <td className="font-bold">{application.name}</td>
-                                        <td className="font-medium truncate">
+                                        <td className="font-medium">
                                             <div className="text-sm">
                                                 {application.tables.slice(0, 2).join(', ')}
                                                 {application.tables.length > 2 && (

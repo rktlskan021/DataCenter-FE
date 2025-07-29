@@ -12,18 +12,18 @@ import pandas as pd
 
 # 데이터베이스 연결 정보
 connection_params = {
-    'host': '${app.connectionInfo.host}',
-    'port': '${app.connectionInfo.port}',
-    'database': '${app.connectionInfo.database}',
-    'user': '${app.connectionInfo.username}',
-    'password': '${app.connectionInfo.password}'
+    'host': '${app.connectInfo.host}',
+    'port': '${app.connectInfo.port}',
+    'database': '${app.connectInfo.database}',
+    'user': '${app.connectInfo.username}',
+    'password': '${app.connectInfo.password}'
 }
 
 # 데이터베이스 연결
 conn = psycopg2.connect(**connection_params)
 
 # 승인된 테이블 조회 예시
-schema_name = '${app.connectionInfo.schema}'
+schema_name = '${app.connectInfo.schema}'
 
 # PERSON 테이블 조회
 person_query = f"""
@@ -52,12 +52,12 @@ print(f"CONDITION_OCCURRENCE 테이블 레코드 수: {len(condition_df)}")
 
 const generateSQLCode = (app) => {
     return `-- ${app.cohortName} 데이터 접속 SQL 예시
--- 스키마: ${app.connectionInfo.schema}
+-- 스키마: ${app.connectInfo.schema}
 
 -- 승인된 테이블 목록 확인
 SELECT table_name 
 FROM information_schema.tables 
-WHERE table_schema = '${app.connectionInfo.schema}';
+WHERE table_schema = '${app.connectInfo.schema}';
 
 -- PERSON 테이블 기본 통계
 SELECT 
@@ -65,14 +65,14 @@ SELECT
     COUNT(DISTINCT gender_concept_id) as gender_types,
     MIN(year_of_birth) as min_birth_year,
     MAX(year_of_birth) as max_birth_year
-FROM ${app.connectionInfo.schema}.person;
+FROM ${app.connectInfo.schema}.person;
 
 -- 조건별 환자 수 (CONDITION_OCCURRENCE 테이블)
 SELECT 
     condition_concept_id,
     COUNT(DISTINCT person_id) as patient_count,
     COUNT(*) as total_occurrences
-FROM ${app.connectionInfo.schema}.condition_occurrence
+FROM ${app.connectInfo.schema}.condition_occurrence
 GROUP BY condition_concept_id
 ORDER BY patient_count DESC
 LIMIT 10;
@@ -82,7 +82,7 @@ SELECT
     EXTRACT(YEAR FROM visit_start_date) as visit_year,
     COUNT(DISTINCT person_id) as unique_patients,
     COUNT(*) as total_visits
-FROM ${app.connectionInfo.schema}.visit_occurrence
+FROM ${app.connectInfo.schema}.visit_occurrence
 GROUP BY EXTRACT(YEAR FROM visit_start_date)
 ORDER BY visit_year;
 `;
@@ -133,11 +133,9 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <span className="text-sm text-gray-600">호스트:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
-                                        {app.connectionInfo.host}
+                                        {app.connectInfo.host}
                                     </div>
-                                    <button
-                                        onClick={() => copyToClipboard(app.connectionInfo.host)}
-                                    >
+                                    <button onClick={() => copyToClipboard(app.connectInfo.host)}>
                                         <MdContentCopy className="h-3 w-3" />
                                     </button>
                                 </div>
@@ -146,7 +144,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <span className="text-sm text-gray-600">포트:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
-                                        {app.connectionInfo.port}
+                                        {app.connectInfo.port}
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +152,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <span className="text-sm text-gray-600">데이터베이스:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
-                                        {app.connectionInfo.database}
+                                        {app.connectInfo.database}
                                     </div>
                                 </div>
                             </div>
@@ -162,11 +160,9 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <span className="text-sm text-gray-600">스키마:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
-                                        {app.connectionInfo.schema}
+                                        {app.connectInfo.schema}
                                     </div>
-                                    <button
-                                        onClick={() => copyToClipboard(app.connectionInfo.schema)}
-                                    >
+                                    <button onClick={() => copyToClipboard(app.connectInfo.schema)}>
                                         <MdContentCopy className="h-3 w-3" />
                                     </button>
                                 </div>
@@ -175,10 +171,10 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <span className="text-sm text-gray-600">사용자명:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
-                                        {app.connectionInfo.username}
+                                        {app.connectInfo.username}
                                     </div>
                                     <button
-                                        onClick={() => copyToClipboard(app.connectionInfo.username)}
+                                        onClick={() => copyToClipboard(app.connectInfo.username)}
                                     >
                                         <MdContentCopy className="h-3 w-3" />
                                     </button>
@@ -188,10 +184,10 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <span className="text-sm text-gray-600">비밀번호:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
-                                        {app.connectionInfo.password}
+                                        {app.connectInfo.password}
                                     </div>
                                     <button
-                                        onClick={() => copyToClipboard(app.connectionInfo.password)}
+                                        onClick={() => copyToClipboard(app.connectInfo.password)}
                                     >
                                         <MdContentCopy className="h-3 w-3" />
                                     </button>
