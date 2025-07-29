@@ -8,11 +8,11 @@ import { FaRegTimesCircle } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import RejectionModal from '../components/modals/RejectionModal';
 import ConnectionInfoModal from '../components/modals/ConnectionInfoModal';
-import { useSchemas } from '../hooks/queries/useUsers';
 import { format } from 'date-fns';
 import { BiSolidEdit } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { AiFillExclamationCircle } from 'react-icons/ai';
+import { useApplies } from '../hooks/queries/useUsers';
 
 export default function Home() {
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
@@ -23,12 +23,13 @@ export default function Home() {
     const [pendingApplications, setPendingApplications] = useState([]);
 
     const { id, name } = useAuthStore();
-    const { data, isLoading } = useSchemas();
+    const { data, isLoading } = useApplies();
 
     const navigator = useNavigate();
 
     useEffect(() => {
         if (!isLoading && data) {
+            console.log(data);
             setApprovedApplications(
                 data
                     .filter((app) => app.status === 'approved')
@@ -198,7 +199,8 @@ export default function Home() {
                                         <div>
                                             <span className="text-gray-500">선택 테이블:</span>
                                             <span className="ml-2 font-medium">
-                                                {app.tables.length}개
+                                                {app.tables.filter((table) => table.checked).length}
+                                                개
                                             </span>
                                         </div>
                                     </div>
@@ -207,19 +209,31 @@ export default function Home() {
                                             승인된 테이블:
                                         </span>
                                         <div className="flex flex-wrap gap-1">
-                                            {app.tables.map((table, idx) => (
-                                                <div
-                                                    key={idx}
-                                                    className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
-                                                >
-                                                    {table.name}
-                                                </div>
-                                            ))}
+                                            {app.tables
+                                                .filter((table) => table.checked)
+                                                .map((table, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
+                                                    >
+                                                        {table.name}
+                                                    </div>
+                                                ))}
                                         </div>
                                     </div>
                                 </div>
                             ))
                         )
+                    ) : pendingApplications.length === 0 ? (
+                        <div className="text-center py-12">
+                            <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                                승인된 코호트가 없습니다
+                            </h3>
+                            <p className="text-gray-500">
+                                코호트 신청 후 승인되면 여기에 표시됩니다.
+                            </p>
+                        </div>
                     ) : (
                         pendingApplications.map((app) => (
                             <div
@@ -266,7 +280,12 @@ export default function Home() {
                                     <div>
                                         <span className="text-gray-500">검토일:</span>
                                         <span className="ml-2 font-medium">
-                                            {format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')}
+                                            {app.resolvedDate
+                                                ? format(
+                                                      new Date(app.resolvedDate),
+                                                      'yyyy-MM-dd hh:mm'
+                                                  )
+                                                : ''}
                                         </span>
                                     </div>
                                     <div>

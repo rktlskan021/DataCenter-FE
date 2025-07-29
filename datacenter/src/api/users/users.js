@@ -9,6 +9,11 @@ export const postLogin = async (id, password) => {
     return res.data;
 };
 
+export const fetchCohortApplies = async () => {
+    const res = await axiosInstance.get('/api/user/cohort/applies');
+    return res.data;
+};
+
 export const fetchIrbDrbData = async (path, name) => {
     const res = await axiosInstance.get(`/documents/${path}`, {
         responseType: 'blob',
