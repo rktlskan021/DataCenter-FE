@@ -16,6 +16,7 @@ export default function AppReviewModal({
     useEffect(() => {
         const handleEsc = (e) => {
             if (e.key === 'Escape') {
+                setReviewComment('');
                 setIsModalOpen(false);
             }
         };
@@ -54,7 +55,13 @@ export default function AppReviewModal({
                             />
                         </div>
                         <div className="flex gap-2 justify-end items-center font-bold">
-                            <button className="border border-gray-300 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-gray-100">
+                            <button
+                                className="border border-gray-300 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-gray-100"
+                                onClick={() => {
+                                    setReviewComment('');
+                                    setIsModalOpen(false);
+                                }}
+                            >
                                 취소
                             </button>
                             <button
@@ -79,6 +86,7 @@ export default function AppReviewModal({
                                                 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',
                                         });
+                                        setReviewComment('');
                                         setIsModalOpen(false);
                                     }
                                 }}
@@ -107,6 +115,7 @@ export default function AppReviewModal({
                                                 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',
                                         });
+                                        setReviewComment('');
                                         setIsModalOpen(false);
                                     }
                                 }}
