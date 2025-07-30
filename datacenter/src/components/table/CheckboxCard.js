@@ -3,7 +3,7 @@ export default function CheckboxCard({ table, isSelected, onClick, color }) {
         <div
             className={`flex gap-3 items-start border rounded-lg p-4 cursor-pointer transition-all duration-200 ${
                 isSelected
-                    ? `border-${color}-600 bg-${color}-50 shadow-md`
+                    ? `bg-${color}-50 border-${color}-600  shadow-md`
                     : `border-gray-300 hover:border-${color}-400 hover:shadow-sm bg-white`
             }`}
             onClick={onClick}

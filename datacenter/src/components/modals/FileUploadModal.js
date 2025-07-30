@@ -45,7 +45,7 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
                             IRB/DRB 승인서 업로드
                         </h2>
                         <p className="mb-4 font-normal text-gray-800 text-sm">
-                            IRB/DRB 승인서 파일을 업로드하세요.
+                            IRB/DRB 승인서 파일을 업로드하세요. (.pdf,.doc,.docx,.zip,.hwp,.hwpx)
                         </p>
                         <div
                             className="flex flex-col items-center justify-center p-6 rounded-md border border-dashed border-gray-300 cursor-pointer hover:border-gray-600 transition"

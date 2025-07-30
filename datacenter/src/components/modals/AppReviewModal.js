@@ -69,9 +69,8 @@ export default function AppReviewModal({
                                 onClick={() => {
                                     if (reviewComment.length === 0) {
                                         toast(`검토 의견을 작성해주세요.`, {
-                                            icon: '📋',
                                             className:
-                                                'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
+                                                'border border-gray-200 bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',
                                         });
                                     } else {
@@ -81,9 +80,8 @@ export default function AppReviewModal({
                                         };
                                         Reject(data);
                                         toast(`${application.author}님의 신청이 거부 되었습니다.`, {
-                                            icon: '📋',
                                             className:
-                                                'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
+                                                'border border-gray-200  bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',
                                         });
                                         setReviewComment('');
@@ -98,7 +96,6 @@ export default function AppReviewModal({
                                 onClick={() => {
                                     if (reviewComment.length === 0) {
                                         toast(`검토 의견을 작성해주세요.`, {
-                                            icon: '📋',
                                             className:
                                                 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',
@@ -110,7 +107,6 @@ export default function AppReviewModal({
                                         };
                                         Approve(data);
                                         toast(`${application.author}님의 신청이 승인 되었습니다.`, {
-                                            icon: '📋',
                                             className:
                                                 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',

@@ -19,6 +19,10 @@ axiosInstance.interceptors.request.use(async (config) => {
         if (res.status === 200) {
             config.headers.Authorization = `Bearer ${token}`;
             return config;
+        } else if (res.status === 401) {
+            Cookies.remove('token');
+            window.location.href = '/';
+            throw new axios.Cancel('Token invalid from server');
         }
     } catch (err) {
         console.warn('🔒 서버에서 토큰 만료 판단됨');

@@ -94,8 +94,8 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
         if (!toast.isActive(TOAST_ID)) {
             toast(`클립보드에 복사되었습니다!`, {
                 toastId: TOAST_ID,
-                icon: '📋',
-                className: 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
+                className:
+                    'flex items-center bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',
             });
         }

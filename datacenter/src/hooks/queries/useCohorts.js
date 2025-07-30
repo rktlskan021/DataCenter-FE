@@ -24,7 +24,6 @@ export const useApplyCohort = () => {
         mutationFn: postApplyCohort,
         onSuccess: () => {
             toast(`성공적으로 신청되었습니다.`, {
-                icon: '📋',
                 className: 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',
             });

@@ -15,7 +15,7 @@ export const fetchCohortApplies = async () => {
 };
 
 export const fetchIrbDrbData = async (path, name) => {
-    const res = await axiosInstance.get(`/documents/${path}`, {
+    const res = await axiosInstance.get(`/documents${path}`, {
         responseType: 'blob',
     });
 

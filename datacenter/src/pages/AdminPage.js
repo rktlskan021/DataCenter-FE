@@ -127,6 +127,7 @@ export default function AdminPage() {
         setApplications(
             localData
                 .filter((app) => {
+                    console.log(app.status);
                     if (statusFilter === 'all') return true;
                     return app.status === statusFilter;
                 })
@@ -152,6 +153,7 @@ export default function AdminPage() {
 
                 const allResults = await Promise.all(dataWithFilesPromises);
                 setLocalData(allResults);
+                setIsLoading(false);
             }
         };
 
@@ -165,7 +167,6 @@ export default function AdminPage() {
                     return new Date(b.appliedDate) - new Date(a.appliedDate);
                 })
             );
-            setIsLoading(false);
         }
     }, [localData]);
 
@@ -175,7 +176,6 @@ export default function AdminPage() {
 
     return (
         <div>
-            (
             <div className="flex flex-col max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
                 <div className="mb-10">
                     <h1 className="font-bold text-3xl">데이터 접근 권한 신청 관리</h1>
@@ -265,96 +265,103 @@ export default function AdminPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {applications.map((application, idx) => (
-                                    <tr
-                                        key={idx}
-                                        className="hover:bg-gray-50 border-b border-gray-200 text-sm text-gray-800"
-                                    >
-                                        <td className="py-4">{application.author}</td>
-                                        <td className="font-bold">{application.name}</td>
-                                        <td className="font-medium">
-                                            <div className="text-sm">
-                                                {application.tables.slice(0, 2).join(', ')}
-                                                {application.tables.length > 2 && (
-                                                    <span className="text-gray-500">
-                                                        {' '}
-                                                        외 {application.tables.length - 2}개
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="flex gap-1 items-center">
-                                                <FaFileAlt />
-                                                <div>
-                                                    <p>
-                                                        {application.files[0].name}
-                                                        {application.files.length > 1
-                                                            ? ` 외 ${application.files.length - 1}개`
-                                                            : null}
-                                                    </p>
-                                                    <p>
-                                                        total :{' '}
-                                                        {application.files
-                                                            .reduce((total, file) => {
-                                                                const sizeMB = parseFloat(
-                                                                    file.size / 1024 / 1024
-                                                                );
-                                                                return total + sizeMB;
-                                                            }, 0)
-                                                            .toFixed(2)}
-                                                        MB
-                                                    </p>
+                                {applications.length === 0 ? (
+                                    <td colSpan={7} className="text-center text-gray-500 py-4">
+                                        신청 정보가 존재하지 않습니다.
+                                    </td>
+                                ) : (
+                                    applications.map((application, idx) => (
+                                        <tr
+                                            key={idx}
+                                            className="hover:bg-gray-50 border-b border-gray-200 text-sm text-gray-800"
+                                        >
+                                            <td className="py-4">{application.author}</td>
+                                            <td className="font-bold">{application.name}</td>
+                                            <td className="font-medium">
+                                                <div className="text-sm">
+                                                    {application.tables.slice(0, 2).join(', ')}
+                                                    {application.tables.length > 2 && (
+                                                        <span className="text-gray-500">
+                                                            {' '}
+                                                            외 {application.tables.length - 2}개
+                                                        </span>
+                                                    )}
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td className="font-medium">
-                                            {format(
-                                                new Date(application.appliedDate),
-                                                'yyyy-MM-dd HH:mm'
-                                            )}
-                                        </td>
-                                        <td>
-                                            {(() => {
-                                                const statusInfo = statusButtons.find(
-                                                    (status) => status.value === application.status
-                                                );
-                                                if (!statusInfo) return null;
-                                                return (
-                                                    <StatusBadge
-                                                        icon={statusInfo.icon}
-                                                        label={statusInfo.label}
-                                                        className={statusInfo.className}
-                                                    />
-                                                );
-                                            })()}
-                                        </td>
-                                        <td>
-                                            <div className="flex gap-2">
-                                                <button
-                                                    className="border border-gray-200 py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
-                                                    onClick={() => {
-                                                        setIsAppDetailModalOpen(true);
-                                                        setSelectedApplication(application);
-                                                    }}
-                                                >
-                                                    <FaRegEye className="w-4 h-4" />
-                                                </button>
-                                                {application.status === 'applied' && (
+                                            </td>
+                                            <td>
+                                                <div className="flex gap-1 items-center">
+                                                    <FaFileAlt />
+                                                    <div>
+                                                        <p>
+                                                            {application.files[0].name}
+                                                            {application.files.length > 1
+                                                                ? ` 외 ${application.files.length - 1}개`
+                                                                : null}
+                                                        </p>
+                                                        <p>
+                                                            total :{' '}
+                                                            {application.files
+                                                                .reduce((total, file) => {
+                                                                    const sizeMB = parseFloat(
+                                                                        file.size / 1024 / 1024
+                                                                    );
+                                                                    return total + sizeMB;
+                                                                }, 0)
+                                                                .toFixed(2)}
+                                                            MB
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="font-medium">
+                                                {format(
+                                                    new Date(application.appliedDate),
+                                                    'yyyy-MM-dd HH:mm'
+                                                )}
+                                            </td>
+                                            <td>
+                                                {(() => {
+                                                    const statusInfo = statusButtons.find(
+                                                        (status) =>
+                                                            status.value === application.status
+                                                    );
+                                                    if (!statusInfo) return null;
+                                                    return (
+                                                        <StatusBadge
+                                                            icon={statusInfo.icon}
+                                                            label={statusInfo.label}
+                                                            className={statusInfo.className}
+                                                        />
+                                                    );
+                                                })()}
+                                            </td>
+                                            <td>
+                                                <div className="flex gap-2">
                                                     <button
-                                                        className="border border-gray-200 font-bold py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                                                        className="border border-gray-200 py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
                                                         onClick={() => {
-                                                            setIsAppReviewModalOpen(true);
+                                                            setIsAppDetailModalOpen(true);
                                                             setSelectedApplication(application);
                                                         }}
                                                     >
-                                                        검토
+                                                        <FaRegEye className="w-4 h-4" />
                                                     </button>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                                    {application.status === 'applied' && (
+                                                        <button
+                                                            className="border border-gray-200 font-bold py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                                                            onClick={() => {
+                                                                setIsAppReviewModalOpen(true);
+                                                                setSelectedApplication(application);
+                                                            }}
+                                                        >
+                                                            검토
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -362,7 +369,6 @@ export default function AdminPage() {
                 {activeTab === 'schema-requests' && <div>Test</div>}
                 {activeTab === 'unstructured-data' && <div>Test</div>}
             </div>
-            )
             {isAppDetailModalOpen && (
                 <AppDetailModal
                     isModalOpen={isAppDetailModalOpen}
