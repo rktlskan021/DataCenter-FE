@@ -1,0 +1,5 @@
+.git
+*Dokcerfile*
+node_modules
+.env
+.dockerignore
