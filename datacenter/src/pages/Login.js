@@ -52,7 +52,7 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="h-screen -mt-24 flex items-center justify-center">
             <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
                 {/* 로고 및 브랜딩 */}
                 <div className="text-center mb-8">
