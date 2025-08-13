@@ -46,7 +46,10 @@ export default function Structured() {
 
     useEffect(() => {
         if (isLoading) return;
-        const base = cohortType === 'atlas' ? atlasCohorts : bentoCohorts;
+        const base =
+            cohortType === 'atlas'
+                ? atlasCohorts.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate))
+                : bentoCohorts;
 
         const filtered = base
             .filter((c) => (filterType === 'my' ? c.author === id : true))
