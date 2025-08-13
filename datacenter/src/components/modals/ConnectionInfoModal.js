@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 const TOAST_ID = 'clipboard-toast';
 
 const generatePythonCode = (app) => {
-    return `# ${app.cohortName} 데이터 접속 예시 코드
+    return `# ${app.name} 데이터 접속 예시 코드
 import psycopg2
 import pandas as pd
 
@@ -120,9 +120,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                     <div className="bg-white rounded-lg shadow-lg max-w-4xl max-h-[80vh] overflow-y-auto w-full p-6">
                         <div className="flex items-center text-gray-900 gap-2">
                             <GoDatabase className="h-5 w-5" />
-                            <h2 className="text-lg font-semibold">
-                                {app.cohortName} - 데이터 접속 정보
-                            </h2>
+                            <h2 className="text-lg font-semibold">{app.name} - 데이터 접속 정보</h2>
                         </div>
                         <p className="text-gray-600 mb-5">
                             승인된 스키마에 접속하기 위한 정보와 예시 코드입니다.
