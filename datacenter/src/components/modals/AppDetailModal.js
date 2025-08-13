@@ -45,6 +45,17 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         </div>
 
                         <div>
+                            <h1 className="font-bold text-lg">스키마 정보</h1>
+                            <span className="text-gray-700">
+                                이름 : {application.schemaInfo.name}
+                            </span>
+                            <br />
+                            <span className="text-gray-700">
+                                설명 : {application.schemaInfo.description}
+                            </span>
+                        </div>
+
+                        <div>
                             <h1 className="font-bold text-lg">
                                 선택된 테이블 ({application.tables.length})
                             </h1>

@@ -73,7 +73,7 @@ export default function Home() {
                             <div className="text-3xl font-bold text-emerald-600">
                                 {approvedApplications.length}
                             </div>
-                            <div className="text-gray-600">승인된 코호트</div>
+                            <div className="text-gray-600">승인된 스키마</div>
                         </div>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-blue-600">
@@ -85,9 +85,9 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div>
-                        <h1 className="font-bold text-2xl text-gray-900">코호트 신청 현황</h1>
+                        <h1 className="font-bold text-2xl text-gray-900">스키마 신청 현황</h1>
                         <span className="text-sm font-regular">
-                            신청한 코호트의 승인 상태와 접근 정보를 확인할 수 있습니다.
+                            신청한 스키마의 승인 상태와 접근 정보를 확인할 수 있습니다.
                         </span>
                     </div>
                     <div className="grid w-full grid-cols-2 bg-gray-100 py-1">
@@ -97,7 +97,7 @@ export default function Home() {
                         >
                             <IoMdCheckmarkCircleOutline className="h-5 w-5" />
                             <span className="font-bold">
-                                승인된 코호트 ({approvedApplications.length})
+                                승인된 스키마 ({approvedApplications.length})
                             </span>
                         </div>
                         <div
@@ -176,7 +176,7 @@ export default function Home() {
                                             </button>
                                         </div>
                                     </div>
-                                    <span className="text-sm">{app.cohortDescription}</span>
+                                    <span className="text-sm">{app.description}</span>
                                     <div className="grid grid-cols-3 gap-4 text-sm">
                                         <div>
                                             <span className="text-gray-500">신청일:</span>

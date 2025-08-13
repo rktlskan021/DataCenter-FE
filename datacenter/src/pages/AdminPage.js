@@ -127,7 +127,6 @@ export default function AdminPage() {
         setApplications(
             localData
                 .filter((app) => {
-                    console.log(app.status);
                     if (statusFilter === 'all') return true;
                     return app.status === statusFilter;
                 })
@@ -201,7 +200,7 @@ export default function AdminPage() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                코호트 신청 관리
+                                스키마 신청 관리
                             </button>
                             <button
                                 onClick={() => setActiveTab('schema-requests')}
@@ -258,7 +257,7 @@ export default function AdminPage() {
                                     <th className="w-[10%]">신청자</th>
                                     <th className="w-[15%]">코호트</th>
                                     <th className="w-[25%]">선택 테이블</th>
-                                    <th className="w-[20%]">IRB/DRB</th>
+                                    <th className="w-[20%]">스키마</th>
                                     <th className="w-[10%]">신청일</th>
                                     <th className="w-[10%]">상태</th>
                                     <th className="w-[10%]">액션</th>
@@ -266,9 +265,11 @@ export default function AdminPage() {
                             </thead>
                             <tbody>
                                 {applications.length === 0 ? (
-                                    <td colSpan={7} className="text-center text-gray-500 py-4">
-                                        신청 정보가 존재하지 않습니다.
-                                    </td>
+                                    <tr>
+                                        <td colSpan={7} className="text-center text-gray-500 py-4">
+                                            신청 정보가 존재하지 않습니다.
+                                        </td>
+                                    </tr>
                                 ) : (
                                     applications.map((application, idx) => (
                                         <tr
@@ -288,30 +289,8 @@ export default function AdminPage() {
                                                     )}
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div className="flex gap-1 items-center">
-                                                    <FaFileAlt />
-                                                    <div>
-                                                        <p>
-                                                            {application.files[0].name}
-                                                            {application.files.length > 1
-                                                                ? ` 외 ${application.files.length - 1}개`
-                                                                : null}
-                                                        </p>
-                                                        <p>
-                                                            total :{' '}
-                                                            {application.files
-                                                                .reduce((total, file) => {
-                                                                    const sizeMB = parseFloat(
-                                                                        file.size / 1024 / 1024
-                                                                    );
-                                                                    return total + sizeMB;
-                                                                }, 0)
-                                                                .toFixed(2)}
-                                                            MB
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                            <td className="font-medium">
+                                                {application.schemaInfo.name}
                                             </td>
                                             <td className="font-medium">
                                                 {format(
