@@ -8,5 +8,12 @@ module.exports = {
             },
         },
     },
+    safelist: [
+        {
+            pattern:
+                /^(bg|border|hover:border|hover:bg)-(emerald|blue|rose|teal|yellow|green|red)-(50|100|200|300|400|500|600|700)$/,
+            variants: ['hover'],
+        },
+    ],
     plugins: [],
 };
