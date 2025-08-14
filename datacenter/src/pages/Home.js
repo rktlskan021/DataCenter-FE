@@ -29,7 +29,6 @@ export default function Home() {
 
     useEffect(() => {
         if (!isLoading && data) {
-            console.log(data);
             setApprovedApplications(
                 data
                     .filter((app) => app.status === 'approved')
@@ -53,7 +52,6 @@ export default function Home() {
 
     return (
         <div className="min-h-screen">
-            (
             <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
                 <div className="flex gap-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div className="w-16 h-16 rounded-full bg-cyan-600 flex items-center justify-center shadow-sm border border-gray-200">
@@ -148,7 +146,9 @@ export default function Home() {
                                                     </div>
                                                 </div>
                                             )}
-                                            <h1 className="text-lg font-semibold">{app.name}</h1>
+                                            <h1 className="text-lg font-semibold">
+                                                {app.schemaInfo.name}
+                                            </h1>
                                             <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                                 <IoMdCheckmarkCircleOutline />
                                                 <span className="text-xs">승인됨</span>
@@ -176,7 +176,17 @@ export default function Home() {
                                             </button>
                                         </div>
                                     </div>
-                                    <span className="text-sm">{app.description}</span>
+                                    <span className="text-sm">{app.schemaInfo.description}</span>
+                                    <div className="grid grid-cols-3 gap-4 text-sm">
+                                        <div>
+                                            <span className="text-gray-500">코호트 이름:</span>
+                                            <span className="ml-2 font-medium">{app.name}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-gray-500">코호트 타입:</span>
+                                            <span className="ml-2 font-medium">{app.origin}</span>
+                                        </div>
+                                    </div>
                                     <div className="grid grid-cols-3 gap-4 text-sm">
                                         <div>
                                             <span className="text-gray-500">신청일:</span>
@@ -242,7 +252,9 @@ export default function Home() {
                             >
                                 <div className="relative flex items-center justify-between">
                                     <div className="flex gap-2">
-                                        <h1 className="text-lg font-semibold">{app.name}</h1>
+                                        <h1 className="text-lg font-semibold">
+                                            {app.schemaInfo.name}
+                                        </h1>
                                         <div
                                             className={`flex gap-1 font-bold items-center px-2 rounded-xl ${app.status === 'rejected' ? 'text-red-900 bg-red-100' : 'text-blue-900 bg-blue-100'}`}
                                         >
@@ -269,7 +281,17 @@ export default function Home() {
                                         </button>
                                     )}
                                 </div>
-                                <span className="text-sm">{app.description}</span>
+                                <span className="text-sm">{app.schemaInfo.description}</span>
+                                <div className="grid grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <span className="text-gray-500">코호트 이름:</span>
+                                        <span className="ml-2 font-medium">{app.name}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-500">코호트 타입:</span>
+                                        <span className="ml-2 font-medium">{app.origin}</span>
+                                    </div>
+                                </div>
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
                                         <span className="text-gray-500">신청일:</span>
@@ -325,7 +347,6 @@ export default function Home() {
                     app={selectApp}
                 />
             </div>
-            )
         </div>
     );
 }
