@@ -95,7 +95,7 @@ export default function Structured() {
     return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
             <div>
-                <h1 className="font-bold text-4xl mb-5">코호트 리스트</h1>
+                <h1 className="font-bold text-4xl mb-5">정형 데이터 신청</h1>
                 <p className="text-xl">코호트 사용 권한을 신청할 수 있습니다.</p>
             </div>
             <div className="flex gap-5">
