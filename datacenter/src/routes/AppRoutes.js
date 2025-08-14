@@ -6,6 +6,8 @@ import Structured from '../pages/Structured';
 import AdminPage from '../pages/AdminPage';
 import Home from '../pages/Home';
 import CohortDetail from '../pages/CohortDetail';
+import Unstructured from '../pages/Unstructured';
+import UnStructuredDetail from '../pages/UnstructuredDetail';
 
 export default function AppRoutes() {
     return (
@@ -32,6 +34,22 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Structured />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/unstructured/:id"
+                element={
+                    <PrivateRoute>
+                        <UnStructuredDetail />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/unstructured"
+                element={
+                    <PrivateRoute>
+                        <Unstructured />
                     </PrivateRoute>
                 }
             />
