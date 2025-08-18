@@ -33,7 +33,7 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
     };
 
     const handleRemoveFile = (fileName) => {
-        setSelectedFiles(selectedFiles.filter((file) => file.name !== fileName));
+        setTmpFiles(tmpFiles.filter((file) => file.name !== fileName));
     };
 
     return (
@@ -74,7 +74,7 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
 
                         {tmpFiles.length > 0 && (
                             <div className="mt-4 space-y-2">
-                                <ul className="list-none pl-0 text-sm text-gray-700">
+                                <ul className="list-none pl-0 text-sm text-gray-700 space-y-2">
                                     {tmpFiles.map((file, idx) => (
                                         <li
                                             key={idx}
