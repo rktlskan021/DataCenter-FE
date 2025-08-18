@@ -427,14 +427,14 @@ export default function CohortDetail() {
                     files={selectedFiles}
                 />
             )}
-            {isFileUploadOpen ? (
+            {isFileUploadOpen && (
                 <FileUploadModal
                     isOpen={isFileUploadOpen}
                     setIsOpen={setFileUploadOpen}
                     selectedFiles={selectedFiles}
                     setSelectedFiles={setSelectedFiles}
                 />
-            ) : null}
+            )}
         </div>
     );
 }
