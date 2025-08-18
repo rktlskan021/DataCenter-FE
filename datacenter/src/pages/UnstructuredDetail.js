@@ -8,6 +8,11 @@ import { FiImage } from 'react-icons/fi';
 import { VscGraph } from 'react-icons/vsc';
 import { LuDna } from 'react-icons/lu';
 import { format } from 'date-fns';
+import { MdOutlineFileUpload } from 'react-icons/md';
+import { FiInfo } from 'react-icons/fi';
+import { BsCheck2Circle } from 'react-icons/bs';
+import InfoModal from '../components/modals/InfoModal';
+import FileUploadModal from '../components/modals/FileUploadModal';
 
 // 비정형 데이터 타입 정의
 const dataTypes = [
@@ -60,9 +65,16 @@ export default function UnStructuredDetail() {
     const [selectDataType, setSelectDataType] = useState(null);
     const [selectSubType, setSelectSubType] = useState([]);
     const [requestReason, setRequestReason] = useState('');
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [isFileUploadOpen, setFileUploadOpen] = useState(false);
+    const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const cohort_id = useParams().id;
 
-    const canSubmitRequest = selectDataType && selectSubType.length > 0 && requestReason.trim();
+    const canSubmitRequest =
+        selectDataType &&
+        selectSubType.length > 0 &&
+        selectedFiles.length > 0 &&
+        requestReason.trim();
     const { data, isLoading } = useCohortDetail(cohort_id);
 
     if (isLoading) {
@@ -232,6 +244,45 @@ export default function UnStructuredDetail() {
                     </div>
                 )}
                 {selectDataType && selectSubType.length > 0 && (
+                    <div className="flex flex-col gap-5 bg-white border border-gray-200 px-5 py-6 rounded-xl">
+                        <div>
+                            <h1 className="text-2xl font-black font-normal">
+                                IRB/DRB 승인서 업로드
+                            </h1>
+                            <span className="font-normal text-gray-700">
+                                데이터 접근 권한 신청을 위해 IRB/DRB 승인서를 업로드하세요
+                            </span>
+                        </div>
+                        <div className="flex gap-4">
+                            <button
+                                className="flex gap-3 items-center border border-gray-300 rounded px-4 py-2 hover:bg-gray-100"
+                                onClick={() => setFileUploadOpen(true)}
+                            >
+                                <MdOutlineFileUpload className="h-6 w-6" />
+                                <span className="font-bold text-xs">파일 업로드</span>
+                            </button>
+                            {selectedFiles.length > 0 ? (
+                                <div className="flex items-center gap-2 text-sm font-bold text-green-600">
+                                    <BsCheck2Circle className="h-4 w-4" />
+                                    <span>
+                                        {selectedFiles[0].name} 업로드 완료
+                                        {selectedFiles.length !== 1
+                                            ? ` (외 ${selectedFiles.length - 1}건)`
+                                            : null}
+                                    </span>
+                                    <button
+                                        onClick={() => setIsInfoModalOpen(true)}
+                                        className="text-gray-500 hover:text-gray-700"
+                                        aria-label="전체 파일 보기"
+                                    >
+                                        <FiInfo className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+                )}
+                {selectDataType && selectSubType.length > 0 && (
                     <div className="px-5 py-6 bg-white rounded-xl">
                         <div className="mb-8">
                             <p className="font-bold text-gray-900 text-2xl">신청 사유</p>
@@ -249,6 +300,12 @@ export default function UnStructuredDetail() {
                     </div>
                 )}
                 <div className="flex flex-col gap-2 items-end">
+                    {selectedFiles.length ? null : (
+                        <div className="flex items-center gap-2 text-sm text-amber-600">
+                            <FiInfo className="h-4 w-4" />
+                            <span>모든 항목을 선택하고 신청 사유를 작성해주세요</span>
+                        </div>
+                    )}
                     <button
                         disabled={!canSubmitRequest}
                         className={`px-8 bg-blue-600 text-white rounded py-3 font-bold ${
@@ -261,6 +318,21 @@ export default function UnStructuredDetail() {
                     </button>
                 </div>
             </div>
+            {isInfoModalOpen && (
+                <InfoModal
+                    isModalOpen={isInfoModalOpen}
+                    setIsModalOpen={setIsInfoModalOpen}
+                    files={selectedFiles}
+                />
+            )}
+            {isFileUploadOpen && (
+                <FileUploadModal
+                    isOpen={isFileUploadOpen}
+                    setIsOpen={setFileUploadOpen}
+                    selectedFiles={selectedFiles}
+                    setSelectedFiles={setSelectedFiles}
+                />
+            )}
         </>
     );
 }
