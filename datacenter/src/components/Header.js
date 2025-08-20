@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
+import Dropdown from './Dropdown';
 
 export default function Header() {
     const { name, isLoggedIn, logout, isAdmin } = useAuthStore();
@@ -13,11 +14,23 @@ export default function Header() {
                         <Link to="/home">Data Center</Link>
                     </h1>
                     <div className="flex gap-8 text-gray-600 font-bold text-lg">
-                        <Link to="/structured">
-                            <p className="text-gray-600 hover:text-gray-900 hover:-translate-y-0.5 transition-all duration-300 ">
-                                정형 데이터 신청
-                            </p>
-                        </Link>
+                        <Dropdown
+                            label="정형 데이터 신청"
+                            align="left"
+                            hoverOpen
+                            items={[
+                                {
+                                    label: '신규 정형 데이터 신청',
+                                    to: '/structured',
+                                    description: '새 정형 데이터 요청',
+                                },
+                                {
+                                    label: '기존 정형 데이터 권한 신청',
+                                    to: '/structured',
+                                    description: '등록된 정형 데이터 이용 권한 요청',
+                                },
+                            ]}
+                        />
                         <Link to="/unstructured">
                             <p className="text-gray-600 hover:text-gray-900 hover:-translate-y-0.5 transition-all duration-300 ">
                                 비정형 데이터 신청
