@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
 import bmiLogo from '../assets/imgs/bmiLabLogo.svg';
 import { postLogin } from '../api/users/users';
+import { Database, Shield, Users, BarChart3 } from 'lucide-react';
 
 export default function Login() {
     const [userId, setUserId] = useState('');
@@ -12,6 +13,28 @@ export default function Login() {
     const { login, logout, isLoggedIn } = useAuthStore();
     const navigate = useNavigate();
 
+    const features = [
+        {
+            icon: Database,
+            title: 'OMOP CDM 데이터',
+            description: '표준화된 의료 데이터 모델을 통한 안전한 데이터 접근',
+        },
+        {
+            icon: Shield,
+            title: '보안 강화',
+            description: 'IRB/DRB 승인을 통한 엄격한 데이터 보안 관리',
+        },
+        {
+            icon: Users,
+            title: '코호트 관리',
+            description: '연구 목적에 맞는 환자 코호트 생성 및 관리',
+        },
+        {
+            icon: BarChart3,
+            title: '데이터 분석',
+            description: '승인된 데이터를 활용한 고급 분석 도구 제공',
+        },
+    ];
     useEffect(() => {
         if (isLoggedIn) {
             logout();
@@ -52,69 +75,106 @@ export default function Login() {
     };
 
     return (
-        <div className="h-screen -mt-24 flex items-center justify-center">
-            <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-                {/* 로고 및 브랜딩 */}
-                <div className="text-center mb-8">
-                    <img src={bmiLogo} className="mx-auto mb-4" />
-                    {/* <h1 className="text-2xl font-bold text-gray-900 mb-2">SNUH BMI LAB</h1> */}
-                    <p className="text-gray-600 text-sm">Data Center</p>
-                </div>
-
-                {/* 로그인 폼 */}
-                <form onSubmit={handleLogin}>
-                    <div className="space-y-4">
-                        <div>
-                            <label
-                                htmlFor="userId"
-                                className="block text-sm font-medium text-gray-700 mb-2"
-                            >
-                                아이디
-                            </label>
-                            <input
-                                id="userId"
-                                type="text"
-                                placeholder="아이디를 입력하세요"
-                                value={userId}
-                                onChange={(e) => setUserId(e.target.value)}
-                                disabled={loading}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:bg-gray-50"
-                            />
-                        </div>
-
-                        <div>
-                            <label
-                                htmlFor="userPw"
-                                className="block text-sm font-medium text-gray-700 mb-2"
-                            >
-                                비밀번호
-                            </label>
-                            <input
-                                id="userPw"
-                                type="password"
-                                placeholder="비밀번호를 입력하세요"
-                                value={userPw}
-                                onChange={(e) => setuserPw(e.target.value)}
-                                disabled={loading}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:bg-gray-50"
-                            />
-                        </div>
+        // ✅ 화면을 2칸으로 나눔 (모바일 1칸, md 이상 2칸)
+        <div className="h-[calc(100vh-96px)] w-screen grid grid-cols-1 md:grid-cols-2">
+            {/* 왼쪽 칸: 카드 가운데 정렬 */}
+            <div className="flex items-center justify-center p-6 bg-white">
+                <div className="w-full max-w-md p-10 rounded-2xl shadow-xl border border-gray-100">
+                    {/* 로고 및 브랜딩 */}
+                    <div className="text-center mb-8">
+                        <img src={bmiLogo} alt="BMI Lab" className="mx-auto mb-4" />
+                        <p className="text-gray-600 text-sm font-bold">Data Center</p>
                     </div>
 
-                    {error && (
-                        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl">
-                            <p className="text-red-600 text-sm">{error}</p>
-                        </div>
-                    )}
+                    {/* 로그인 폼 */}
+                    <form onSubmit={handleLogin}>
+                        <div className="space-y-4">
+                            <div>
+                                <label
+                                    htmlFor="userId"
+                                    className="block text-sm font-medium text-gray-700 mb-2"
+                                >
+                                    아이디
+                                </label>
+                                <input
+                                    id="userId"
+                                    type="text"
+                                    placeholder="아이디를 입력하세요"
+                                    value={userId}
+                                    onChange={(e) => setUserId(e.target.value)}
+                                    disabled={loading}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:bg-gray-50"
+                                />
+                            </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        로그인
-                    </button>
-                </form>
+                            <div>
+                                <label
+                                    htmlFor="userPw"
+                                    className="block text-sm font-medium text-gray-700 mb-2"
+                                >
+                                    비밀번호
+                                </label>
+                                <input
+                                    id="userPw"
+                                    type="password"
+                                    placeholder="비밀번호를 입력하세요"
+                                    value={userPw}
+                                    onChange={(e) => setuserPw(e.target.value)}
+                                    disabled={loading}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:bg-gray-50"
+                                />
+                            </div>
+                        </div>
+
+                        {error && (
+                            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl">
+                                <p className="text-red-600 text-sm">{error}</p>
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            로그인
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {/* 오른쪽 칸: 파란 배경 (그냥 절반 차지) */}
+            <div className="flex justify-start items-center bg-gradient-to-br from-blue-600 to-blue-700">
+                <div className="px-20 text-white ">
+                    <h2 className="text-4xl font-bold mb-6">의료 데이터 연구 플랫폼</h2>
+                    <p className="text-xl font-medium text-blue-100 mb-12">
+                        안전하고 표준화된 의료 데이터에 접근하여 혁신적인 연구를 수행하세요
+                    </p>
+
+                    <div className="space-y-8">
+                        {features.map((feature, index) => (
+                            <div key={index} className="flex items-start space-x-4">
+                                <div className="flex-shrink-0">
+                                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                                        <feature.icon className="h-6 w-6 text-white" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
+                                    <p className="text-blue-100">{feature.description}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-12 p-6 bg-white/10 rounded-lg backdrop-blur-sm">
+                        <h3 className="text-lg font-bold mb-2">연구 윤리 준수</h3>
+                        <p className="text-blue-100 text-sm font-medium">
+                            모든 데이터 접근은 IRB(기관생명윤리위원회) 또는 DRB(데이터심의위원회)
+                            승인을 통해 엄격하게 관리됩니다.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     );
