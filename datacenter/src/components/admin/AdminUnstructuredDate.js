@@ -233,7 +233,7 @@ export default function AdminUnstructuredData({}) {
                                             <div className="font-medium text-sm text-purple-900 bg-purple-100 px-2 rounded-xl">
                                                 {application.dataType}
                                             </div>
-                                            <div className="font-medium text-xs text-neutral-900 bg-neutral-100 px-2 rounded-xl">
+                                            <div className="font-medium text-sm text-neutral-900 bg-neutral-100 px-2 rounded-xl">
                                                 {application.dataSubtype}
                                             </div>
                                         </div>
