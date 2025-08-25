@@ -19,17 +19,17 @@ axiosInstance.interceptors.request.use(async (config) => {
         if (res.status === 200) {
             config.headers.Authorization = `Bearer ${token}`;
             return config;
-        } else if (res.status === 401) {
+        } else if (res.status === 403) {
+            console.log('토큰 만료 실행');
             Cookies.remove('token');
             window.location.href = '/';
             throw new axios.Cancel('Token invalid from server');
         }
     } catch (err) {
         console.warn('🔒 서버에서 토큰 만료 판단됨');
+        console.warn(err);
         Cookies.remove('token');
-        setTimeout(() => {
-            window.location.href = '/';
-        }, 100);
+        window.location.href = '/';
         throw new axios.Cancel('Token invalid from server');
     }
 
@@ -39,11 +39,10 @@ axiosInstance.interceptors.request.use(async (config) => {
 axiosInstance.interceptors.response.use(
     (res) => res,
     (err) => {
-        if (err.response?.status === 401) {
+        if (err.response?.status === 403) {
             Cookies.remove('token');
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 100);
+            alert('토큰 만료');
+            window.location.href = '/';
         }
         return Promise.reject(err);
     }
