@@ -33,30 +33,6 @@ export default function AdminPage() {
         },
     ];
 
-    const summarySchemaList = [
-        {
-            label: '전체 신청',
-            color: 'text-gray-800',
-            count: localData.length,
-            count: 0,
-        },
-        {
-            label: '대기중',
-            color: 'text-blue-600',
-            count: localData.filter((app) => app.status === 'applied').length,
-        },
-        {
-            label: '승인됨',
-            color: 'text-emerald-600',
-            count: localData.filter((app) => app.status === 'approved').length,
-        },
-        {
-            label: '거부됨',
-            color: 'text-red-600',
-            count: localData.filter((app) => app.status === 'rejected').length,
-        },
-    ];
-
     const summaryUnstructuredList = [
         {
             label: '전체 신청',
@@ -82,7 +58,6 @@ export default function AdminPage() {
 
     const summaries = {
         'cohort-requests': summaryList,
-        'schema-requests': summarySchemaList,
         'unstructured-data': summaryUnstructuredList,
     };
 
@@ -116,16 +91,6 @@ export default function AdminPage() {
                                 스키마 신청 관리
                             </button>
                             <button
-                                onClick={() => setActiveTab('schema-requests')}
-                                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                                    activeTab === 'schema-requests'
-                                        ? 'border-blue-600 text-blue-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                            >
-                                스키마 권한 요청
-                            </button>
-                            <button
                                 onClick={() => setActiveTab('unstructured-data')}
                                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                                     activeTab === 'unstructured-data'
@@ -147,7 +112,6 @@ export default function AdminPage() {
                         setLocalData={setLocalData}
                     />
                 )}
-                {activeTab === 'schema-requests' && <div>Test</div>}
                 {activeTab === 'unstructured-data' && <AdminUnstructuredData />}
             </div>
         </div>

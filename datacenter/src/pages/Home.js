@@ -58,16 +58,6 @@ export default function Home() {
                                 스키마 신청 관리
                             </button>
                             <button
-                                onClick={() => setActiveTab('schema-requests')}
-                                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                                    activeTab === 'schema-requests'
-                                        ? 'border-blue-600 text-blue-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                            >
-                                스키마 권한 요청
-                            </button>
-                            <button
                                 onClick={() => setActiveTab('unstructured-data')}
                                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                                     activeTab === 'unstructured-data'
