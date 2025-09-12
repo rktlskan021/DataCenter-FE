@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useParams } from 'react-router-dom';
 import { useCohortDetail, useApplyCohort } from '../hooks/queries/useCohorts';
@@ -13,6 +13,9 @@ import { FiInfo } from 'react-icons/fi';
 import { BsCheck2Circle } from 'react-icons/bs';
 import InfoModal from '../components/modals/InfoModal';
 import FileUploadModal from '../components/modals/FileUploadModal';
+import { IoSettingsOutline } from 'react-icons/io5';
+import { TiPlus } from 'react-icons/ti';
+import PeriodBox from '../components/unstructured/PeriodBox';
 
 // 비정형 데이터 타입 정의
 const dataTypes = [
@@ -61,6 +64,26 @@ const dataTypes = [
     },
 ];
 
+function useOutsideClose(onClose) {
+    const ref = useRef(null);
+    useEffect(() => {
+        const onDown = (e) => {
+            if (!ref.current) return;
+            if (!ref.current.contains(e.target)) onClose();
+        };
+        const onKey = (e) => {
+            if (e.key === 'Escape') onClose();
+        };
+        document.addEventListener('mousedown', onDown);
+        document.addEventListener('keydown', onKey);
+        return () => {
+            document.removeEventListener('mousedown', onDown);
+            document.removeEventListener('keydown', onKey);
+        };
+    }, [onClose]);
+    return ref;
+}
+
 export default function UnStructuredDetail() {
     const [selectDataType, setSelectDataType] = useState(null);
     const [selectSubType, setSelectSubType] = useState([]);
@@ -68,6 +91,19 @@ export default function UnStructuredDetail() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [isFileUploadOpen, setFileUploadOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [period, setPeriod] = useState([]);
+    const [dateRanges, setDateRanges] = useState([
+        {
+            id: '1',
+            startDate: undefined,
+            endDate: undefined,
+            operator: 'AND',
+        },
+    ]);
+
+    const popoverRef = useOutsideClose(() => setOpen(false));
+
     const cohort_id = useParams().id;
 
     const canSubmitRequest =
@@ -77,6 +113,33 @@ export default function UnStructuredDetail() {
         requestReason.trim();
     const { data, isLoading } = useCohortDetail(cohort_id);
 
+    const onApply = () => {
+        setPeriod(dateRanges);
+        console.log('적용:', period);
+        setOpen(false);
+    };
+
+    const addDateRange = () => {
+        const newRange = {
+            id: Date.now().toString(),
+            startDate: undefined,
+            endDate: undefined,
+        };
+        setDateRanges([...dateRanges, newRange]);
+    };
+
+    const removeDateRange = (id) => {
+        if (dateRanges.length > 1) {
+            setDateRanges(dateRanges.filter((range) => range.id !== id));
+        }
+    };
+
+    const updateDateRange = (id, field, value) => {
+        setDateRanges(
+            dateRanges.map((range) => (range.id === id ? { ...range, [field]: value } : range))
+        );
+    };
+
     if (isLoading) {
         return <LoadingSpinner />;
     }
@@ -85,17 +148,15 @@ export default function UnStructuredDetail() {
         <>
             <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
                 <div className="flex flex-col gap-3 bg-white border border-gray-200 px-5 py-6 rounded-xl">
-                    <h1 className="font-bold text-2xl">{data.cohortInfo.name}</h1>
-                    <span>{data.cohortInfo.description}</span>
+                    <h1 className="font-bold text-2xl">{data.name}</h1>
+                    <span>{data.description}</span>
                     <div className="flex gap-5">
-                        <span>작성자: {data.cohortInfo.author}</span>
+                        <span>작성자: {data.creator}</span>
                         <span>
-                            생성일:{' '}
-                            {format(new Date(data.cohortInfo.createdDate), 'yyyy-MM-dd hh:mm')}
+                            생성일: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                         <span>
-                            수정일:{' '}
-                            {format(new Date(data.cohortInfo.modifiedDate), 'yyyy-MM-dd hh:mm')}
+                            수정일: {format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                     </div>
                 </div>
@@ -216,6 +277,72 @@ export default function UnStructuredDetail() {
                                     </span>
                                 </div>
                             </div>
+                            <div className="relative">
+                                {/* 트리거 버튼 */}
+                                <button
+                                    type="button"
+                                    onClick={() => setOpen((v) => !v)}
+                                    aria-haspopup="dialog"
+                                    aria-expanded={open}
+                                    className="flex gap-4 items-center justify-center justify-self-end border border-emerald-200 bg-white rounded-lg px-2 py-2 transition duration-200 ease-in-out hover:bg-neutral-100"
+                                >
+                                    <IoSettingsOutline size={17} />
+                                    <span className="font-medium text-sm">수집 기간 설정</span>
+                                </button>
+
+                                {/* Popover */}
+                                {open && (
+                                    <div
+                                        ref={popoverRef}
+                                        className="absolute z-50 mt-2 right-0 w-96 rounded-xl border border-gray-200 bg-white shadow-xl"
+                                    >
+                                        {/* 화살표 */}
+                                        <div className="absolute -top-2 right-6 h-4 w-4 rotate-45 bg-white border-t border-l border-gray-200" />
+
+                                        <div className="p-4 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-sm font-semibold">수집 기간</h3>
+                                                <button
+                                                    className="flex items-center justify-center gap-2 rounded-lg border border-neutral-300 px-2 py-1 transition duration-200 ease-in-out hover:bg-neutral-100"
+                                                    onClick={addDateRange}
+                                                >
+                                                    <TiPlus />
+                                                    <span className="font-medium text-xs">
+                                                        기간 추가
+                                                    </span>
+                                                </button>
+                                            </div>
+
+                                            {dateRanges.map((range, index) => (
+                                                <PeriodBox
+                                                    range={range}
+                                                    index={index}
+                                                    length={dateRanges.length}
+                                                    removeDateRange={removeDateRange}
+                                                    updateDateRange={updateDateRange}
+                                                />
+                                            ))}
+
+                                            <div className="flex justify-end gap-2 pt-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setOpen(false)}
+                                                    className="px-3 py-2 text-sm rounded-lg border border-gray-200 hover:bg-gray-50"
+                                                >
+                                                    취소
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={onApply}
+                                                    className="px-3 py-2 text-sm rounded-lg bg-emerald-500 text-white hover:bg-emerald-600"
+                                                >
+                                                    적용
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         <div className="flex items-center justify-around text-center pt-6 pb-6">
                             <div>
@@ -238,7 +365,12 @@ export default function UnStructuredDetail() {
 
                         <div className="border-t border-green-200 mx-5 py-6">
                             <div className="text-sm text-green-800">
-                                <strong>데이터 수집 기간:</strong> {'2021~2022'}
+                                <strong>데이터 수집 기간 :</strong>{' '}
+                                {period
+                                    .map((date) => {
+                                        return `${date.startDate} ~ ${date.endDate}`;
+                                    })
+                                    .join(' or ')}
                             </div>
                         </div>
                     </div>
