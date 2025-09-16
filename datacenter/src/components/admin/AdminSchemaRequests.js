@@ -148,8 +148,8 @@ export default function AdminSchemaRequests({
                                     key={idx}
                                     className="hover:bg-gray-50 border-b border-gray-200 text-sm text-gray-800"
                                 >
-                                    <td className="py-4">{application.author}</td>
-                                    <td>-</td>
+                                    <td className="py-4">{application.creator}</td>
+                                    <td>{application.modifier ? application.modifier : '-'}</td>
                                     <td className="font-bold">{application.name}</td>
                                     <td className="font-medium">
                                         <div className="text-sm">

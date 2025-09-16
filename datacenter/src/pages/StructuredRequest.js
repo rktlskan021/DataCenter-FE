@@ -95,7 +95,7 @@ export default function Structured() {
     return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
             <div>
-                <h1 className="font-bold text-4xl mb-5">신규 정형 데이터 신청</h1>
+                <h1 className="font-bold text-4xl mb-5">정형 데이터 신청</h1>
                 <p className="text-xl">코호트 사용 권한을 신청할 수 있습니다.</p>
             </div>
             <div className="flex gap-5">
@@ -265,7 +265,7 @@ export default function Structured() {
                                     <td className="px-6 py-4 text-sm text-gray-800">
                                         <div className="flex items-center gap-2">
                                             <FaUser />
-                                            <span>{cohort.creator}</span>
+                                            <span>{cohort.author}</span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-600">
@@ -283,12 +283,10 @@ export default function Structured() {
                                         <div className="flex items-center gap-2">
                                             <FaRegCalendarAlt />
                                             <span>
-                                                {cohort.modifiedDate
-                                                    ? format(
-                                                          new Date(cohort.modifiedDate),
-                                                          'yyyy-MM-dd hh-mm'
-                                                      )
-                                                    : '-'}
+                                                {format(
+                                                    new Date(cohort.modifiedDate),
+                                                    'yyyy-MM-dd hh-mm'
+                                                )}
                                             </span>
                                         </div>
                                     </td>

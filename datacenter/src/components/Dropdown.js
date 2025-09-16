@@ -23,14 +23,9 @@ export default function Dropdown({
             if (menuRef.current?.contains(t) || buttonRef.current?.contains(t)) return;
             setOpen(false);
         }
-        function onEscape(e) {
-            if (e.key === 'Escape') setOpen(false);
-        }
         document.addEventListener('mousedown', onDocClick);
-        document.addEventListener('keydown', onEscape);
         return () => {
             document.removeEventListener('mousedown', onDocClick);
-            document.removeEventListener('keydown', onEscape);
         };
     }, [open]);
 
@@ -46,41 +41,6 @@ export default function Dropdown({
         hoverTimer.current = window.setTimeout(() => setOpen(false), 120);
     };
 
-    // 키보드 내비게이션
-    const onButtonKeyDown = (e) => {
-        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setOpen(true);
-        }
-    };
-
-    const onMenuKeyDown = (e) => {
-        const nodeList = menuRef.current?.querySelectorAll('a[role="menuitem"]') || [];
-        const focusables = Array.from(nodeList);
-        const idx = focusables.indexOf(document.activeElement);
-
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            const next = focusables[(idx + 1) % focusables.length] || focusables[0];
-            next?.focus();
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            const prev =
-                focusables[(idx - 1 + focusables.length) % focusables.length] ||
-                focusables[focusables.length - 1];
-            prev?.focus();
-        } else if (e.key === 'Home') {
-            e.preventDefault();
-            focusables[0]?.focus();
-        } else if (e.key === 'End') {
-            e.preventDefault();
-            focusables[focusables.length - 1]?.focus();
-        } else if (e.key === 'Tab') {
-            // 탭으로 나가면 닫기
-            setOpen(false);
-        }
-    };
-
     return (
         <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <button
@@ -89,7 +49,6 @@ export default function Dropdown({
                 aria-expanded={open}
                 aria-controls={menuId}
                 className={`text-gray-600 hover:text-gray-900 hover:-translate-y-0.5 transition-all duration-300 font-bold text-lg ${className}`}
-                onKeyDown={onButtonKeyDown}
                 type="button"
             >
                 {label}
@@ -101,7 +60,6 @@ export default function Dropdown({
                     id={menuId}
                     role="menu"
                     tabIndex={-1}
-                    onKeyDown={onMenuKeyDown}
                     className={[
                         'absolute z-50 mt-2 min-w-[220px]',
                         align === 'right' ? 'right-0' : 'left-0',

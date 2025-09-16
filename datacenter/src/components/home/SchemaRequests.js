@@ -113,6 +113,9 @@ export default function SchemaRequests({ setApprovedAppLength, setPendingAppLeng
                                     )}
                                     <h1 className="text-lg font-semibold">{app.schemaInfo.name}</h1>
                                     <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
+                                        <span className="text-xs">스키마 신청</span>
+                                    </div>
+                                    <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                         <IoMdCheckmarkCircleOutline />
                                         <span className="text-xs">승인됨</span>
                                     </div>
@@ -121,7 +124,7 @@ export default function SchemaRequests({ setApprovedAppLength, setPendingAppLeng
                                     <button
                                         className="flex justify-center items-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
                                         onClick={() => {
-                                            navigator(`/structured/${app.id}`);
+                                            navigator(`/structured/modify/${app.id}`);
                                         }}
                                     >
                                         <BiSolidEdit size={20} />
@@ -170,19 +173,17 @@ export default function SchemaRequests({ setApprovedAppLength, setPendingAppLeng
                                     </span>
                                 </div>
                             </div>
-                            <div>
+                            <div className="flex">
                                 <span className="text-sm text-gray-500">승인된 테이블:</span>
                                 <div className="flex flex-wrap gap-1">
-                                    {app.tables
-                                        .filter((table) => table.checked)
-                                        .map((table, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
-                                            >
-                                                {table.name}
-                                            </div>
-                                        ))}
+                                    {app.tables.map((table, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
+                                        >
+                                            {table}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -205,6 +206,9 @@ export default function SchemaRequests({ setApprovedAppLength, setPendingAppLeng
                         <div className="relative flex items-center justify-between">
                             <div className="flex gap-2">
                                 <h1 className="text-lg font-semibold">{app.schemaInfo.name}</h1>
+                                <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
+                                    <span className="text-xs">스키마 신청</span>
+                                </div>
                                 <div
                                     className={`flex gap-1 font-bold items-center px-2 rounded-xl ${app.status === 'rejected' ? 'text-red-900 bg-red-100' : 'text-blue-900 bg-blue-100'}`}
                                 >
@@ -260,19 +264,19 @@ export default function SchemaRequests({ setApprovedAppLength, setPendingAppLeng
                                 </span>
                             </div>
                         </div>
-                        <div>
-                            <span className="text-sm text-gray-500">승인된 테이블:</span>
+                        <div className="flex items-center">
+                            <span className="whitespace-nowrap self-start text-sm text-gray-500 mr-1">
+                                승인된 테이블:
+                            </span>
                             <div className="flex flex-wrap gap-1">
-                                {app.tables
-                                    .filter((table) => table.checked)
-                                    .map((table, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
-                                        >
-                                            {table.name}
-                                        </div>
-                                    ))}
+                                {app.tables.map((table, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="font-bold text-center bg-gray-200 text-xs px-1.5 py-1 rounded-xl"
+                                    >
+                                        {table}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

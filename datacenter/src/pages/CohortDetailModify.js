@@ -8,7 +8,8 @@ import { FiInfo } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
 import CheckboxCard from '../components/table/CheckboxCard';
 import { useParams } from 'react-router-dom';
-import { useCohortDetail, useApplyCohort } from '../hooks/queries/useCohorts';
+import { useApplyCohort } from '../hooks/queries/useCohorts';
+import { useStruct } from '../hooks/queries/useUsers';
 import { fetchIrbDrbData } from '../api/users/users';
 import { format } from 'date-fns';
 
@@ -55,7 +56,7 @@ const tableMeta = {
     fact_relationship: { hasPersonId: false },
 };
 
-export default function CohortDetail() {
+export default function CohortDetailModify() {
     const [selectedTables, setSelectedTables] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [isFileUploadOpen, setFileUploadOpen] = useState(false);
@@ -63,14 +64,12 @@ export default function CohortDetail() {
     const [schemaName, setSchemaName] = useState('');
     const [schemaDescription, setSchemaDescription] = useState('');
     const [isDisabledSchemaInfo, setIsDisabledSchemaInfo] = useState(false);
-    const cohort_id = useParams().id;
+    const struct_id = useParams().id;
 
     const { mutate } = useApplyCohort();
-    const { data, isLoading } = useCohortDetail(cohort_id);
+    const { data, isLoading } = useStruct(struct_id);
 
-    const [withPersonId, setWithPersonId] = useState(
-        Object.keys(tableMeta).map((table) => tableMeta[table].hasPersonId)
-    );
+    const [withPersonId, setWithPersonId] = useState([]);
     const [withoutPersonId, setWithoutPersonId] = useState([]);
     const [allTables, setAllTables] = useState([]);
 
@@ -144,7 +143,7 @@ export default function CohortDetail() {
 
     const clickApplyBtn = () => {
         const cohortData = {
-            cohort_id,
+            cohort_id: struct_id,
             schemaName,
             schemaDescription,
             selectedTables,
@@ -154,57 +153,63 @@ export default function CohortDetail() {
         mutate(cohortData); // 한 번에 객체로 전달
     };
 
-    // useEffect(() => {
-    //     if (!isLoading && data) {
-    //         const withId = data.tableInfo?.filter(
-    //             (t) => tableMeta[t.name.toLowerCase()]?.hasPersonId
-    //         );
-    //         const withoutId = data.tableInfo?.filter(
-    //             (t) => tableMeta[t.name.toLowerCase()]?.hasPersonId === false
-    //         );
-    //         const selectedTableNames = data.tableInfo?.filter((t) => t.checked).map((t) => t.name);
+    useEffect(() => {
+        if (!isLoading && data) {
+            const withId = data.tableInfo?.filter(
+                (t) => tableMeta[t.name.toLowerCase()]?.hasPersonId
+            );
+            const withoutId = data.tableInfo?.filter(
+                (t) => tableMeta[t.name.toLowerCase()]?.hasPersonId === false
+            );
+            const selectedTableNames = data.tableInfo?.filter((t) => t.checked).map((t) => t.name);
 
-    //         if (data.schemaInfo) {
-    //             setSchemaName(data.schemaInfo.name);
-    //             setSchemaDescription(data.schemaInfo.description);
-    //             setIsDisabledSchemaInfo(true);
-    //         }
+            if (data.schemaInfo) {
+                setSchemaName(data.schemaInfo.name);
+                setSchemaDescription(data.schemaInfo.description);
+                setIsDisabledSchemaInfo(true);
+            }
 
-    //         if (data.irb_drb) {
-    //             const filePromies = data.irb_drb.map((file) =>
-    //                 fetchIrbDrbData(file.path, file.name)
-    //             );
+            if (data.irb_drb) {
+                const filePromies = data.irb_drb.map((file) =>
+                    fetchIrbDrbData(file.path, file.name)
+                );
 
-    //             Promise.all(filePromies).then((files) => {
-    //                 setSelectedFiles(files);
-    //             });
-    //         }
+                Promise.all(filePromies).then((files) => {
+                    setSelectedFiles(files);
+                });
+            }
 
-    //         setWithPersonId(withId);
-    //         setWithoutPersonId(withoutId);
-    //         setAllTables([...withId, ...withoutId]);
-    //         setSelectedTables(selectedTableNames);
-    //     }
-    // }, [isLoading, data]);
+            setWithPersonId(withId);
+            setWithoutPersonId(withoutId);
+            setAllTables([...withId, ...withoutId]);
+            setSelectedTables(selectedTableNames);
+
+            console.log(data);
+        }
+    }, [isLoading, data]);
 
     if (isLoading) {
         return <LoadingSpinner />;
     }
+
+    console.log(struct_id);
 
     return (
         <div>
             (
             <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
                 <div className="flex flex-col gap-3 bg-white border border-gray-200 px-5 py-6 rounded-xl">
-                    <h1 className="font-bold text-2xl">{data.name}</h1>
-                    <span>{data.description}</span>
+                    <h1 className="font-bold text-2xl">{data.cohortInfo.name}</h1>
+                    <span>{data.cohortInfo.description}</span>
                     <div className="flex gap-5">
                         <span>작성자: {data.creator}</span>
                         <span>
-                            생성일: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
+                            생성일:{' '}
+                            {format(new Date(data.cohortInfo.createdDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                         <span>
-                            수정일: {format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')}
+                            수정일:{' '}
+                            {format(new Date(data.cohortInfo.modifiedDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ import Home from '../pages/Home';
 import CohortDetail from '../pages/CohortDetail';
 import Unstructured from '../pages/Unstructured';
 import UnStructuredDetail from '../pages/UnstructuredDetail';
+import CohortDetailModify from '../pages/CohortDetailModify';
 
 export default function AppRoutes() {
     return (
@@ -26,6 +27,14 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <CohortDetail />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/structured/modify/:id"
+                element={
+                    <PrivateRoute>
+                        <CohortDetailModify />
                     </PrivateRoute>
                 }
             />

@@ -156,7 +156,10 @@ export default function UnStructuredDetail() {
                             생성일: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                         <span>
-                            수정일: {format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')}
+                            수정일:{' '}
+                            {data.modifiedData
+                                ? format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')
+                                : '-'}
                         </span>
                     </div>
                 </div>
