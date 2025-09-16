@@ -10,7 +10,7 @@ export const postLogin = async (id, password) => {
 };
 
 export const fetchCohortApplies = async () => {
-    const res = await axiosInstance.get('/api/struct/my');
+    const res = await axiosInstance.get('/api/struct/my/');
     return res.data;
 };
 
