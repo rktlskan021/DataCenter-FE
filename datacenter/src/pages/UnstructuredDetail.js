@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useParams } from 'react-router-dom';
-import { useCohortDetail, useApplyCohort } from '../hooks/queries/useCohorts';
+import { useCohortDetail, useApplyUnstruct } from '../hooks/queries/useCohorts';
 import { FaRegFileAlt } from 'react-icons/fa';
 import { CiWavePulse1 } from 'react-icons/ci';
 import { FiImage } from 'react-icons/fi';
@@ -20,7 +20,7 @@ import PeriodBox from '../components/unstructured/PeriodBox';
 // 비정형 데이터 타입 정의
 const dataTypes = [
     {
-        id: 'biosignal',
+        id: 'BIO_SIGNAL',
         name: '생체신호',
         description: '심전도, 근전도 등 생체에서 발생하는 전기적 신호 데이터',
         icon: CiWavePulse1,
@@ -28,13 +28,13 @@ const dataTypes = [
         bgColor: 'bg-red-50',
         borderColor: 'border-red-200',
         subtypes: [
-            { id: 'ecg', name: 'ECG (심전도)', description: '심장의 전기적 활동을 측정한 데이터' },
-            { id: 'emg', name: 'EMG (근전도)', description: '근육의 전기적 활동을 측정한 데이터' },
+            { id: 'ECG', name: 'ECG (심전도)', description: '심장의 전기적 활동을 측정한 데이터' },
+            { id: 'EMG', name: 'EMG (근전도)', description: '근육의 전기적 활동을 측정한 데이터' },
             { id: 'eeg', name: 'EEG (뇌전도)', description: '뇌의 전기적 활동을 측정한 데이터' },
         ],
     },
     {
-        id: 'image',
+        id: 'IMAGING',
         name: '이미지',
         description: 'CT, MRI, X-ray 등 의료 영상 데이터',
         icon: FiImage,
@@ -42,8 +42,8 @@ const dataTypes = [
         bgColor: 'bg-blue-50',
         borderColor: 'border-blue-200',
         subtypes: [
-            { id: 'ct', name: 'CT', description: '컴퓨터 단층촬영 영상 데이터' },
-            { id: 'mri', name: 'MRI', description: '자기공명영상 데이터' },
+            { id: 'CT', name: 'CT', description: '컴퓨터 단층촬영 영상 데이터' },
+            { id: 'MRI', name: 'MRI', description: '자기공명영상 데이터' },
             { id: 'xray', name: 'X-ray', description: 'X선 촬영 영상 데이터' },
             { id: 'ultrasound', name: '초음파', description: '초음파 영상 데이터' },
         ],
@@ -112,10 +112,10 @@ export default function UnStructuredDetail() {
         selectedFiles.length > 0 &&
         requestReason.trim();
     const { data, isLoading } = useCohortDetail(cohort_id);
+    const { mutate } = useApplyUnstruct();
 
     const onApply = () => {
         setPeriod(dateRanges);
-        console.log('적용:', period);
         setOpen(false);
     };
 
@@ -138,6 +138,22 @@ export default function UnStructuredDetail() {
         setDateRanges(
             dateRanges.map((range) => (range.id === id ? { ...range, [field]: value } : range))
         );
+    };
+
+    const clickApplyBtn = () => {
+        const start_dates = period.map((date) => date.startDate);
+        const end_dates = period.map((date) => date.endDate);
+        console.log(start_dates);
+        const unStructData = {
+            cohort_id: cohort_id,
+            data_type: selectDataType.id,
+            sub_types: selectSubType,
+            start_dates,
+            end_dates,
+            files: selectedFiles,
+        };
+
+        mutate(unStructData); // 한 번에 객체로 전달
     };
 
     if (isLoading) {
@@ -448,6 +464,7 @@ export default function UnStructuredDetail() {
                                 ? 'opacity-50 cursor-not-allowed'
                                 : 'hover:bg-blue-700'
                         }`}
+                        onClick={clickApplyBtn}
                     >
                         비정형 데이터 접근 신청
                     </button>

@@ -30,6 +30,38 @@ export const postApplyCohort = async ({
         formData.append('files', file);
     });
 
-    const res = await axiosInstance.post(`/api/cohort/id/${cohort_id}/apply/`, formData);
+    const res = await axiosInstance.post(`/api/cohort/id/${cohort_id}/apply_struct/`, formData);
+    return res.data;
+};
+
+export const postApplyUnstruct = async ({
+    cohort_id,
+    data_type,
+    sub_types,
+    start_dates,
+    end_dates,
+    files,
+}) => {
+    const formData = new FormData();
+
+    formData.append('data_type', data_type);
+
+    sub_types.forEach((type) => {
+        formData.append('sub_types', type);
+    });
+
+    start_dates.forEach((date) => {
+        formData.append('start_dates', date);
+    });
+
+    end_dates.forEach((date) => {
+        formData.append('end_dates', date);
+    });
+
+    files.forEach((file) => {
+        formData.append('files', file);
+    });
+
+    const res = await axiosInstance.post(`/api/cohort/id/${cohort_id}/apply_unstruct/`, formData);
     return res.data;
 };
