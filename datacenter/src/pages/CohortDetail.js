@@ -9,51 +9,7 @@ import { LuUser } from 'react-icons/lu';
 import CheckboxCard from '../components/table/CheckboxCard';
 import { useParams } from 'react-router-dom';
 import { useCohortDetail, useApplyCohort } from '../hooks/queries/useCohorts';
-import { fetchIrbDrbData } from '../api/users/users';
 import { format } from 'date-fns';
-
-const tableMeta = {
-    person: { hasPersonId: true },
-    observation_period: { hasPersonId: true },
-    visit_occurrence: { hasPersonId: true },
-    visit_detail: { hasPersonId: true },
-    condition_occurrence: { hasPersonId: true },
-    drug_exposure: { hasPersonId: true },
-    procedure_occurrence: { hasPersonId: true },
-    device_exposure: { hasPersonId: true },
-    measurement: { hasPersonId: true },
-    observation: { hasPersonId: true },
-    death: { hasPersonId: true },
-    note: { hasPersonId: true },
-    note_nlp: { hasPersonId: true },
-    specimen: { hasPersonId: true },
-    payer_plan_period: { hasPersonId: true },
-    drug_era: { hasPersonId: true },
-    dose_era: { hasPersonId: true },
-    condition_era: { hasPersonId: true },
-    episode: { hasPersonId: true },
-
-    // 나머지는 명시적으로 false 처리 (선택)
-    metadata: { hasPersonId: false },
-    vocabulary: { hasPersonId: false },
-    concept: { hasPersonId: false },
-    domain: { hasPersonId: false },
-    concept_class: { hasPersonId: false },
-    concept_relationship: { hasPersonId: false },
-    concept_synonym: { hasPersonId: false },
-    concetp_ancestor: { hasPersonId: false },
-    source_to_concept_map: { hasPersonId: false },
-    care_site: { hasPersonId: false },
-    cohort: { hasPersonId: false },
-    cohort_definition: { hasPersonId: false },
-    provider: { hasPersonId: false },
-    drug_strength: { hasPersonId: false },
-    cdm_source: { hasPersonId: false },
-    episode_event: { hasPersonId: false },
-    cost: { hasPersonId: false },
-    location: { hasPersonId: false },
-    fact_relationship: { hasPersonId: false },
-};
 
 export default function CohortDetail() {
     const [selectedTables, setSelectedTables] = useState([]);
@@ -62,15 +18,12 @@ export default function CohortDetail() {
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const [schemaName, setSchemaName] = useState('');
     const [schemaDescription, setSchemaDescription] = useState('');
-    const [isDisabledSchemaInfo, setIsDisabledSchemaInfo] = useState(false);
     const cohort_id = useParams().id;
 
     const { mutate } = useApplyCohort();
     const { data, isLoading } = useCohortDetail(cohort_id);
 
-    const [withPersonId, setWithPersonId] = useState(
-        Object.keys(tableMeta).map((table) => tableMeta[table].hasPersonId)
-    );
+    const [withPersonId, setWithPersonId] = useState([]);
     const [withoutPersonId, setWithoutPersonId] = useState([]);
     const [allTables, setAllTables] = useState([]);
 
@@ -154,38 +107,16 @@ export default function CohortDetail() {
         mutate(cohortData); // 한 번에 객체로 전달
     };
 
-    // useEffect(() => {
-    //     if (!isLoading && data) {
-    //         const withId = data.tableInfo?.filter(
-    //             (t) => tableMeta[t.name.toLowerCase()]?.hasPersonId
-    //         );
-    //         const withoutId = data.tableInfo?.filter(
-    //             (t) => tableMeta[t.name.toLowerCase()]?.hasPersonId === false
-    //         );
-    //         const selectedTableNames = data.tableInfo?.filter((t) => t.checked).map((t) => t.name);
+    useEffect(() => {
+        if (!isLoading && data) {
+            const withId = data.tableInfo?.filter((t) => !t?.isPersonIndependent);
+            const withoutId = data.tableInfo?.filter((t) => t?.isPersonIndependent);
 
-    //         if (data.schemaInfo) {
-    //             setSchemaName(data.schemaInfo.name);
-    //             setSchemaDescription(data.schemaInfo.description);
-    //             setIsDisabledSchemaInfo(true);
-    //         }
-
-    //         if (data.irb_drb) {
-    //             const filePromies = data.irb_drb.map((file) =>
-    //                 fetchIrbDrbData(file.path, file.name)
-    //             );
-
-    //             Promise.all(filePromies).then((files) => {
-    //                 setSelectedFiles(files);
-    //             });
-    //         }
-
-    //         setWithPersonId(withId);
-    //         setWithoutPersonId(withoutId);
-    //         setAllTables([...withId, ...withoutId]);
-    //         setSelectedTables(selectedTableNames);
-    //     }
-    // }, [isLoading, data]);
+            setWithPersonId(withId);
+            setWithoutPersonId(withoutId);
+            setAllTables([...withId, ...withoutId]);
+        }
+    }, [isLoading, data]);
 
     if (isLoading) {
         return <LoadingSpinner />;
@@ -204,7 +135,10 @@ export default function CohortDetail() {
                             생성일: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                         <span>
-                            수정일: {format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')}
+                            수정일:{' '}
+                            {data.modifiedData
+                                ? format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')
+                                : '-'}
                         </span>
                     </div>
                 </div>
@@ -336,7 +270,6 @@ export default function CohortDetail() {
                             value={schemaName}
                             placeholder="예: diabetes_study_2024"
                             className="max-w-md w-full px-2 py-1.5 border border-gray-200 rounded"
-                            disabled={isDisabledSchemaInfo}
                             required
                         />
                         <p className="text-xs text-gray-500 mt-1">
@@ -358,7 +291,6 @@ export default function CohortDetail() {
                             placeholder="이 스키마의 목적과 사용 용도를 설명해주세요..."
                             className="max-w-2xl w-full px-2 py-1.5 border border-gray-200 rounded"
                             rows={3}
-                            disabled={isDisabledSchemaInfo}
                             required
                         />
                     </div>
