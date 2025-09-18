@@ -1,5 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchSchemas, fetchCohortApplies, fetchStruct } from '../../api/users/users';
+import {
+    fetchSchemas,
+    fetchCohortApplies,
+    fetchStruct,
+    fetchUnstructApplies,
+} from '../../api/users/users';
 
 export const useSchemas = () => {
     return useQuery({
@@ -20,5 +25,12 @@ export const useStruct = (struct_id) => {
         queryKey: ['struct'],
         queryFn: () => fetchStruct(struct_id),
         enabled: !!struct_id,
+    });
+};
+
+export const useUnstructApplies = () => {
+    return useQuery({
+        queryKey: ['unstruct_applies'],
+        queryFn: fetchUnstructApplies,
     });
 };

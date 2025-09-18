@@ -32,3 +32,8 @@ export const fetchStruct = async (struct_id) => {
     const res = await axiosInstance.get(`/api/struct/id/${struct_id}`);
     return res.data;
 };
+
+export const fetchUnstructApplies = async () => {
+    const res = await axiosInstance.get('/api/unstruct/my/');
+    return res.data;
+};

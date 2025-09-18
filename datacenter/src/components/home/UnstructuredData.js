@@ -6,117 +6,37 @@ import { format } from 'date-fns';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import RejectionModal from '../modals/RejectionModal';
-
-const userUnstructuredApplications = [
-    {
-        id: 1,
-        requestId: 'REQ-20240315001',
-        cohortId: 1,
-        cohortName: 'Atlas Cohort 1',
-        cohortDescription: '2024년 1분기에 가입한 신규 사용자들의 행동 패턴 분석',
-        dataType: '생체신호',
-        dataSubtype: 'ECG (심전도)',
-        applicationDate: '2024-03-15',
-        status: 'approved',
-        approvedDate: '2024-03-18',
-        statistics: {
-            totalFiles: 1247,
-            totalSize: '623.5GB',
-            avgFileSize: '512MB',
-            patients: 998,
-            dateRange: '2023-01-01 ~ 2024-03-31',
-        },
-        apiInfo: {
-            endpoint: 'https://api.data-center.hospital.com/v1/unstructured',
-            apiKey: 'dc_api_kr_001_ecg_atlas1_2024',
-            downloadUrl: 'https://download.data-center.hospital.com/ecg/atlas1',
-            expiryDate: '2024-09-18',
-        },
-    },
-    {
-        id: 2,
-        requestId: 'REQ-20240320002',
-        cohortId: 3,
-        cohortName: 'Bento Cohort 3',
-        cohortDescription: '심혈관 질환 환자들의 치료 경과 및 예후 분석',
-        dataType: '이미지',
-        dataSubtype: 'CT',
-        applicationDate: '2024-03-20',
-        status: 'approved',
-        approvedDate: '2024-03-22',
-        statistics: {
-            totalFiles: 892,
-            totalSize: '1.2TB',
-            avgFileSize: '1.4GB',
-            patients: 445,
-            dateRange: '2023-06-01 ~ 2024-03-31',
-        },
-        apiInfo: {
-            endpoint: 'https://api.data-center.hospital.com/v1/unstructured',
-            apiKey: 'dc_api_kr_002_ct_bento3_2024',
-            downloadUrl: 'https://download.data-center.hospital.com/ct/bento3',
-            expiryDate: '2024-09-22',
-        },
-    },
-    {
-        id: 3,
-        requestId: 'REQ-20240325003',
-        cohortId: 2,
-        cohortName: 'Atlas Cohort 2',
-        cohortDescription: '모바일 앱을 통해 서비스를 이용하는 사용자들의 리텐션 분석',
-        dataType: '유전체',
-        dataSubtype: 'WES',
-        applicationDate: '2024-03-25',
-        status: 'pending',
-        reviewDate: null,
-        rejectionReason: '',
-        statistics: {
-            totalFiles: 156,
-            totalSize: '78.2GB',
-            avgFileSize: '512MB',
-            patients: 156,
-            dateRange: '2023-01-01 ~ 2024-02-29',
-        },
-    },
-    {
-        id: 4,
-        requestId: 'REQ-20240310004',
-        cohortId: 4,
-        cohortName: 'Bento Cohort 1',
-        cohortDescription: '최근 활동이 감소한 사용자들을 대상으로 한 이탈 방지 분석',
-        dataType: '생체신호',
-        dataSubtype: 'EMG (근전도)',
-        applicationDate: '2024-03-10',
-        status: 'rejected',
-        reviewDate: '2024-03-12',
-        rejectionReason:
-            '해당 코호트에는 EMG 데이터가 수집되지 않았습니다. ECG 데이터로 변경하여 재신청해 주시기 바랍니다.',
-        statistics: {
-            totalFiles: 0,
-            totalSize: '0GB',
-            avgFileSize: '0MB',
-            patients: 0,
-            dateRange: 'N/A',
-        },
-    },
-];
+import { useUnstructApplies } from '../../hooks/queries/useUsers';
 
 export default function UnstructuredData({ setApprovedAppLength, setPendingAppLength }) {
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
     const [selectApp, setSelectApp] = useState(null);
     const [isRejectionModalOpen, setIsRejectionModalOpen] = useState(false);
+    const [approvedApplications, setApprovedApplications] = useState([]);
+    const [pendingApplications, setPendingApplications] = useState([]);
 
-    const approvedUnstructuredApps = userUnstructuredApplications.filter(
-        (app) => app.status === 'approved'
-    );
-    const pendingUnstructuredApps = userUnstructuredApplications.filter(
-        (app) => app.status !== 'approved'
-    );
+    const { data, isLoading } = useUnstructApplies();
 
     useEffect(() => {
-        setApprovedAppLength(approvedUnstructuredApps.length);
-        setPendingAppLength(pendingUnstructuredApps.length);
-    }, []);
+        if (!isLoading && data) {
+            setApprovedApplications(
+                data
+                    .filter((app) => app.status === 'approved')
+                    .sort((a, b) => {
+                        return new Date(b.appliedDate) - new Date(a.appliedDate);
+                    })
+            );
+            setApprovedAppLength(approvedApplications.length);
+            setPendingApplications(
+                data
+                    .filter((app) => app.status !== 'approved')
+                    .sort((a, b) => {
+                        return new Date(b.appliedDate) - new Date(a.appliedDate);
+                    })
+            );
+            setPendingAppLength(pendingApplications.length);
+        }
+    }, [isLoading, data]);
 
     return (
         <div className="flex flex-col gap-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -133,7 +53,7 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                 >
                     <IoMdCheckmarkCircleOutline className="h-5 w-5" />
                     <span className="font-bold">
-                        승인된 비정형 데이터 ({approvedUnstructuredApps.length})
+                        승인된 비정형 데이터 ({approvedApplications.length})
                     </span>
                 </div>
                 <div
@@ -142,12 +62,12 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                 >
                     <GoClock className="h-5 w-5" />
                     <span className="font-bold ">
-                        대기중/반려된 비정형 데이터 ({pendingUnstructuredApps.length})
+                        대기중/반려된 비정형 데이터 ({pendingApplications.length})
                     </span>
                 </div>
             </div>
             {selectFilterCohort === 0 &&
-                (approvedUnstructuredApps.length === 0 ? (
+                (approvedApplications.length === 0 ? (
                     <div className="text-center py-12">
                         <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                         <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -158,20 +78,25 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                         </p>
                     </div>
                 ) : (
-                    approvedUnstructuredApps.map((app, idx) => (
+                    approvedApplications.map((app, idx) => (
                         <div
                             key={idx}
                             className="flex flex-col gap-2 border border-emerald-200 bg-emerald-50/30 rounded-lg p-6 text-gray-900"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex gap-2">
-                                    <h1 className="text-lg font-semibold">{app.cohortName}</h1>
+                                    <h1 className="text-lg font-semibold">{app.name}</h1>
                                     <div className="flex gap-1 font-bold text-purple-900 items-center px-2 rounded-xl bg-purple-100">
-                                        <span className="text-xs">{app.dataType}</span>
+                                        <span className="text-xs">
+                                            {app.unstructType?.mainType}
+                                        </span>
                                     </div>
-                                    <div className="flex gap-1 font-bold text-neutral-900 items-center px-2 rounded-xl bg-neutral-100">
-                                        <span className="text-xs">{app.dataSubtype}</span>
-                                    </div>
+                                    {app.unstructType?.subTypes?.map((sub) => (
+                                        <div className="flex gap-1 font-bold text-neutral-900 items-center px-2 rounded-xl bg-neutral-100">
+                                            <span className="text-xs">{sub}</span>
+                                        </div>
+                                    ))}
+
                                     <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                         <IoMdCheckmarkCircleOutline />
                                         <span className="text-xs">승인됨</span>
@@ -190,36 +115,36 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                                     </button>
                                 </div>
                             </div>
-                            <span className="text-sm">{app.cohortDescription}</span>
+                            <span className="text-sm">{app.description}</span>
                             <div className="grid grid-cols-5 gap-4 text-sm">
                                 <div>
                                     <span className="text-gray-500">총 파일 수:</span>
                                     <span className="ml-2 font-medium">
-                                        {app.statistics.totalFiles}
+                                        {/* {app.statistics.totalFiles} */}
                                     </span>
                                 </div>
                                 <div>
                                     <span className="text-gray-500">환자 수:</span>
                                     <span className="ml-2 font-medium">
-                                        {app.statistics.patients}
+                                        {/* {app.statistics.patients} */}
                                     </span>
                                 </div>
                                 <div>
                                     <span className="text-gray-500">총 크기:</span>
                                     <span className="ml-2 font-medium">
-                                        {app.statistics.totalSize}
+                                        {/* {app.statistics.totalSize} */}
                                     </span>
                                 </div>
                                 <div>
                                     <span className="text-gray-500">평균 크기:</span>
                                     <span className="ml-2 font-medium">
-                                        {app.statistics.avgFileSize}
+                                        {/* {app.statistics.avgFileSize} */}
                                     </span>
                                 </div>
                                 <div>
                                     <span className="text-gray-500">데이터 수집 기간:</span>
                                     <span className="ml-2 font-medium">
-                                        {app.statistics.dateRange}
+                                        {/* {app.statistics.dateRange} */}
                                     </span>
                                 </div>
                             </div>
@@ -227,22 +152,22 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                                 <div>
                                     <span className="text-gray-500">신청일:</span>
                                     <span className="ml-2 font-medium">
-                                        {format(new Date(app.applicationDate), 'yyyy-MM-dd hh:mm')}
+                                        {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
                                     <span className="text-gray-500">승인일:</span>
                                     <span className="ml-2 font-medium">
-                                        {format(new Date(app.approvedDate), 'yyyy-MM-dd hh:mm')}
+                                        {format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
                                     <span className="text-gray-500">만료일:</span>
                                     <span className="ml-2 font-medium">
-                                        {format(
+                                        {/* {format(
                                             new Date(app.apiInfo.expiryDate),
                                             'yyyy-MM-dd hh:mm'
-                                        )}
+                                        )} */}
                                     </span>
                                 </div>
                             </div>
@@ -250,7 +175,7 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                     ))
                 ))}
             {selectFilterCohort === 1 &&
-                (pendingUnstructuredApps.length === 0 ? (
+                (pendingApplications.length === 0 ? (
                     <div className="text-center py-12">
                         <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                         <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -259,20 +184,24 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                         <p className="text-gray-500">비정형 데이터 신청 후 여기에 표시됩니다.</p>
                     </div>
                 ) : (
-                    pendingUnstructuredApps.map((app, idx) => (
+                    pendingApplications.map((app, idx) => (
                         <div
                             key={idx}
                             className={`flex flex-col gap-2 border rounded-lg p-6 text-gray-900 ${app.status === 'rejected' ? 'border-red-200 bg-red-50/30' : 'border-blue-200 bg-blue-50/30'}`}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex gap-2">
-                                    <h1 className="text-lg font-semibold">{app.cohortName}</h1>
+                                    <h1 className="text-lg font-semibold">{app.name}</h1>
                                     <div className="flex gap-1 font-bold text-purple-900 items-center px-2 rounded-xl bg-purple-100">
-                                        <span className="text-xs">{app.dataType}</span>
+                                        <span className="text-xs">
+                                            {app.unstructType?.mainType}
+                                        </span>
                                     </div>
-                                    <div className="flex gap-1 font-bold text-neutral-900 items-center px-2 rounded-xl bg-neutral-100">
-                                        <span className="text-xs">{app.dataSubtype}</span>
-                                    </div>
+                                    {app.unstructType?.subTypes?.map((sub) => (
+                                        <div className="flex gap-1 font-bold text-neutral-900 items-center px-2 rounded-xl bg-neutral-100">
+                                            <span className="text-xs">{sub}</span>
+                                        </div>
+                                    ))}
                                     <div
                                         className={`flex gap-1 font-bold items-center px-2 rounded-xl ${app.status === 'rejected' ? 'text-red-900 bg-red-100' : 'text-blue-900 bg-blue-100'}`}
                                     >
@@ -301,18 +230,20 @@ export default function UnstructuredData({ setApprovedAppLength, setPendingAppLe
                                     )}
                                 </div>
                             </div>
-                            <span className="text-sm">{app.cohortDescription}</span>
+                            <span className="text-sm">{app.description}</span>
                             <div className="grid grid-cols-3 gap-4 text-sm">
                                 <div>
                                     <span className="text-gray-500">신청일:</span>
                                     <span className="ml-2 font-medium">
-                                        {format(new Date(app.applicationDate), 'yyyy-MM-dd hh:mm')}
+                                        {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
                                     <span className="text-gray-500">검토일:</span>
                                     <span className="ml-2 font-medium">
-                                        {format(new Date(app.reviewDate), 'yyyy-MM-dd hh:mm')}
+                                        {app.resolvedDate
+                                            ? format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')
+                                            : '-'}
                                     </span>
                                 </div>
                             </div>
