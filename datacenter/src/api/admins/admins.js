@@ -5,6 +5,11 @@ export const fetchApplies = async () => {
     return res.data;
 };
 
+export const fetchUnstructApplies = async () => {
+    const res = await axiosInstance.get('/api/admin/unstruct');
+    return res.data;
+};
+
 export const postApplyApprove = async ({ cohort_id, review }) => {
     const res = await axiosInstance.post(`/api/admin/struct/id/${cohort_id}/approve`, {
         review: review,
