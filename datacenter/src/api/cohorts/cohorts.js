@@ -19,8 +19,8 @@ export const postApplyCohort = async ({
 }) => {
     const formData = new FormData();
 
-    formData.append('name', schemaName);
-    formData.append('description', schemaDescription);
+    formData.append('schema_name', schemaName);
+    formData.append('schema_description', schemaDescription);
 
     selectedTables.forEach((table) => {
         formData.append('tables', table);

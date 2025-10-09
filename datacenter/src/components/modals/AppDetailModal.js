@@ -30,13 +30,13 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         <div>
                             <h1 className="font-bold text-xl">신청 상세 정보</h1>
                             <span className="text-gray-700">
-                                {application.author}님의 데이터 접근 권한 신청 내용입니다.
+                                {application.creator}님의 데이터 접근 권한 신청 내용입니다.
                             </span>
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">신청자 정보</h1>
-                            <span className="text-gray-700">이름 : {application.author}</span>
+                            <span className="text-gray-700">이름 : {application.creator}</span>
                         </div>
 
                         <div>

@@ -205,7 +205,7 @@ export default function SchemaRequests({ setApprovedAppLength, setPendingAppLeng
                     >
                         <div className="relative flex items-center justify-between">
                             <div className="flex gap-2">
-                                <h1 className="text-lg font-semibold">{app.schemaInfo.name}</h1>
+                                <h1 className="text-lg font-semibold">{app.name}</h1>
                                 <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                     <span className="text-xs">스키마 신청</span>
                                 </div>
@@ -259,9 +259,7 @@ export default function SchemaRequests({ setApprovedAppLength, setPendingAppLeng
                             </div>
                             <div>
                                 <span className="text-gray-500">선택 테이블:</span>
-                                <span className="ml-2 font-medium">
-                                    {app.tables.filter((table) => table.checked).length}개
-                                </span>
+                                <span className="ml-2 font-medium">{app.tables.length}개</span>
                             </div>
                         </div>
                         <div className="flex items-center">
