@@ -6,37 +6,11 @@ import { format } from 'date-fns';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import RejectionModal from '../modals/RejectionModal';
-import { useUnstructApplies } from '../../hooks/queries/useUsers';
 
-export default function UnstructuredData({ setApprovedAppLength, setPendingAppLength }) {
+export default function UnstructuredData({ approvedApplications, pendingApplications, isLoading }) {
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
     const [selectApp, setSelectApp] = useState(null);
     const [isRejectionModalOpen, setIsRejectionModalOpen] = useState(false);
-    const [approvedApplications, setApprovedApplications] = useState([]);
-    const [pendingApplications, setPendingApplications] = useState([]);
-
-    const { data, isLoading } = useUnstructApplies();
-
-    useEffect(() => {
-        if (!isLoading && data) {
-            setApprovedApplications(
-                data
-                    .filter((app) => app.status === 'approved')
-                    .sort((a, b) => {
-                        return new Date(b.appliedDate) - new Date(a.appliedDate);
-                    })
-            );
-            setApprovedAppLength(approvedApplications.length);
-            setPendingApplications(
-                data
-                    .filter((app) => app.status !== 'approved')
-                    .sort((a, b) => {
-                        return new Date(b.appliedDate) - new Date(a.appliedDate);
-                    })
-            );
-            setPendingAppLength(pendingApplications.length);
-        }
-    }, [isLoading, data]);
 
     return (
         <div className="flex flex-col gap-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">

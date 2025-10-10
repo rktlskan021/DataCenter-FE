@@ -1,16 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAuthStore from '../stores/useAuthStore';
 import { LuUser } from 'react-icons/lu';
+import { useApplies } from '../hooks/queries/useUsers';
+import { useUnstructApplies } from '../hooks/queries/useUsers';
 
 import SchemaRequests from '../components/home/SchemaRequests';
 import UnstructuredData from '../components/home/UnstructuredData';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function Home() {
-    const [approvedAppLength, setApprovedAppLength] = useState();
-    const [pendingAppLength, setPendingAppLength] = useState();
+    const [approvedApplications, setApprovedApplications] = useState([]);
+    const [pendingApplications, setPendingApplications] = useState([]);
     const [activeTab, setActiveTab] = useState('cohort-requests');
 
+    const { data: AData, isLoading: AisLoading } = useApplies();
+    const { data: UAData, isLoading: UAisLoading } = useUnstructApplies();
     const { id, name } = useAuthStore();
+
+    useEffect(() => {
+        if (activeTab === 'cohort-requests') {
+            setApprovedApplications(
+                AData.filter((app) => app.status === 'approved').sort((a, b) => {
+                    return new Date(b.appliedDate) - new Date(a.appliedDate);
+                })
+            );
+            setPendingApplications(
+                AData.filter((app) => app.status !== 'approved').sort((a, b) => {
+                    return new Date(b.appliedDate) - new Date(a.appliedDate);
+                })
+            );
+        } else {
+            setApprovedApplications(
+                UAData.filter((app) => app.status === 'approved').sort((a, b) => {
+                    return new Date(b.appliedDate) - new Date(a.appliedDate);
+                })
+            );
+            setPendingApplications(
+                UAData.filter((app) => app.status !== 'approved').sort((a, b) => {
+                    return new Date(b.appliedDate) - new Date(a.appliedDate);
+                })
+            );
+        }
+    }, [activeTab]);
+
+    if (AisLoading || UAisLoading) return <LoadingSpinner />;
 
     return (
         <div className="min-h-screen">
@@ -31,13 +64,13 @@ export default function Home() {
                     <div className="flex items-center gap-6 text-sm">
                         <div className="text-center">
                             <div className="text-3xl font-bold text-emerald-600">
-                                {approvedAppLength}
+                                {approvedApplications.length}
                             </div>
                             <div className="text-gray-600">승인된 스키마</div>
                         </div>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-blue-600">
-                                {pendingAppLength}
+                                {pendingApplications.length}
                             </div>
                             <div className="text-gray-600">대기중 신청</div>
                         </div>
@@ -72,15 +105,17 @@ export default function Home() {
                 </div>
                 {activeTab === 'cohort-requests' && (
                     <SchemaRequests
-                        setApprovedAppLength={setApprovedAppLength}
-                        setPendingAppLength={setPendingAppLength}
+                        approvedApplications={approvedApplications}
+                        pendingApplications={pendingApplications}
+                        isLoading={AisLoading}
                     />
                 )}
 
                 {activeTab === 'unstructured-data' && (
                     <UnstructuredData
-                        setApprovedAppLength={setApprovedAppLength}
-                        setPendingAppLength={setPendingAppLength}
+                        approvedApplications={approvedApplications}
+                        pendingApplications={pendingApplications}
+                        isLoading={UAisLoading}
                     />
                 )}
             </div>

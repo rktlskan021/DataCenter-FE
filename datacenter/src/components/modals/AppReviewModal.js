@@ -42,7 +42,7 @@ export default function AppReviewModal({
                         <div>
                             <h1 className="font-bold text-lg">신청 검토</h1>
                             <span className="text-gray-700">
-                                {application.author}님의 신청을 검토하고 승인 또는 거부하세요.
+                                {application.creator}님의 신청을 검토하고 승인 또는 거부하세요.
                             </span>
                         </div>
                         <div>
@@ -79,11 +79,15 @@ export default function AppReviewModal({
                                             review: reviewComment,
                                         };
                                         Reject(data);
-                                        toast(`${application.author}님의 신청이 거부 되었습니다.`, {
-                                            className:
-                                                'border border-gray-200  bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
-                                            bodyClassName: 'text-sm whitespace-nowrap max-w-full',
-                                        });
+                                        toast(
+                                            `${application.creator}님의 신청이 거부 되었습니다.`,
+                                            {
+                                                className:
+                                                    'border border-gray-200  bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
+                                                bodyClassName:
+                                                    'text-sm whitespace-nowrap max-w-full',
+                                            }
+                                        );
                                         setReviewComment('');
                                         setIsModalOpen(false);
                                     }
@@ -106,11 +110,15 @@ export default function AppReviewModal({
                                             review: reviewComment,
                                         };
                                         Approve(data);
-                                        toast(`${application.author}님의 신청이 승인 되었습니다.`, {
-                                            className:
-                                                'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
-                                            bodyClassName: 'text-sm whitespace-nowrap max-w-full',
-                                        });
+                                        toast(
+                                            `${application.creator}님의 신청이 승인 되었습니다.`,
+                                            {
+                                                className:
+                                                    'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
+                                                bodyClassName:
+                                                    'text-sm whitespace-nowrap max-w-full',
+                                            }
+                                        );
                                         setReviewComment('');
                                         setIsModalOpen(false);
                                     }

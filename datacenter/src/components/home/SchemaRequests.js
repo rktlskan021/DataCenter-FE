@@ -6,44 +6,18 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
-import { useApplies } from '../../hooks/queries/useUsers';
 import { useNavigate } from 'react-router-dom';
 import RejectionModal from '../../components/modals/RejectionModal';
 import ConnectionInfoModal from '../../components/modals/ConnectionInfoModal';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
-export default function SchemaRequests({ setApprovedAppLength, setPendingAppLength }) {
+export default function SchemaRequests({ approvedApplications, pendingApplications, isLoading }) {
     const [selectFilterCohort, setSelectFilterCohort] = useState(0);
-    const [approvedApplications, setApprovedApplications] = useState([]);
-    const [pendingApplications, setPendingApplications] = useState([]);
     const [selectApp, setSelectApp] = useState(null);
     const [isRejectionModalOpen, setIsRejectionModalOpen] = useState(false);
     const [isConnectionInfoModalOpen, setIsConnectionInfoModalOpen] = useState(false);
 
-    const { data, isLoading } = useApplies();
-
     const navigator = useNavigate();
-
-    useEffect(() => {
-        if (!isLoading && data) {
-            setApprovedApplications(
-                data
-                    .filter((app) => app.status === 'approved')
-                    .sort((a, b) => {
-                        return new Date(b.appliedDate) - new Date(a.appliedDate);
-                    })
-            );
-            setApprovedAppLength(approvedApplications.length);
-            setPendingApplications(
-                data
-                    .filter((app) => app.status !== 'approved')
-                    .sort((a, b) => {
-                        return new Date(b.appliedDate) - new Date(a.appliedDate);
-                    })
-            );
-            setPendingAppLength(pendingApplications.length);
-        }
-    }, [isLoading, data]);
 
     if (isLoading) {
         return <LoadingSpinner />;

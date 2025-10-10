@@ -26,7 +26,7 @@ export default function Header() {
                                 },
                                 {
                                     label: '기존 정형 데이터 권한 신청',
-                                    to: '/structured',
+                                    to: '/schema',
                                     description: '등록된 정형 데이터 이용 권한 요청',
                                 },
                             ]}

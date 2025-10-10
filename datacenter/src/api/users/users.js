@@ -28,6 +28,11 @@ export const fetchSchemas = async () => {
     return res.data;
 };
 
+export const fetchStructAll = async () => {
+    const res = await axiosInstance.get('/api/struct');
+    return res.data;
+};
+
 export const fetchStruct = async (struct_id) => {
     const res = await axiosInstance.get(`/api/struct/id/${struct_id}`);
     return res.data;

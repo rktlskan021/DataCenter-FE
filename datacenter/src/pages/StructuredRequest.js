@@ -10,8 +10,8 @@ import {
 } from '@headlessui/react';
 import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 import useAuthStore from '../stores/useAuthStore';
-import { useCohorts } from '../hooks/queries/useCohorts';
 import { format } from 'date-fns';
+import { useStructAll } from '../hooks/queries/useUsers';
 
 const filters = [
     { id: 1, name: '코호트 이름', value: 'name' },
@@ -19,12 +19,12 @@ const filters = [
     { id: 3, name: '작성자', value: 'author' },
 ];
 
-export default function Structured() {
+export default function StructuredRequest() {
     const [isInputFocused, setIsInputFocused] = useState(false);
 
     // fetch atlas & bento data
     // const [atlasCohorts, setAtlasCohorts] = useState([]);
-    const { data: atlasCohorts, isLoading } = useCohorts();
+    const { data: atlasCohorts, isLoading } = useStructAll();
     const [bentoCohorts, setBentoCohorts] = useState([]);
 
     // 상태 선언
@@ -96,7 +96,7 @@ export default function Structured() {
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
             <div>
                 <h1 className="font-bold text-4xl mb-5">정형 데이터 신청</h1>
-                <p className="text-xl">코호트 사용 권한을 신청할 수 있습니다.</p>
+                <p className="text-xl">신청된 정형 데이터에 대한 사용 권한을 신청할 수 있습니다.</p>
             </div>
             <div className="flex gap-5">
                 <div className="flex font-bold jusfify-between items-center">

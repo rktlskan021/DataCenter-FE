@@ -14,22 +14,22 @@ export default function AdminPage() {
         {
             label: '전체 신청',
             color: 'text-gray-800',
-            count: applications.length,
+            count: localData.length,
         },
         {
             label: '대기중',
             color: 'text-blue-600',
-            count: applications.filter((app) => app.status === 'applied').length,
+            count: localData.filter((app) => app.status === 'applied').length,
         },
         {
             label: '승인됨',
             color: 'text-emerald-600',
-            count: applications.filter((app) => app.status === 'approved').length,
+            count: localData.filter((app) => app.status === 'approved').length,
         },
         {
             label: '거부됨',
             color: 'text-red-600',
-            count: applications.filter((app) => app.status === 'rejected').length,
+            count: localData.filter((app) => app.status === 'rejected').length,
         },
     ];
 
@@ -112,7 +112,8 @@ export default function AdminPage() {
                         setLocalData={setLocalData}
                     />
                 )}
-                {activeTab === 'unstructured-data' && <AdminUnstructuredData />}
+                {/* {activeTab === 'unstructured-data' && <AdminUnstructuredData />} */}
+                {activeTab === 'unstructured-data' && <></>}
             </div>
         </div>
     );

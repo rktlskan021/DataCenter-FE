@@ -9,6 +9,7 @@ import CohortDetail from '../pages/CohortDetail';
 import Unstructured from '../pages/Unstructured';
 import UnStructuredDetail from '../pages/UnstructuredDetail';
 import CohortDetailModify from '../pages/CohortDetailModify';
+import StructuredRequest from '../pages/StructuredRequest';
 
 export default function AppRoutes() {
     return (
@@ -59,6 +60,14 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Unstructured />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/schema"
+                element={
+                    <PrivateRoute>
+                        <StructuredRequest />
                     </PrivateRoute>
                 }
             />

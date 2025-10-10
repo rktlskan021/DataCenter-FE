@@ -4,6 +4,7 @@ import {
     fetchCohortApplies,
     fetchStruct,
     fetchUnstructApplies,
+    fetchStructAll,
 } from '../../api/users/users';
 
 export const useSchemas = () => {
@@ -32,5 +33,12 @@ export const useUnstructApplies = () => {
     return useQuery({
         queryKey: ['unstruct_applies'],
         queryFn: fetchUnstructApplies,
+    });
+};
+
+export const useStructAll = () => {
+    return useQuery({
+        queryKey: ['structAll'],
+        queryFn: () => fetchStructAll(),
     });
 };
