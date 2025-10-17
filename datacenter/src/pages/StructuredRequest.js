@@ -12,6 +12,7 @@ import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 import useAuthStore from '../stores/useAuthStore';
 import { format } from 'date-fns';
 import { useStructAll } from '../hooks/queries/useUsers';
+import Pagination from '../components/Pagination';
 
 const filters = [
     { id: 1, name: '코호트 이름', value: 'name' },
@@ -36,7 +37,7 @@ export default function StructuredRequest() {
     const [currentCohorts, setCurrentCohorts] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
 
-    const itemsPerPage = 10;
+    const itemsPerPage = 5;
     const { id } = useAuthStore();
     const navigator = useNavigate();
 
@@ -63,6 +64,11 @@ export default function StructuredRequest() {
             (currentPage - 1) * itemsPerPage,
             currentPage * itemsPerPage
         );
+
+        // 검색/필터링 결과가 현재 페이지보다 작아지면 페이지를 조정합니다.
+        if (currentPage > total && total > 0) {
+            setCurrentPage(total);
+        }
 
         setCurrentCohorts(paginated);
         setTotalPages(total);
@@ -302,41 +308,11 @@ export default function StructuredRequest() {
                     </tbody>
                 </table>
 
-                {/* ✅ 페이지네이션 버튼 */}
-                <div className="flex justify-center items-center gap-2 py-4">
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                        className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-                        disabled={currentPage === 1}
-                    >
-                        이전
-                    </button>
-
-                    {[...Array(totalPages)].map((_, index) => {
-                        const page = index + 1;
-                        return (
-                            <button
-                                key={page}
-                                onClick={() => setCurrentPage(page)}
-                                className={`px-3 py-1 border rounded-md ${
-                                    page === currentPage
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-100 hover:bg-gray-200'
-                                }`}
-                            >
-                                {page}
-                            </button>
-                        );
-                    })}
-
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                        className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-                        disabled={currentPage === totalPages}
-                    >
-                        다음
-                    </button>
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    setCurrentPage={setCurrentPage}
+                />
             </div>
         </div>
     );

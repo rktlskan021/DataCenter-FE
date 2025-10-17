@@ -1,14 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react'; // useEffect 추가
 import SummaryBox from '../components/summary/SummaryBox';
 import AdminSchemaRequests from '../components/admin/AdminSchemaRequests';
 import AdminUnstructuredData from '../components/admin/AdminUnstructuredDate';
+import { useApplies } from '../hooks/queries/useAdmins';
+import LoadingSpinner from '../components/LoadingSpinner';
+// 💡 페이지네이션 컴포넌트를 불러옵니다. (경로를 확인해주세요!)
+import Pagination from '../components/Pagination';
+
+const ITEMS_PER_PAGE = 10; // 💡 페이지당 표시할 항목 수 정의
 
 export default function AdminPage() {
     const [applications, setApplications] = useState([]);
-    const [statusFilter, setStatusFilter] = useState('all');
     const [localData, setLocalData] = useState([]);
-
     const [activeTab, setActiveTab] = useState('cohort-requests');
+    const [currentPage, setCurrentPage] = useState(1); // 💡 페이지네이션: 현재 페이지 상태
+
+    const { data, isLoading } = useApplies();
+
+    // 💡 페이지네이션 로직을 useMemo로 구현하여 totalPages와 현재 페이지 데이터를 계산
+    const { totalPages, currentApplicationsForDisplay } = useMemo(() => {
+        const totalItems = localData.length;
+        const calculatedTotalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+        // 페이지 범위 조정 (데이터가 줄어들었을 경우)
+        if (currentPage > calculatedTotalPages && calculatedTotalPages > 0) {
+            setCurrentPage(calculatedTotalPages);
+        }
+
+        const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+        const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+
+        const paginatedData = localData.slice(indexOfFirstItem, indexOfLastItem);
+
+        return {
+            totalPages: calculatedTotalPages,
+            currentApplicationsForDisplay: paginatedData,
+        };
+    }, [localData, currentPage]);
+
+    // 💡 localData가 변경될 때마다 현재 페이지를 1로 리셋하는 로직은 제거 (useMemo 내부에서 처리)
+    // 💡 대신, localData가 비어있을 때 currentPage를 1로 설정하여 안전하게 만듭니다.
+    useEffect(() => {
+        if (localData.length === 0 && currentPage !== 1) {
+            setCurrentPage(1);
+        }
+    }, [localData, currentPage]);
 
     const summaryList = [
         {
@@ -61,6 +97,8 @@ export default function AdminPage() {
         'unstructured-data': summaryUnstructuredList,
     };
 
+    if (isLoading) return <LoadingSpinner />;
+
     return (
         <div>
             <div className="flex flex-col max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
@@ -105,12 +143,26 @@ export default function AdminPage() {
                 </div>
 
                 {activeTab === 'cohort-requests' && (
-                    <AdminSchemaRequests
-                        applications={applications}
-                        setApplications={setApplications}
-                        localData={localData}
-                        setLocalData={setLocalData}
-                    />
+                    <>
+                        <AdminSchemaRequests
+                            applications={applications}
+                            setApplications={setApplications}
+                            // 💡 localData Prop에 페이지네이션된 데이터 전달
+                            localData={currentApplicationsForDisplay}
+                            setLocalData={setLocalData}
+                            data={data}
+                            // 💡 추가: 필터링을 위한 전체 데이터 Prop을 새로 정의 (AdminSchemaRequests에서 필터링에 사용)
+                            fullData={localData}
+                            // 💡 추가: 페이지가 변경되면 필터 상태도 초기화되도록, 현재 페이지 상태를 전달합니다.
+                            currentPage={currentPage}
+                        />
+                        {/* 💡 페이지네이션 컴포넌트 렌더링 */}
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    </>
                 )}
                 {/* {activeTab === 'unstructured-data' && <AdminUnstructuredData />} */}
                 {activeTab === 'unstructured-data' && <></>}

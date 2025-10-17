@@ -7,22 +7,23 @@ import { format } from 'date-fns';
 import { useState, useEffect } from 'react';
 import AppDetailModal from '../modals/AppDetailModal';
 import AppReviewModal from '../modals/AppReviewModal';
-import { useApplies } from '../../hooks/queries/useAdmins';
 import { fetchIrbDrbData } from '../../api/users/users';
 import LoadingSpinner from '../LoadingSpinner';
 
 export default function AdminSchemaRequests({
     applications,
     setApplications,
-    localData,
+    localData, // 현재 페이지의 데이터 (페이지네이션 완료)
     setLocalData,
+    data,
+    fullData, // 전체 데이터
+    currentPage, // 현재 페이지 번호
 }) {
     const [statusFilter, setStatusFilter] = useState('all');
     const [isAppDetailModalOpen, setIsAppDetailModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isAppReviewModalOpen, setIsAppReviewModalOpen] = useState(false);
     const [reviewComment, setReviewComment] = useState('');
-    const { data, isLoading: DataLoading } = useApplies();
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -48,6 +49,7 @@ export default function AdminSchemaRequests({
         },
     ];
 
+    // 💡 수정된 useEffect: localData (페이지네이션된 데이터)가 변경될 때마다 필터/정렬을 다시 적용
     useEffect(() => {
         setApplications(
             localData
@@ -59,11 +61,11 @@ export default function AdminSchemaRequests({
                     return new Date(b.appliedDate) - new Date(a.appliedDate);
                 })
         );
-    }, [statusFilter]);
+    }, [statusFilter, localData, setApplications]); // localData 추가!
 
     useEffect(() => {
         const fetchAllFiles = async () => {
-            if (!DataLoading && data) {
+            if (data) {
                 const dataWithFilesPromises = data.map(async (item) => {
                     if (Array.isArray(item.irb_drb)) {
                         const files = await Promise.all(
@@ -82,17 +84,7 @@ export default function AdminSchemaRequests({
         };
 
         fetchAllFiles();
-    }, [DataLoading, data]);
-
-    useEffect(() => {
-        if (localData.length > 0) {
-            setApplications(
-                localData.sort((a, b) => {
-                    return new Date(b.appliedDate) - new Date(a.appliedDate);
-                })
-            );
-        }
-    }, [localData]);
+    }, [data, setLocalData]);
 
     if (isLoading) {
         return <LoadingSpinner />;
@@ -115,6 +107,7 @@ export default function AdminSchemaRequests({
                     </button>
                 ))}
             </div>
+            {/* ... (테이블 및 모달 렌더링 코드는 변경 없음) ... */}
             <div className="flex flex-col gap-10 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                 <div>
                     <h1 className="text-2xl font-black font-normal">신청 목록</h1>
@@ -138,7 +131,7 @@ export default function AdminSchemaRequests({
                     <tbody>
                         {applications.length === 0 ? (
                             <tr>
-                                <td colSpan={7} className="text-center text-gray-500 py-4">
+                                <td colSpan={8} className="text-center text-gray-500 py-4">
                                     신청 정보가 존재하지 않습니다.
                                 </td>
                             </tr>

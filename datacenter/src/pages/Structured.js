@@ -7,6 +7,7 @@ import useAuthStore from '../stores/useAuthStore';
 import { useCohorts } from '../hooks/queries/useCohorts';
 import { format } from 'date-fns';
 import InputBox from '../components/InputBox';
+import Pagination from '../components/Pagination';
 
 const filters = [
     { id: 1, name: '코호트 이름', value: 'name' },
@@ -236,41 +237,11 @@ export default function Structured() {
                     </tbody>
                 </table>
 
-                {/* ✅ 페이지네이션 버튼 */}
-                <div className="flex justify-center items-center gap-2 py-4">
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                        className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-                        disabled={currentPage === 1}
-                    >
-                        이전
-                    </button>
-
-                    {[...Array(totalPages)].map((_, index) => {
-                        const page = index + 1;
-                        return (
-                            <button
-                                key={page}
-                                onClick={() => setCurrentPage(page)}
-                                className={`px-3 py-1 border rounded-md ${
-                                    page === currentPage
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-100 hover:bg-gray-200'
-                                }`}
-                            >
-                                {page}
-                            </button>
-                        );
-                    })}
-
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                        className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-                        disabled={currentPage === totalPages}
-                    >
-                        다음
-                    </button>
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    setCurrentPage={setCurrentPage}
+                />
             </div>
         </div>
     );
