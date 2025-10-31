@@ -206,7 +206,7 @@ export default function Unstructured() {
                                             <span>
                                                 {format(
                                                     new Date(cohort.createdDate),
-                                                    'yyyy-MM-dd hh-mm'
+                                                    'yyyy-MM-dd hh:mm'
                                                 )}
                                             </span>
                                         </div>
@@ -217,7 +217,7 @@ export default function Unstructured() {
                                             <span>
                                                 {format(
                                                     new Date(cohort.modifiedDate),
-                                                    'yyyy-MM-dd hh-mm'
+                                                    'yyyy-MM-dd hh:mm'
                                                 )}
                                             </span>
                                         </div>
