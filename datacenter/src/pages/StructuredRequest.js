@@ -11,9 +11,9 @@ import SchemaApplyModal from '../components/modals/SchemaApplyModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const filters = [
-    { id: 1, name: '이름', value: 'schema_name' },
-    { id: 2, name: '설명', value: 'schema_description' },
-    { id: 3, name: '작성자', value: 'creator_name' },
+    { id: 1, name: 'Schema name', value: 'schema_name' },
+    { id: 2, name: 'Description', value: 'schema_description' },
+    { id: 3, name: 'Creator', value: 'creator_name' },
 ];
 
 export default function StructuredRequest() {
@@ -68,8 +68,10 @@ export default function StructuredRequest() {
     return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
             <div>
-                <h1 className="font-bold text-4xl mb-5">정형 데이터 신청</h1>
-                <p className="text-xl">신청된 정형 데이터에 대한 사용 권한을 신청할 수 있습니다.</p>
+                <h1 className="font-bold text-4xl mb-5">Structured Data Application</h1>
+                <p className="text-xl">
+                    You can apply for permission to use the requestred structured data.
+                </p>
             </div>
             <div className="flex gap-5">
                 <div className="flex font-bold jusfify-between items-center">
@@ -99,35 +101,35 @@ export default function StructuredRequest() {
                 selected={selected}
                 setSelected={setSelected}
                 searchTerm={searchTerm}
-                placeholder={'스키마 이름 또는 설명으로 검색...'}
+                placeholder={'Search by schema name or description...'}
                 setSearchTerm={setSearchTerm}
                 filters={filters}
             />
 
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
-                    스키마 목록
+                    Schema List
                 </h1>
                 <table className="w-full table-fixed divide-y divide-gray-200">
                     <thead>
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[20%]">
-                                스키마 이름
+                                Schema Name
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[30%]">
-                                설명
+                                description
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                작성자
+                                creator
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                환자수
+                                number of patients
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                테이블수
+                                number of tables
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[23%]">
-                                액션
+                                action
                             </th>
                         </tr>
                     </thead>
@@ -151,7 +153,7 @@ export default function StructuredRequest() {
                                         {schema.patient_count}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-600">
-                                        {schema.tables?.length}개
+                                        {schema.tables?.length} tables
                                     </td>
                                     <td className="px-6 py-4 text-sm">
                                         <div className="flex gap-2">
@@ -163,7 +165,7 @@ export default function StructuredRequest() {
                                                 }}
                                             >
                                                 <FaRegEye className="w-4 h-4" />
-                                                상세보기
+                                                View
                                             </button>
                                             <button
                                                 className="text-nowrap bg-blue-600 py-1.5 px-2 text-white rounded-lg flex justify-center items-center hover:bg-blue-700 transition duration-200 ease-in-out"
@@ -172,7 +174,7 @@ export default function StructuredRequest() {
                                                     setSelectedSchema(schema);
                                                 }}
                                             >
-                                                권한 요청
+                                                Request
                                             </button>
                                         </div>
                                     </td>
@@ -181,7 +183,7 @@ export default function StructuredRequest() {
                         ) : (
                             <tr>
                                 <td colSpan={6} className="text-center text-gray-500 py-4">
-                                    검색 결과가 없습니다.
+                                    No search results.
                                 </td>
                             </tr>
                         )}

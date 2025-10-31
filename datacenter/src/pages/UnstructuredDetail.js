@@ -21,45 +21,66 @@ import PeriodBox from '../components/unstructured/PeriodBox';
 const dataTypes = [
     {
         id: 'BIO_SIGNAL',
-        name: '생체신호',
-        description: '심전도, 근전도 등 생체에서 발생하는 전기적 신호 데이터',
+        name: 'Biological Signal', // 생체신호
+        description:
+            'Electrical signal data generated from biological systems, such as ECG and EMG.', // 심전도, 근전도 등 생체에서 발생하는 전기적 신호 데이터
         icon: CiWavePulse1,
         color: 'text-red-600',
         bgColor: 'bg-red-50',
         borderColor: 'border-red-200',
         subtypes: [
-            { id: 'ECG', name: 'ECG (심전도)', description: '심장의 전기적 활동을 측정한 데이터' },
-            { id: 'EMG', name: 'EMG (근전도)', description: '근육의 전기적 활동을 측정한 데이터' },
-            { id: 'eeg', name: 'EEG (뇌전도)', description: '뇌의 전기적 활동을 측정한 데이터' },
+            {
+                id: 'ECG',
+                name: 'ECG (Electrocardiogram)',
+                description: "Data measuring the heart's electrical activity.",
+            }, // 심장의 전기적 활동을 측정한 데이터
+            {
+                id: 'EMG',
+                name: 'EMG (Electromyography)',
+                description: "Data measuring the muscle's electrical activity.",
+            }, // 근육의 전기적 활동을 측정한 데이터
+            {
+                id: 'eeg',
+                name: 'EEG (Electroencephalogram)',
+                description: "Data measuring the brain's electrical activity.",
+            }, // 뇌의 전기적 활동을 측정한 데이터
         ],
     },
     {
         id: 'IMAGING',
-        name: '이미지',
-        description: 'CT, MRI, X-ray 등 의료 영상 데이터',
+        name: 'Imaging', // 이미지 (또는 Medical Imaging)
+        description: 'Medical imaging data such as CT, MRI, and X-ray.', // CT, MRI, X-ray 등 의료 영상 데이터
         icon: FiImage,
         color: 'text-blue-600',
         bgColor: 'bg-blue-50',
         borderColor: 'border-blue-200',
         subtypes: [
-            { id: 'CT', name: 'CT', description: '컴퓨터 단층촬영 영상 데이터' },
-            { id: 'MRI', name: 'MRI', description: '자기공명영상 데이터' },
-            { id: 'xray', name: 'X-ray', description: 'X선 촬영 영상 데이터' },
-            { id: 'ultrasound', name: '초음파', description: '초음파 영상 데이터' },
+            { id: 'CT', name: 'CT', description: 'Computed Tomography imaging data.' }, // 컴퓨터 단층촬영 영상 데이터
+            { id: 'MRI', name: 'MRI', description: 'Magnetic Resonance Imaging data.' }, // 자기공명영상 데이터
+            { id: 'xray', name: 'X-ray', description: 'X-ray imaging data.' }, // X선 촬영 영상 데이터
+            { id: 'ultrasound', name: 'Ultrasound', description: 'Ultrasound imaging data.' }, // 초음파 영상 데이터
         ],
     },
     {
         id: 'genomic',
-        name: '유전체',
-        description: 'WES, RNA-seq 등 유전체 분석 데이터',
+        name: 'Genomic', // 유전체
+        description: 'Genomic analysis data such as WES and RNA-seq.', // WES, RNA-seq 등 유전체 분석 데이터
         icon: LuDna,
         color: 'text-green-600',
         bgColor: 'bg-green-50',
         borderColor: 'border-green-200',
         subtypes: [
-            { id: 'wes', name: 'WES', description: '전체 엑솜 시퀀싱 데이터' },
-            { id: 'wgs', name: 'WGS', description: '전체 게놈 시퀀싱 데이터' },
-            { id: 'rnaseq', name: 'RNA-seq', description: 'RNA 시퀀싱 데이터' },
+            {
+                id: 'wes',
+                name: 'WES (Whole Exome Sequencing)',
+                description: 'Whole Exome Sequencing data.',
+            }, // 전체 엑솜 시퀀싱 데이터
+            {
+                id: 'wgs',
+                name: 'WGS (Whole Genome Sequencing)',
+                description: 'Whole Genome Sequencing data.',
+            }, // 전체 게놈 시퀀싱 데이터
+            { id: 'rnaseq', name: 'RNA-seq (RNA Sequencing)', description: 'RNA Sequencing data.' }, // RNA 시퀀싱 데이터
         ],
     },
 ];
@@ -167,12 +188,12 @@ export default function UnStructuredDetail() {
                     <h1 className="font-bold text-2xl">{data.name}</h1>
                     <span>{data.description}</span>
                     <div className="flex gap-5">
-                        <span>작성자: {data.creator}</span>
+                        <span>Creator: {data.creator}</span>
                         <span>
-                            생성일: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
+                            Creation date: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                         <span>
-                            수정일:{' '}
+                            Modification Date:{' '}
                             {data.modifiedData
                                 ? format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')
                                 : '-'}
@@ -187,10 +208,11 @@ export default function UnStructuredDetail() {
                             </div>
                             <div>
                                 <h1 className="text-lg text-purple-900 font-bold">
-                                    비정형 데이터 타입 선택
+                                    Select Unstructured Data Type
                                 </h1>
                                 <span className="text-purple-700 font-medium">
-                                    요청할 비정형 데이터의 타입을 선택해주세요.
+                                    Please select the type of unstructured data you would like to
+                                    request.
                                 </span>
                             </div>
                         </div>
@@ -237,10 +259,10 @@ export default function UnStructuredDetail() {
                                 </div>
                                 <div>
                                     <h1 className="text-lg text-blue-900 font-bold">
-                                        구체적인 데이터 종류 선택
+                                        Select a specific data type
                                     </h1>
                                     <span className="text-blue-700 font-medium">
-                                        이미지 데이터 중에서 필요한 종류를 선택해주세요
+                                        Please select the type of image data you need
                                     </span>
                                 </div>
                             </div>
@@ -289,10 +311,11 @@ export default function UnStructuredDetail() {
                                 </div>
                                 <div>
                                     <h1 className="text-lg text-green-900 font-bold">
-                                        데이터 통계
+                                        Data Statistics
                                     </h1>
                                     <span className="text-green-700 font-medium">
-                                        선택한 조건에 해당하는 데이터의 통계 정보입니다
+                                        This is statistical information on data corresponding to the
+                                        selected conditions.
                                     </span>
                                 </div>
                             </div>
@@ -306,7 +329,9 @@ export default function UnStructuredDetail() {
                                     className="flex gap-4 items-center justify-center justify-self-end border border-emerald-200 bg-white rounded-lg px-2 py-2 transition duration-200 ease-in-out hover:bg-neutral-100"
                                 >
                                     <IoSettingsOutline size={17} />
-                                    <span className="font-medium text-sm">수집 기간 설정</span>
+                                    <span className="font-medium text-sm">
+                                        Set collection period
+                                    </span>
                                 </button>
 
                                 {/* Popover */}
@@ -320,14 +345,16 @@ export default function UnStructuredDetail() {
 
                                         <div className="p-4 space-y-3">
                                             <div className="flex items-center justify-between">
-                                                <h3 className="text-sm font-semibold">수집 기간</h3>
+                                                <h3 className="text-sm font-semibold">
+                                                    Collection period
+                                                </h3>
                                                 <button
                                                     className="flex items-center justify-center gap-2 rounded-lg border border-neutral-300 px-2 py-1 transition duration-200 ease-in-out hover:bg-neutral-100"
                                                     onClick={addDateRange}
                                                 >
                                                     <TiPlus />
                                                     <span className="font-medium text-xs">
-                                                        기간 추가
+                                                        Add period
                                                     </span>
                                                 </button>
                                             </div>
@@ -348,14 +375,14 @@ export default function UnStructuredDetail() {
                                                     onClick={() => setOpen(false)}
                                                     className="px-3 py-2 text-sm rounded-lg border border-gray-200 hover:bg-gray-50"
                                                 >
-                                                    취소
+                                                    Close
                                                 </button>
                                                 <button
                                                     type="button"
                                                     onClick={onApply}
                                                     className="px-3 py-2 text-sm rounded-lg bg-emerald-500 text-white hover:bg-emerald-600"
                                                 >
-                                                    적용
+                                                    Apply
                                                 </button>
                                             </div>
                                         </div>
@@ -366,25 +393,25 @@ export default function UnStructuredDetail() {
                         <div className="flex items-center justify-around text-center pt-6 pb-6">
                             <div>
                                 <p className="font-bold text-blue-600 text-4xl">441</p>
-                                <p className="font-medium text-gray-500">총 파일 수</p>
+                                <p className="font-medium text-gray-500">Total number of files</p>
                             </div>
                             <div>
                                 <p className="font-bold text-green-600 text-4xl">352</p>
-                                <p className="font-medium text-gray-500">대상 환자 수</p>
+                                <p className="font-medium text-gray-500">Number of patinets</p>
                             </div>
                             <div>
                                 <p className="font-bold text-purple-600 text-4xl">220.5GB</p>
-                                <p className="font-medium text-gray-500">총 데이터 크기</p>
+                                <p className="font-medium text-gray-500">Total data size</p>
                             </div>
                             <div>
                                 <p className="font-bold text-red-600 text-4xl">512MB</p>
-                                <p className="font-medium text-gray-500">평균 파일 크기</p>
+                                <p className="font-medium text-gray-500">Average file size</p>
                             </div>
                         </div>
 
                         <div className="border-t border-green-200 mx-5 py-6">
                             <div className="text-sm text-green-800">
-                                <strong>데이터 수집 기간 :</strong>{' '}
+                                <strong>Data collection period :</strong>{' '}
                                 {period
                                     .map((date) => {
                                         return `${date.startDate} ~ ${date.endDate}`;
@@ -398,10 +425,10 @@ export default function UnStructuredDetail() {
                     <div className="flex flex-col gap-5 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                         <div>
                             <h1 className="text-2xl font-black font-normal">
-                                IRB/DRB 승인서 업로드
+                                Upload IRB/DRB approval form
                             </h1>
                             <span className="font-normal text-gray-700">
-                                데이터 접근 권한 신청을 위해 IRB/DRB 승인서를 업로드하세요
+                                Upload IRB/DRB approval to apply for data access.
                             </span>
                         </div>
                         <div className="flex gap-4">
@@ -410,15 +437,15 @@ export default function UnStructuredDetail() {
                                 onClick={() => setFileUploadOpen(true)}
                             >
                                 <MdOutlineFileUpload className="h-6 w-6" />
-                                <span className="font-bold text-xs">파일 업로드</span>
+                                <span className="font-bold text-xs">File Upload</span>
                             </button>
                             {selectedFiles.length > 0 ? (
                                 <div className="flex items-center gap-2 text-sm font-bold text-green-600">
                                     <BsCheck2Circle className="h-4 w-4" />
                                     <span>
-                                        {selectedFiles[0].name} 업로드 완료
+                                        {selectedFiles[0].name} upload completed
                                         {selectedFiles.length !== 1
-                                            ? ` (외 ${selectedFiles.length - 1}건)`
+                                            ? ` (and ${selectedFiles.length - 1} more file${selectedFiles.length - 1 !== 1 ? 's' : ''})`
                                             : null}
                                     </span>
                                     <button
@@ -436,15 +463,18 @@ export default function UnStructuredDetail() {
                 {selectDataType && selectSubType.length > 0 && (
                     <div className="px-5 py-6 bg-white rounded-xl">
                         <div className="mb-8">
-                            <p className="font-bold text-gray-900 text-2xl">신청 사유</p>
+                            <p className="font-bold text-gray-900 text-2xl">
+                                Reason for application
+                            </p>
                             <p className="font-normal text-gray-500 text-base">
-                                비정형 데이터 신청 사유와 사용 목적을 상세히 작성해주세요
+                                Please write in detail the reason for requesting unstructured data
+                                and the purpose of use.
                             </p>
                         </div>
                         <textarea
                             value={requestReason}
                             onChange={(e) => setRequestReason(e.target.value)}
-                            placeholder="예: 심전도 데이터를 활용해 부정맥 예측 모델 개발을 위해 해당 데이터가 필요합니다."
+                            placeholder="EX: I need electrocardiogram data to develop an arrhythmia prediction model."
                             className="w-full min-h-[120px] p-2 border border-gray-300 rounded-lg"
                             required
                         />
@@ -454,7 +484,7 @@ export default function UnStructuredDetail() {
                     {selectedFiles.length ? null : (
                         <div className="flex items-center gap-2 text-sm text-amber-600">
                             <FiInfo className="h-4 w-4" />
-                            <span>모든 항목을 선택하고 신청 사유를 작성해주세요</span>
+                            <span>Please select all items and provide reasons for application</span>
                         </div>
                     )}
                     <button
@@ -466,7 +496,7 @@ export default function UnStructuredDetail() {
                         }`}
                         onClick={clickApplyBtn}
                     >
-                        비정형 데이터 접근 신청
+                        Application
                     </button>
                 </div>
             </div>

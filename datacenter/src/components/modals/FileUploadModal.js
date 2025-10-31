@@ -42,10 +42,10 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
                         <h2 className="text-lg font-semibold text-gray-800">
-                            IRB/DRB 승인서 업로드
+                            Upload IRB/DRB approval form
                         </h2>
                         <p className="mb-4 font-normal text-gray-800 text-sm">
-                            IRB/DRB 승인서 파일을 업로드하세요. (.pdf,.doc,.docx,.hwp,.hwpx)
+                            Upload your IRB/DRB approval file. (.pdf,.doc,.docx,.hwp,.hwpx)
                         </p>
                         <div
                             className="flex flex-col items-center justify-center p-6 rounded-md border border-dashed border-gray-300 cursor-pointer hover:border-gray-600 transition"
@@ -53,9 +53,7 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
                             onDrop={handleDrop}
                         >
                             <MdOutlineFileUpload className="w-12 h-12 text-gray-400 mb-4" />
-                            <p className="text-gray-700 font-medium mb-2">
-                                파일을 여기로 드래그하거나 클릭하여 선택하세요
-                            </p>
+                            <p className="text-gray-700 font-medium mb-2">Drag File</p>
                             <input
                                 type="file"
                                 accept=".pdf,.doc,.docx,.hwp,.hwpx"
@@ -68,7 +66,7 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
                                 htmlFor="fileUpload"
                                 className="inline-block px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50"
                             >
-                                파일 선택
+                                Select file
                             </label>
                         </div>
 
@@ -106,17 +104,17 @@ export default function FileUploadModal({ isOpen, setIsOpen, selectedFiles, setS
                                 onClick={() => setIsOpen(false)}
                                 className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
                             >
-                                닫기
+                                Close
                             </button>
                             <button
                                 onClick={() => {
-                                    alert('파일 업로드 완료!');
+                                    alert('Upload Completed');
                                     setIsOpen(false);
                                     setSelectedFiles(tmpFiles);
                                 }}
                                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                             >
-                                업로드
+                                Upload
                             </button>
                         </div>
                     </div>

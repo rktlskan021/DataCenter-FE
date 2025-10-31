@@ -92,7 +92,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
         if (!toast.isActive(TOAST_ID)) {
-            toast(`클립보드에 복사되었습니다!`, {
+            toast(`Copied to clipboard`, {
                 toastId: TOAST_ID,
                 className:
                     'flex items-center bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
@@ -120,15 +120,19 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                     <div className="bg-white rounded-lg shadow-lg max-w-4xl max-h-[80vh] overflow-y-auto w-full p-6">
                         <div className="flex items-center text-gray-900 gap-2">
                             <GoDatabase className="h-5 w-5" />
-                            <h2 className="text-lg font-semibold">{app.name} - 데이터 접속 정보</h2>
+                            <h2 className="text-lg font-semibold">
+                                {app.name} - Data Access Infomation
+                            </h2>
                         </div>
                         <p className="text-gray-600 mb-5">
-                            승인된 스키마에 접속하기 위한 정보와 예시 코드입니다.
+                            Information and example code for accessing an approved schema.
                         </p>
-                        <h2 className="text-gray-900 font-bold text-lg">데이터베이스 연결 정보</h2>
+                        <h2 className="text-gray-900 font-bold text-lg">
+                            Database Connection Infomation
+                        </h2>
                         <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mb-5">
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">호스트:</span>
+                                <span className="text-sm text-gray-600">Host:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.host}
@@ -139,7 +143,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">포트:</span>
+                                <span className="text-sm text-gray-600">Port:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.port}
@@ -147,7 +151,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">데이터베이스:</span>
+                                <span className="text-sm text-gray-600">Database:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.database}
@@ -155,7 +159,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">스키마:</span>
+                                <span className="text-sm text-gray-600">Schema:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.schema}
@@ -166,7 +170,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">사용자명:</span>
+                                <span className="text-sm text-gray-600">Username:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.username}
@@ -179,7 +183,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">비밀번호:</span>
+                                <span className="text-sm text-gray-600">Password:</span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.password}
@@ -192,7 +196,9 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                         </div>
-                        <h2 className="text-gray-900 font-bold text-lg">Python 접속 예시 코드</h2>
+                        <h2 className="text-gray-900 font-bold text-lg">
+                            Python connection example code
+                        </h2>
                         <div className="relative mb-3">
                             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
                                 <code>{generatePythonCode(app)}</code>
@@ -204,7 +210,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <MdContentCopy className="h-4 w-4" />
                             </button>
                         </div>
-                        <h2 className="text-gray-900 font-bold text-lg">SQL 쿼리 예시</h2>
+                        <h2 className="text-gray-900 font-bold text-lg">SQL query example</h2>
                         <div className="relative">
                             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
                                 <code>{generateSQLCode(app)}</code>
@@ -221,7 +227,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 onClick={() => setIsModalOpen(false)}
                                 className="px-4 py-2 bg-black text-white rounded hover:bg-black/70"
                             >
-                                닫기
+                                Close
                             </button>
                         </div>
                     </div>

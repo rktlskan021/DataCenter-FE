@@ -26,7 +26,7 @@ export default function CheckboxCard({ table, isSelected, onClick, color }) {
             <div className="flex flex-col">
                 <h3 className="font-semibold text-xm align-middle">{table.name}</h3>
                 <p className="text-xs text-gray-600 mb-2">{table.description}</p>
-                <p className="text-xs text-gray-500">레코드 수 : {table.recordCount}</p>
+                <p className="text-xs text-gray-500">Number of Records : {table.recordCount}</p>
             </div>
         </div>
     );

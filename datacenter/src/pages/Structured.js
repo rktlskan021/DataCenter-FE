@@ -10,9 +10,9 @@ import InputBox from '../components/InputBox';
 import Pagination from '../components/Pagination';
 
 const filters = [
-    { id: 1, name: '코호트 이름', value: 'name' },
-    { id: 2, name: '설명', value: 'description' },
-    { id: 3, name: '작성자', value: 'author' },
+    { id: 1, name: 'Cohort name', value: 'name' },
+    { id: 2, name: 'Description', value: 'description' },
+    { id: 3, name: 'Creator', value: 'author' },
 ];
 
 export default function Structured() {
@@ -89,9 +89,9 @@ export default function Structured() {
     return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
             <div>
-                <h1 className="font-bold text-4xl mb-5">신규 정형 데이터 신청</h1>
+                <h1 className="font-bold text-4xl mb-5">Apply for new structured data</h1>
                 <p className="text-xl">
-                    생성된 코호트에 대한 정규 데이터 사용을 신청할 수 있습니다.
+                    You can apply to use structured data for the created cohort.
                 </p>
             </div>
             <div className="flex gap-5">
@@ -145,6 +145,7 @@ export default function Structured() {
                 selected={selected}
                 setSelected={setSelected}
                 cohortType={cohortType}
+                placeholder={'Search by cohort name or description...'}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 filters={filters}
@@ -153,28 +154,28 @@ export default function Structured() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
                     {cohortType === 'atlas' ? 'ATLAS ' : 'Bento '}
-                    코호트 목록
+                    Cohort List
                 </h1>
                 <table className="w-full table-fixed divide-y divide-gray-200">
                     <thead>
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[20%]">
-                                코호트 이름
+                                Cohort name
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[30%]">
-                                설명
+                                Description
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                환자 수
+                                Number of patients
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                작성자
+                                Creator
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
-                                생성일
+                                Creation date
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
-                                수정일
+                                Modification date
                             </th>
                         </tr>
                     </thead>
@@ -230,7 +231,7 @@ export default function Structured() {
                         ) : (
                             <tr>
                                 <td colSpan={6} className="text-center text-gray-500 py-4">
-                                    검색 결과가 없습니다.
+                                    No search results.
                                 </td>
                             </tr>
                         )}

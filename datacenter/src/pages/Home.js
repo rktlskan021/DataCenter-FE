@@ -37,8 +37,6 @@ export default function Home() {
             .filter((app) => app.status !== 'approved' && !app?.isAccessApproved)
             .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate));
 
-        console.log(approved);
-
         const approvedKey = `${activeTab}-approved`;
         const pendingKey = `${activeTab}-pending`;
 
@@ -112,15 +110,15 @@ export default function Home() {
                     <div className="flex items-center gap-6 text-sm">
                         <div className="text-center">
                             <div className="text-3xl font-bold text-emerald-600">
-                                {AData.filter((app) => app.status === 'approved').length}
+                                {approvedApplications.length}
                             </div>
-                            <div className="text-gray-600">승인된 스키마</div>
+                            <div className="text-gray-600">Approved Application</div>
                         </div>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-blue-600">
-                                {AData.filter((app) => app.status !== 'approved').length}
+                                {pendingApplications.length}
                             </div>
-                            <div className="text-gray-600">대기중 신청</div>
+                            <div className="text-gray-600">Pending Application</div>
                         </div>
                     </div>
                 </div>
@@ -136,7 +134,7 @@ export default function Home() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                스키마 신청 관리
+                                Schema Application
                             </button>
                             <button
                                 onClick={() => setActiveTab('unstructured-data')}
@@ -146,7 +144,7 @@ export default function Home() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                비정형 데이터 신청
+                                Unstructured Data Application
                             </button>
                         </nav>
                     </div>

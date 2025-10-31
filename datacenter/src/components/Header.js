@@ -15,32 +15,33 @@ export default function Header() {
                     </h1>
                     <div className="flex gap-8 text-gray-600 font-bold text-lg">
                         <Dropdown
-                            label="정형 데이터 신청"
+                            label="Structured Data Application"
                             align="left"
                             hoverOpen
                             items={[
                                 {
-                                    label: '신규 정형 데이터 신청',
+                                    label: 'New Structured Data Application',
                                     to: '/structured',
-                                    description: '새 정형 데이터 요청',
+                                    description: 'New structured data requests',
                                 },
                                 {
-                                    label: '기존 정형 데이터 권한 신청',
+                                    label: 'Apply for Structured Data Permissoin',
                                     to: '/schema',
-                                    description: '등록된 정형 데이터 이용 권한 요청',
+                                    description:
+                                        'Request Permission to use registered structured data',
                                 },
                             ]}
                         />
                         <Link to="/unstructured">
                             <p className="text-gray-600 hover:text-gray-900 hover:-translate-y-0.5 transition-all duration-300 ">
-                                비정형 데이터 신청
+                                Unstructured Data Application
                             </p>
                         </Link>
                     </div>
                 </div>
                 {isLoggedIn ? (
                     <div className="flex gap-3 items-center">
-                        <span>안녕하세요, {name}님</span>
+                        <span>Welcome, {name}</span>
                         {isAdmin && (
                             <Link
                                 to="/admin"

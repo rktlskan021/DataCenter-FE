@@ -29,40 +29,39 @@ export default function SchemaDetailModal({ isModalOpen, setIsModalOpen, schema 
                         </button>
 
                         <div>
-                            <h1 className="font-bold text-xl">스키마 상세 정보</h1>
+                            <h1 className="font-bold text-xl">Schema Details</h1>
                         </div>
 
                         <div className="space-y-2">
                             <div className="flex justify-between bg-gray-100 rounded-lg px-2 py-2">
-                                <span>이름 : </span>
+                                <span>Name : </span>
                                 <p className="text-black font-medium">{schema.schema_name}</p>
                             </div>
                             <div className="flex justify-between bg-gray-100 rounded-lg px-2 py-2">
-                                <span>작성자 : </span>
+                                <span>Creator : </span>
                                 <p className="text-black font-medium">{schema.creator_name}</p>
                             </div>
                             <div className="flex justify-between bg-gray-100 rounded-lg px-2 py-2">
-                                <span>승인일 : </span>
+                                <span>Application Date : </span>
                                 <p className="text-black font-medium">
                                     {format(new Date(schema.resolved_at), 'yyyy-MM-dd hh:mm')}
                                 </p>
                             </div>
                             <div className="flex justify-between bg-gray-100 rounded-lg px-2 py-2">
-                                <span>환자수 : </span>
+                                <span>Number of Patients : </span>
                                 <p className="text-black font-medium">{schema.patient_count}</p>
                             </div>
                             <div className="bg-gray-100 rounded-lg px-2 py-2">
-                                <span className="text-nowrap">설명 : </span>
+                                <span className="text-nowrap">Description : </span>
                                 <p className="text-black font-medium break-all">
                                     {schema.schema_description}
-                                    sdkjfsdjfjdslkfjdlksjfkldsjflkdsjflksdlkfdskljksdjfldsjfkldsjklfjdsklfjdsklfjdsklfjdlskjf
                                 </p>
                             </div>
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">
-                                선택된 테이블 ({schema.tables.length})
+                                Selected Tables ({schema.tables.length})
                             </h1>
                             <div className="flex flex-wrap gap-1">
                                 {schema.tables.map((table, idx) => (

@@ -1,27 +1,19 @@
-import { useState, Fragment, useEffect } from 'react';
-import { FaSearch, FaUser, FaChevronDown, FaRegCalendarAlt } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaUser, FaRegCalendarAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import {
-    Listbox,
-    ListboxButton,
-    ListboxOptions,
-    ListboxOption,
-    Transition,
-} from '@headlessui/react';
+import InputBox from '../components/InputBox';
 import { fetchBentoCohorts } from '../api/fetchBentoCohorts';
 import useAuthStore from '../stores/useAuthStore';
 import { useCohorts } from '../hooks/queries/useCohorts';
 import { format } from 'date-fns';
 
 const filters = [
-    { id: 1, name: '코호트 이름', value: 'name' },
-    { id: 2, name: '설명', value: 'description' },
-    { id: 3, name: '작성자', value: 'author' },
+    { id: 1, name: 'Cohort name', value: 'name' },
+    { id: 2, name: 'Description', value: 'description' },
+    { id: 3, name: 'Creator', value: 'author' },
 ];
 
 export default function Unstructured() {
-    const [isInputFocused, setIsInputFocused] = useState(false);
-
     // fetch atlas & bento data
     // const [atlasCohorts, setAtlasCohorts] = useState([]);
     const { data: atlasCohorts, isLoading } = useCohorts();
@@ -95,8 +87,10 @@ export default function Unstructured() {
     return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
             <div>
-                <h1 className="font-bold text-4xl mb-5">비정형 데이터 신청</h1>
-                <p className="text-xl">코호트를 선택하여 비정형 데이터를 신청할 수 있습니다.</p>
+                <h1 className="font-bold text-4xl mb-5">Apply for new unstructured data</h1>
+                <p className="text-xl">
+                    You can apply to use unstructured data for the created cohort.
+                </p>
             </div>
             <div className="flex gap-5">
                 <div className="flex font-bold jusfify-between items-center">
@@ -144,104 +138,42 @@ export default function Unstructured() {
                     </button>
                 </div>
             </div>
-            <div className="flex jusfify-between items-center gap-5 bg-gray-150 shadow-sm border border-gray-200 p-6">
-                {/* 검색창 */}
-                <div
-                    className={`flex border rounded-md w-full h-[42px] items-center py-2 px-5 transition duration-300 bg-gray-50 ${
-                        isInputFocused ? 'border-blue-500' : 'border-gray-200'
-                    }`}
-                >
-                    <FaSearch />
-                    <input
-                        placeholder={`${cohortType.toUpperCase()} 코호트 이름 또는 설명으로 검색...`}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        onFocus={() => setIsInputFocused(true)}
-                        onBlur={() => setIsInputFocused(false)}
-                        className="pl-5 bg-transparent focus:outline-none w-full"
-                    />
-                </div>
 
-                {/* 유저 아이콘 + Select Box */}
-                <Listbox value={selected} onChange={setSelected}>
-                    <div className="relative">
-                        <ListboxButton className="relative w-[150px] h-[42px] cursor-default rounded-md bg-gray-50 border border-gray-200 py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:border-blue-500 text-sm">
-                            <div className="flex items-center gap-2">
-                                <FaUser />
-                                <span className="block truncate">{selected.name}</span>
-                            </div>
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                <FaChevronDown className="h-4 w-4 text-gray-400" />
-                            </span>
-                        </ListboxButton>
-                        <Transition
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-32 overflow-auto rounded-md bg-gray-50 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {filters.map((filter) => (
-                                    <ListboxOption
-                                        key={filter.id}
-                                        className={({ active }) =>
-                                            `relative cursor-pointer select-none py-2 pl-4 pr-4 ${
-                                                active
-                                                    ? 'bg-blue-100 text-blue-900'
-                                                    : 'text-gray-900'
-                                            }`
-                                        }
-                                        value={filter}
-                                    >
-                                        {({ selected }) => (
-                                            <>
-                                                <span
-                                                    className={`block truncate ${
-                                                        selected ? 'font-medium' : 'font-normal'
-                                                    }`}
-                                                >
-                                                    {filter.name}
-                                                </span>
-                                                {selected ? (
-                                                    <span className="absolute inset-y-0 right-2 flex items-center pl-2 text-blue-600">
-                                                        ✔
-                                                    </span>
-                                                ) : null}
-                                            </>
-                                        )}
-                                    </ListboxOption>
-                                ))}
-                            </ListboxOptions>
-                        </Transition>
-                    </div>
-                </Listbox>
-            </div>
+            <InputBox
+                selected={selected}
+                setSelected={setSelected}
+                cohortType={cohortType}
+                placeholder={'Search by cohort name or description...'}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                filters={filters}
+            />
 
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
                     {cohortType === 'atlas' ? 'ATLAS ' : 'Bento '}
-                    코호트 목록
+                    Cohort List
                 </h1>
                 <table className="w-full table-fixed divide-y divide-gray-200">
                     <thead>
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[20%]">
-                                코호트 이름
+                                Cohort name
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[30%]">
-                                설명
+                                Description
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                환자 수
+                                Number of patients
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                작성자
+                                Creator
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
-                                생성일
+                                Creation date
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
-                                수정일
+                                Modification date
                             </th>
                         </tr>
                     </thead>
@@ -309,7 +241,7 @@ export default function Unstructured() {
                         className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
                         disabled={currentPage === 1}
                     >
-                        이전
+                        prev
                     </button>
 
                     {[...Array(totalPages)].map((_, index) => {
@@ -334,7 +266,7 @@ export default function Unstructured() {
                         className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
                         disabled={currentPage === totalPages}
                     >
-                        다음
+                        next
                     </button>
                 </div>
             </div>

@@ -18,7 +18,7 @@ export default function InfoModal({ isModalOpen, setIsModalOpen, files }) {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
                         <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                            업로드된 파일 목록
+                            List of uploaded files
                         </h2>
                         <ul className="space-y-2 text-gray-700 text-sm">
                             {files.map((file, idx) => (
@@ -35,7 +35,7 @@ export default function InfoModal({ isModalOpen, setIsModalOpen, files }) {
                                 onClick={() => setIsModalOpen(false)}
                                 className="px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-gray-400"
                             >
-                                닫기
+                                Close
                             </button>
                         </div>
                     </div>

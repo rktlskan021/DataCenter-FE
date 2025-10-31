@@ -16,36 +16,38 @@ export default function Login() {
     const features = [
         {
             icon: Database,
-            title: 'OMOP CDM 데이터',
-            description: '표준화된 의료 데이터 모델을 통한 안전한 데이터 접근',
+            title: 'OMOP CDM Data', // OMOP CDM 데이터
+            description: 'Secure data access through a standardized medical data model.', // 표준화된 의료 데이터 모델을 통한 안전한 데이터 접근
         },
         {
             icon: Shield,
-            title: '보안 강화',
-            description: 'IRB/DRB 승인을 통한 엄격한 데이터 보안 관리',
+            title: 'Enhanced Security', // 보안 강화
+            description: 'Strict data security management through IRB/DRB approval.', // IRB/DRB 승인을 통한 엄격한 데이터 보안 관리
         },
         {
             icon: Users,
-            title: '코호트 관리',
-            description: '연구 목적에 맞는 환자 코호트 생성 및 관리',
+            title: 'Cohort Management', // 코호트 관리
+            description:
+                'Creation and management of patient cohorts suitable for research purposes.', // 연구 목적에 맞는 환자 코호트 생성 및 관리
         },
         {
             icon: BarChart3,
-            title: '데이터 분석',
-            description: '승인된 데이터를 활용한 고급 분석 도구 제공',
+            title: 'Data Analysis', // 데이터 분석
+            description: 'Provision of advanced analysis tools utilizing approved data.', // 승인된 데이터를 활용한 고급 분석 도구 제공
         },
     ];
+
     useEffect(() => {
         if (isLoggedIn) {
             logout();
-            alert('로그아웃 되었습니다.');
+            alert('You have been logout');
         }
     }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         if (userId === '' || userPw === '') {
-            setError('아이디와 비밀번호를 모두 입력해주세요.');
+            setError('Please enter both ID and Password');
             return;
         }
 
@@ -68,7 +70,7 @@ export default function Login() {
                 navigate('/home');
             }
         } catch (err) {
-            setError('로그인에 실패했습니다.');
+            setError('Login failed');
         } finally {
             setLoading(false);
         }
@@ -94,12 +96,12 @@ export default function Login() {
                                     htmlFor="userId"
                                     className="block text-sm font-medium text-gray-700 mb-2"
                                 >
-                                    아이디
+                                    ID
                                 </label>
                                 <input
                                     id="userId"
                                     type="text"
-                                    placeholder="아이디를 입력하세요"
+                                    placeholder="Enter ID"
                                     value={userId}
                                     onChange={(e) => setUserId(e.target.value)}
                                     disabled={loading}
@@ -112,12 +114,12 @@ export default function Login() {
                                     htmlFor="userPw"
                                     className="block text-sm font-medium text-gray-700 mb-2"
                                 >
-                                    비밀번호
+                                    Password
                                 </label>
                                 <input
                                     id="userPw"
                                     type="password"
-                                    placeholder="비밀번호를 입력하세요"
+                                    placeholder="Enter PW"
                                     value={userPw}
                                     onChange={(e) => setuserPw(e.target.value)}
                                     disabled={loading}
@@ -137,7 +139,7 @@ export default function Login() {
                             disabled={loading}
                             className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            로그인
+                            Login
                         </button>
                     </form>
                 </div>
@@ -146,11 +148,12 @@ export default function Login() {
             {/* 오른쪽 칸: 파란 배경 (그냥 절반 차지) */}
             <div className="flex justify-start items-center bg-gradient-to-br from-blue-600 to-blue-700">
                 <div className="px-20 text-white ">
-                    <h2 className="text-4xl font-bold mb-6">의료 데이터 연구 플랫폼</h2>
+                    <h2 className="text-4xl font-bold mb-6">Medical Data Research Platform</h2>{' '}
+                    {/* 의료 데이터 연구 플랫폼 */}
                     <p className="text-xl font-medium text-blue-100 mb-12">
-                        안전하고 표준화된 의료 데이터에 접근하여 혁신적인 연구를 수행하세요
+                        Access standardized and secure medical data to conduct innovative research.{' '}
+                        {/* 안전하고 표준화된 의료 데이터에 접근하여 혁신적인 연구를 수행하세요 */}
                     </p>
-
                     <div className="space-y-8">
                         {features.map((feature, index) => (
                             <div key={index} className="flex items-start space-x-4">
@@ -166,12 +169,13 @@ export default function Login() {
                             </div>
                         ))}
                     </div>
-
                     <div className="mt-12 p-6 bg-white/10 rounded-lg backdrop-blur-sm">
-                        <h3 className="text-lg font-bold mb-2">연구 윤리 준수</h3>
+                        <h3 className="text-lg font-bold mb-2">Compliance with Research Ethics</h3>{' '}
+                        {/* 연구 윤리 준수 */}
                         <p className="text-blue-100 text-sm font-medium">
-                            모든 데이터 접근은 IRB(기관생명윤리위원회) 또는 DRB(데이터심의위원회)
-                            승인을 통해 엄격하게 관리됩니다.
+                            All data access is strictly managed through approval from the IRB
+                            (Institutional Review Board) or DRB (Data Review Board).{' '}
+                            {/* 모든 데이터 접근은 IRB(기관생명윤리위원회) 또는 DRB(데이터심의위원회) 승인을 통해 엄격하게 관리됩니다. */}
                         </p>
                     </div>
                 </div>

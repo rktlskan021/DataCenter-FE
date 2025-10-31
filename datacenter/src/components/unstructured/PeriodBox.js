@@ -6,7 +6,7 @@ export default function PeriodBox({ range, index, length, removeDateRange, updat
             {index > 0 && <p className="font-bold">OR</p>}
             <div className="grid grid-cols-2 gap-2">
                 <div>
-                    <label className="text-xs text-gray-600 mb-1 block">시작일</label>
+                    <label className="text-xs text-gray-600 mb-1 block">Start</label>
                     <input
                         type="date"
                         value={range.startDate}
@@ -15,7 +15,7 @@ export default function PeriodBox({ range, index, length, removeDateRange, updat
                     />
                 </div>
                 <div>
-                    <label className="text-xs text-gray-600 mb-1 block">종료일</label>
+                    <label className="text-xs text-gray-600 mb-1 block">End</label>
                     <input
                         type="date"
                         value={range.endDate}
@@ -31,7 +31,7 @@ export default function PeriodBox({ range, index, length, removeDateRange, updat
                         className="flex items-center h-6 px-2 text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                         <LuX className="mr-1" />
-                        <span className="text-sm">삭제</span>
+                        <span className="text-sm">Delete</span>
                     </button>
                 </div>
             )}

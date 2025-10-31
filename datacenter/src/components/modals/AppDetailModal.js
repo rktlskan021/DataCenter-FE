@@ -29,18 +29,18 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         </button>
 
                         <div>
-                            <h1 className="font-bold text-xl">신청 상세 정보</h1>
+                            <h1 className="font-bold text-xl">Application Details</h1>
                             <span className="text-gray-700">
                                 {application?.accessId
-                                    ? `${application.applicant}님의 스키마 접근 권한 신청 내용입니다.`
-                                    : `${application.creator}님의 데이터 접근 권한 신청 내용입니다.`}
+                                    ? `This is the schema access request submitted by ${application.applicant}.`
+                                    : `This is the data access request submitted by ${application.creator}.`}
                             </span>
                         </div>
 
                         <div>
-                            <h1 className="font-bold text-lg">신청자 정보</h1>
+                            <h1 className="font-bold text-lg">Application Information</h1>
                             <span className="text-gray-700">
-                                이름 :{' '}
+                                Name :{' '}
                                 {application?.accessId
                                     ? application.applicant
                                     : application.creator}
@@ -50,33 +50,35 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         <div>
                             {application.applicant ? (
                                 <>
-                                    <h1 className="font-bold text-lg">스키마 정보</h1>
+                                    <h1 className="font-bold text-lg">Schema Infomation</h1>
                                     <p className="text-gray-700">
-                                        이름 : {application?.schemaInfo?.name}
+                                        Name : {application?.schemaInfo?.name}
                                     </p>
-                                    <p className="text-gray-700">소유자 : {application?.creator}</p>
                                     <p className="text-gray-700">
-                                        원본 승인일 :{' '}
+                                        Creator : {application?.creator}
+                                    </p>
+                                    <p className="text-gray-700">
+                                        Approval Date :{' '}
                                         {format(
                                             new Date(application?.appliedDate),
                                             'yyyy-MM-dd HH:mm'
                                         )}
                                     </p>
                                     <p className="text-gray-700">
-                                        설명 : {application?.schemaInfo?.description}
+                                        Description : {application?.schemaInfo?.description}
                                     </p>
                                 </>
                             ) : (
                                 <>
-                                    <h1 className="font-bold text-lg">코호트 정보</h1>
-                                    <span className="text-gray-700">이름 : {application.name}</span>
+                                    <h1 className="font-bold text-lg">Cohort Information</h1>
+                                    <span className="text-gray-700">Name : {application.name}</span>
                                 </>
                             )}
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">
-                                선택된 테이블 ({application.tables.length})
+                                Selected Tables ({application.tables.length})
                             </h1>
                             <div className="flex flex-wrap gap-1">
                                 {application.tables.map((table, idx) => (
@@ -91,7 +93,7 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         </div>
 
                         <div>
-                            <h1 className="font-bold text-lg">IRB/DRB 파일</h1>
+                            <h1 className="font-bold text-lg">IRB/DRB File</h1>
                             <div className="flex flex-col gap-2">
                                 {application.files.map((file, idx) => (
                                     <div
@@ -136,7 +138,7 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         </div>
                         {application.accessId && (
                             <div>
-                                <h1 className="font-bold text-lg">신청 사유</h1>
+                                <h1 className="font-bold text-lg">Reason for application</h1>
                                 <p className="p-4 bg-amber-50 rounded-lg border border-amber-200">
                                     {application.purpose}
                                 </p>

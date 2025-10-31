@@ -39,7 +39,7 @@ export default function InputBox({
             {/* 유저 아이콘 + Select Box */}
             <Listbox value={selected} onChange={setSelected}>
                 <div className="relative">
-                    <ListboxButton className="relative w-[150px] h-[42px] cursor-default rounded-md bg-white border border-gray-200 py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:border-blue-500 text-sm">
+                    <ListboxButton className="relative w-[170px] h-[42px] cursor-default rounded-md bg-white border border-gray-200 py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:border-blue-500 text-sm">
                         <div className="flex items-center gap-2">
                             <FaUser />
                             <span className="block truncate">{selected.name}</span>

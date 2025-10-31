@@ -33,7 +33,7 @@ export default function Pagination({ currentPage, totalPages, setCurrentPage }) 
                 className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 transition duration-150"
                 disabled={currentPage === 1}
             >
-                이전
+                prev
             </button>
 
             {/* 페이지 번호 버튼 */}
@@ -57,7 +57,7 @@ export default function Pagination({ currentPage, totalPages, setCurrentPage }) 
                 className="px-3 py-1 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 transition duration-150"
                 disabled={currentPage === totalPages}
             >
-                다음
+                next
             </button>
         </div>
     );

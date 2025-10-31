@@ -40,15 +40,15 @@ export default function SchemaApplyModal({
                         </button>
 
                         <div>
-                            <h1 className="font-bold text-lg">스키마 접근 권한 요청</h1>
+                            <h1 className="font-bold text-lg">Request schema access permission</h1>
                             <span className="text-gray-700">
-                                {schema.schema_name} 스카마에 대한 접근 권한을 요청합니다.
+                                Requesting access to schema {schema.schema_name}.
                             </span>
                         </div>
                         <div>
-                            <h1 className="text-gray-900">신청 목적</h1>
+                            <h1 className="text-gray-900">Perpose of application</h1>
                             <textarea
-                                placeholder="신청 목적을 입력하세요..."
+                                placeholder="Please enter your application purpose..."
                                 value={purpose}
                                 onChange={(e) => setPurpose(e.target.value)}
                                 className="mt-1 w-full h-20 border border-gray-300 p-2 rounded-lg min-h-[40px]"
@@ -62,7 +62,7 @@ export default function SchemaApplyModal({
                                     setIsModalOpen(false);
                                 }}
                             >
-                                취소
+                                Close
                             </button>
                             <button
                                 className="text-white bg-blue-600 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-blue-700"
@@ -81,7 +81,7 @@ export default function SchemaApplyModal({
                                     }
                                 }}
                             >
-                                권한 요청
+                                Request
                             </button>
                         </div>
                     </div>

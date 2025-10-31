@@ -130,12 +130,12 @@ export default function CohortDetail() {
                     <h1 className="font-bold text-2xl">{data.name}</h1>
                     <span>{data.description}</span>
                     <div className="flex gap-5">
-                        <span>작성자: {data.creator}</span>
+                        <span>Creator: {data.creator}</span>
                         <span>
-                            생성일: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
+                            Creation Date: {format(new Date(data.createdDate), 'yyyy-MM-dd hh:mm')}
                         </span>
                         <span>
-                            수정일:{' '}
+                            Modification Date:{' '}
                             {data.modifiedData
                                 ? format(new Date(data.modifiedDate), 'yyyy-MM-dd hh:mm')
                                 : '-'}
@@ -150,11 +150,11 @@ export default function CohortDetail() {
                             </div>
                             <div>
                                 <h1 className="text-lg text-blue-900 font-bold">
-                                    환자 데이터 테이블
+                                    Patient Data Table
                                 </h1>
                                 <span className="text-blue-700 font-regular">
-                                    person id가 포함된 환자별 임상 데이터 테이블 (
-                                    {withPersonId.length}개)
+                                    Clinical data table by patient with person id (
+                                    {withPersonId.length} tables)
                                 </span>
                             </div>
                         </div>
@@ -165,8 +165,8 @@ export default function CohortDetail() {
                             {selectedTables.filter((name) =>
                                 withPersonId.map((table) => table.name).includes(name)
                             ).length === withPersonId.length
-                                ? '전체 해제'
-                                : '전체 선택'}
+                                ? 'Deselect All'
+                                : 'Select all'}
                         </button>
                     </div>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4 py-5">
@@ -182,7 +182,7 @@ export default function CohortDetail() {
                     </div>
                     <div className="mx-5 mb-6 p-3 bg-blue-100 rounded-lg border border-blue-200">
                         <p className="text-sm text-blue-800 font-bold">
-                            선택된 환자 데이터 테이블: {countWithPersonIdTable}개
+                            Selected Table: {countWithPersonIdTable} tables
                         </p>
                     </div>
                 </div>
@@ -194,11 +194,11 @@ export default function CohortDetail() {
                             </div>
                             <div>
                                 <h1 className="text-lg text-emerald-900 font-bold">
-                                    참조/메타데이터 테이블
+                                    Reference/Metadata Table
                                 </h1>
                                 <span className="text-emerald-700 font-regular">
-                                    용어집, 코드 매핑, 시스템 정보 등 참조용 테이블 (
-                                    {withoutPersonId.length}개)
+                                    Reference tables including glossary, code mapping, system
+                                    information, etc. ({withoutPersonId.length} tables)
                                 </span>
                             </div>
                         </div>
@@ -209,8 +209,8 @@ export default function CohortDetail() {
                             {selectedTables.filter((name) =>
                                 withoutPersonId.map((table) => table.name).includes(name)
                             ).length === withoutPersonId.length
-                                ? '전체 해제'
-                                : '전체 선택'}
+                                ? 'Deselect All'
+                                : 'Select all'}
                         </button>
                     </div>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4 py-5">
@@ -226,34 +226,34 @@ export default function CohortDetail() {
                     </div>
                     <div className="mx-5 mb-6 p-3 bg-emerald-100 rounded-lg border border-emerald-200">
                         <p className="text-sm text-emerald-800 font-bold">
-                            선택된 환자 데이터 테이블: {countWithOutPersonIdTable}개
+                            Selected Table: {countWithOutPersonIdTable} tables
                         </p>
                     </div>
                 </div>
                 <div className="flex items-center bg-white justify-between text-lg border border-gray-200 px-5 py-6 rounded-xl">
                     <div className="flex gap-5 font-bold">
                         <span className="text-gray-600">
-                            전체 선택될 테이블: {selectedTables.length}개
+                            All selected tables: {selectedTables.length} tables
                         </span>
                         <span className="text-blue-600">
-                            환자 테이블: {countWithPersonIdTable}개
+                            Patient Tables: {countWithPersonIdTable} tables
                         </span>
                         <span className="text-emerald-600">
-                            참조 테이블: {countWithOutPersonIdTable}개
+                            Reference Tables: {countWithOutPersonIdTable} tables
                         </span>
                     </div>
                     <button
                         className="font-medium text-sm bg-transparent border border-gray-300 px-4 py-2 rounded-lg text-gray-900 hover:bg-gray-100 transition duration-200 ease-in-out"
                         onClick={handleSelectAll}
                     >
-                        {selectedTables.length === allTables.length ? '전체 해제' : '전체 선택'}
+                        {selectedTables.length === allTables.length ? 'Deselect All' : 'Select All'}
                     </button>
                 </div>
                 <div className="flex flex-col gap-5 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                     <div>
-                        <h1 className="text-2xl font-black font-normal">스키마 정보</h1>
+                        <h1 className="text-2xl font-black font-normal">Schema Infomation</h1>
                         <span className="font-normal text-gray-700">
-                            생성될 스키마의 이름과 설명을 입력하세요
+                            Enter the name and description of the schema to be created.
                         </span>
                     </div>
                     <div>
@@ -261,19 +261,20 @@ export default function CohortDetail() {
                             htmlFor="schemaName"
                             className="block text-sm font-medium text-gray-800 mb-2"
                         >
-                            스키마 이름 *
+                            Schema name *
                         </label>
                         <input
                             id="schemaName"
                             type="text"
                             onChange={(e) => setSchemaName(e.target.value)}
                             value={schemaName}
-                            placeholder="예: diabetes_study_2024"
+                            placeholder="EX: diabetes_study_2024"
                             className="max-w-md w-full px-2 py-1.5 border border-gray-200 rounded"
                             required
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                            영문, 숫자, 언더스코어(_)만 사용 가능합니다.
+                            Only letters (a-z, A-Z), numbers (0-9), and underscores (_) are allowed.
+                            Must contain at least one letter.
                         </p>
                     </div>
                     <div>
@@ -281,14 +282,14 @@ export default function CohortDetail() {
                             htmlFor="schemaName"
                             className="block text-sm font-medium text-gray-800 mb-2"
                         >
-                            스키마 설명 *
+                            Schema description *
                         </label>
                         <textarea
                             id="schemaDescription"
                             type="text"
                             onChange={(e) => setSchemaDescription(e.target.value)}
                             value={schemaDescription}
-                            placeholder="이 스키마의 목적과 사용 용도를 설명해주세요..."
+                            placeholder="Please explain the purpose and use of this schema..."
                             className="max-w-2xl w-full px-2 py-1.5 border border-gray-200 rounded"
                             rows={3}
                             required
@@ -297,9 +298,11 @@ export default function CohortDetail() {
                 </div>
                 <div className="flex flex-col gap-5 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                     <div>
-                        <h1 className="text-2xl font-black font-normal">IRB/DRB 승인서 업로드</h1>
+                        <h1 className="text-2xl font-black font-normal">
+                            Upload IRB/DRB approval form
+                        </h1>
                         <span className="font-normal text-gray-700">
-                            데이터 접근 권한 신청을 위해 IRB/DRB 승인서를 업로드하세요
+                            Upload IRB/DRB approval to apply for data access.
                         </span>
                     </div>
                     <div className="flex gap-4">
@@ -308,15 +311,15 @@ export default function CohortDetail() {
                             onClick={() => setFileUploadOpen(true)}
                         >
                             <MdOutlineFileUpload className="h-6 w-6" />
-                            <span className="font-bold text-xs">파일 업로드</span>
+                            <span className="font-bold text-xs">File Upload</span>
                         </button>
                         {selectedFiles.length > 0 ? (
                             <div className="flex items-center gap-2 text-sm font-bold text-green-600">
                                 <BsCheck2Circle className="h-4 w-4" />
                                 <span>
-                                    {selectedFiles[0].name} 업로드 완료
+                                    {selectedFiles[0].name} upload completed
                                     {selectedFiles.length !== 1
-                                        ? ` (외 ${selectedFiles.length - 1}건)`
+                                        ? ` (and ${selectedFiles.length - 1} more file${selectedFiles.length - 1 !== 1 ? 's' : ''})`
                                         : null}
                                 </span>
                                 <button
@@ -334,7 +337,7 @@ export default function CohortDetail() {
                     {selectedFiles.length ? null : (
                         <div className="flex items-center gap-2 text-sm text-amber-600">
                             <FiInfo className="h-4 w-4" />
-                            <span>테이블 선택과 IRB/DRB 파일 업로드를 완료해주세요</span>
+                            <span>Please complete table selection and IRB/DRB file upload.</span>
                         </div>
                     )}
                     <button
@@ -346,7 +349,7 @@ export default function CohortDetail() {
                         }`}
                         onClick={clickApplyBtn}
                     >
-                        데이터 접근 권한 신청
+                        Application
                     </button>
                 </div>
             </div>

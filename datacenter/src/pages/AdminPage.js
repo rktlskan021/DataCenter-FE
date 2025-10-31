@@ -48,22 +48,22 @@ export default function AdminPage() {
 
     const summaryList = [
         {
-            label: '전체 신청',
+            label: 'Total Applications', // 전체 신청
             color: 'text-gray-800',
             count: localData.length,
         },
         {
-            label: '대기중',
+            label: 'Pending', // 대기중
             color: 'text-blue-600',
             count: localData.filter((app) => app.status === 'applied').length,
         },
         {
-            label: '승인됨',
+            label: 'Approved', // 승인됨
             color: 'text-emerald-600',
             count: localData.filter((app) => app.status === 'approved').length,
         },
         {
-            label: '거부됨',
+            label: 'Rejected', // 거부됨
             color: 'text-red-600',
             count: localData.filter((app) => app.status === 'rejected').length,
         },
@@ -71,22 +71,22 @@ export default function AdminPage() {
 
     const summaryUnstructuredList = [
         {
-            label: '전체 신청',
+            label: 'Total Applications', // 전체 신청
             color: 'text-gray-800',
             count: 0,
         },
         {
-            label: '대기중',
+            label: 'Pending', // 대기중
             color: 'text-blue-600',
             count: 0,
         },
         {
-            label: '승인됨',
+            label: 'Approved', // 승인됨
             color: 'text-emerald-600',
             count: 0,
         },
         {
-            label: '거부됨',
+            label: 'Rejected', // 거부됨
             color: 'text-red-600',
             count: 0,
         },
@@ -103,9 +103,9 @@ export default function AdminPage() {
         <div>
             <div className="flex flex-col max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
                 <div className="mb-10">
-                    <h1 className="font-bold text-3xl">데이터 접근 권한 신청 관리</h1>
+                    <h1 className="font-bold text-3xl">Manage data access rights applications</h1>
                     <span>
-                        사용자들의 데이터 접근 권한 신청을 검토하고 승인/거부할 수 있습니다.
+                        You can review and approve/reject users applications for data access rights.
                     </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
@@ -126,7 +126,7 @@ export default function AdminPage() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                스키마 신청 관리
+                                Structured Data Application
                             </button>
                             <button
                                 onClick={() => setActiveTab('unstructured-data')}
@@ -136,7 +136,7 @@ export default function AdminPage() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                비정형 데이터 신청
+                                Unstructured Data Application
                             </button>
                         </nav>
                     </div>

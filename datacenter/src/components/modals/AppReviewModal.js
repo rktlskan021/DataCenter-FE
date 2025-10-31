@@ -38,16 +38,20 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                         </button>
 
                         <div>
-                            <h1 className="font-bold text-lg">신청 검토</h1>
+                            <h1 className="font-bold text-lg">Review Application</h1>{' '}
+                            {/* 신청 검토 */}
                             <span className="text-gray-700">
-                                {application.accessId ? application.applicant : application.creator}
-                                님의 신청을 검토하고 승인 또는 거부하세요.
+                                {/* {applicant/creator}'s application is ready for review. Approve or reject it. */}
+                                Review the application submitted by{' '}
+                                {application.accessId ? application.applicant : application.creator}{' '}
+                                and approve or reject it.
                             </span>
                         </div>
+
                         <div>
-                            <h1 className="text-gray-900">검토 의견</h1>
+                            <h1 className="text-gray-900">Review Comments</h1>
                             <textarea
-                                placeholder="검토 의견을 입력하세요..."
+                                placeholder="Please enter your review comments..."
                                 value={reviewComment}
                                 onChange={(e) => setReviewComment(e.target.value)}
                                 className="mt-1 w-full h-20 border border-gray-300 p-2 rounded-lg min-h-[40px]"
@@ -61,13 +65,13 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                     setIsModalOpen(false);
                                 }}
                             >
-                                취소
+                                close
                             </button>
                             <button
                                 className="border border-gray-300 text-white bg-red-600 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-red-700"
                                 onClick={() => {
                                     if (reviewComment.length === 0) {
-                                        toast(`검토 의견을 작성해주세요.`, {
+                                        toast(`Please write a review comment.`, {
                                             className:
                                                 'border border-gray-200 bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',
@@ -80,7 +84,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                         };
                                         Access(data);
                                         toast(
-                                            `${application.applicant}님의 신청이 거부 되었습니다.`,
+                                            `${application.applicant}'s application has been rejected`,
                                             {
                                                 className:
                                                     'border border-gray-200  bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
@@ -98,7 +102,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                         };
                                         Reject(data);
                                         toast(
-                                            `${application.creator}님의 신청이 거부 되었습니다.`,
+                                            `${application.creator}'s application has been rejected`,
                                             {
                                                 className:
                                                     'border border-gray-200  bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
@@ -112,7 +116,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                     }
                                 }}
                             >
-                                거부
+                                Reject
                             </button>
                             <button
                                 className="border border-gray-300 text-white bg-green-600 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-green-700"
@@ -125,7 +129,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                         };
                                         Access(data);
                                         toast(
-                                            `${application.applicant}님의 신청이 승인 되었습니다.`,
+                                            `${application.applicant}'s application has been approved`,
                                             {
                                                 className:
                                                     'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
@@ -142,7 +146,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                         };
                                         Approve(data);
                                         toast(
-                                            `${application.creator}님의 신청이 승인 되었습니다.`,
+                                            `${application.creator}'s application has been approved`,
                                             {
                                                 className:
                                                     'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
@@ -156,7 +160,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                     }
                                 }}
                             >
-                                승인
+                                Approve
                             </button>
                         </div>
                     </div>

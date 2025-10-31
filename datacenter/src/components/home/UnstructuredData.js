@@ -15,9 +15,12 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
     return (
         <div className="flex flex-col gap-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div>
-                <h1 className="font-bold text-2xl text-gray-900">비정형 데이터 신청 현황</h1>
+                <h1 className="font-bold text-2xl text-gray-900">
+                    Unstructured Data Applications Status
+                </h1>
                 <span className="text-sm font-regular">
-                    신청한 비정형 데이터의 승인 상태와 접근 정보를 확인할 수 있습니다.
+                    You can process verification status and access information for requestred
+                    unstructured data.
                 </span>
             </div>
             <div className="grid w-full grid-cols-2 bg-gray-100 py-1">
@@ -27,7 +30,7 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                 >
                     <IoMdCheckmarkCircleOutline className="h-5 w-5" />
                     <span className="font-bold">
-                        승인된 비정형 데이터 ({approvedApplications.length})
+                        Approved Unstructured Data ({approvedApplications.length})
                     </span>
                 </div>
                 <div
@@ -36,7 +39,7 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                 >
                     <GoClock className="h-5 w-5" />
                     <span className="font-bold ">
-                        대기중/반려된 비정형 데이터 ({pendingApplications.length})
+                        Pending/Rejected Unstructured Data ({pendingApplications.length})
                     </span>
                 </div>
             </div>
@@ -44,11 +47,10 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                 (approvedApplications.length === 0 ? (
                     <div className="text-center py-12">
                         <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                            승인된 비정형 데이터가 없습니다
-                        </h3>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Data.</h3>
                         <p className="text-gray-500">
-                            비정형 데이터 신청 후 승인되면 여기에 표시됩니다.
+                            After applying for a unstructured data, if it is approved, it will
+                            appear hear.
                         </p>
                     </div>
                 ) : (
@@ -73,7 +75,7 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
 
                                     <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                         <IoMdCheckmarkCircleOutline />
-                                        <span className="text-xs">승인됨</span>
+                                        <span className="text-xs">Approved</span>
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
@@ -85,38 +87,38 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                                         }}
                                     >
                                         <FiDownload className="text-xl" />
-                                        <span>API 접근</span>
+                                        <span>API Access</span>
                                     </button>
                                 </div>
                             </div>
                             <span className="text-sm">{app.description}</span>
                             <div className="grid grid-cols-5 gap-4 text-sm">
                                 <div>
-                                    <span className="text-gray-500">총 파일 수:</span>
+                                    <span className="text-gray-500">Total Number of Files:</span>
                                     <span className="ml-2 font-medium">
                                         {/* {app.statistics.totalFiles} */}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">환자 수:</span>
+                                    <span className="text-gray-500">Number of Patients:</span>
                                     <span className="ml-2 font-medium">
                                         {/* {app.statistics.patients} */}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">총 크기:</span>
+                                    <span className="text-gray-500">Total Size:</span>
                                     <span className="ml-2 font-medium">
                                         {/* {app.statistics.totalSize} */}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">평균 크기:</span>
+                                    <span className="text-gray-500">Average Size:</span>
                                     <span className="ml-2 font-medium">
                                         {/* {app.statistics.avgFileSize} */}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">데이터 수집 기간:</span>
+                                    <span className="text-gray-500">Data Collection Period:</span>
                                     <span className="ml-2 font-medium">
                                         {/* {app.statistics.dateRange} */}
                                     </span>
@@ -124,19 +126,19 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                             </div>
                             <div className="grid grid-cols-5 gap-4 text-sm">
                                 <div>
-                                    <span className="text-gray-500">신청일:</span>
+                                    <span className="text-gray-500">Application Date:</span>
                                     <span className="ml-2 font-medium">
                                         {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">승인일:</span>
+                                    <span className="text-gray-500">Approval Date:</span>
                                     <span className="ml-2 font-medium">
                                         {format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">만료일:</span>
+                                    <span className="text-gray-500">Expiration Date:</span>
                                     <span className="ml-2 font-medium">
                                         {/* {format(
                                             new Date(app.apiInfo.expiryDate),
@@ -152,10 +154,10 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                 (pendingApplications.length === 0 ? (
                     <div className="text-center py-12">
                         <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                            신청된 비정형 데이터가 없습니다
-                        </h3>
-                        <p className="text-gray-500">비정형 데이터 신청 후 여기에 표시됩니다.</p>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Data.</h3>
+                        <p className="text-gray-500">
+                            If you apply for a unstructured data, it will appear hear.
+                        </p>
                     </div>
                 ) : (
                     pendingApplications.map((app, idx) => (
@@ -199,7 +201,7 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                                             }}
                                         >
                                             <IoEyeOutline className="h-4 w-4" />
-                                            <span>반려 사유</span>
+                                            <span>Reason for rejection</span>
                                         </button>
                                     )}
                                 </div>
@@ -207,13 +209,13 @@ export default function UnstructuredData({ approvedApplications, pendingApplicat
                             <span className="text-sm">{app.description}</span>
                             <div className="grid grid-cols-3 gap-4 text-sm">
                                 <div>
-                                    <span className="text-gray-500">신청일:</span>
+                                    <span className="text-gray-500">Application Date:</span>
                                     <span className="ml-2 font-medium">
                                         {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">검토일:</span>
+                                    <span className="text-gray-500">Review Date:</span>
                                     <span className="ml-2 font-medium">
                                         {app.resolvedDate
                                             ? format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')

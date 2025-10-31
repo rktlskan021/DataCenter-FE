@@ -27,23 +27,26 @@ export default function AdminSchemaRequests({
     const [isLoading, setIsLoading] = useState(true);
 
     const statusButtons = [
-        { label: '전체', value: 'all' },
+        { label: 'All', value: 'all' },
         {
-            label: '대기중',
+            label: 'Pending',
             value: 'applied',
-            icon: <FaRegClock />,
+            // 💡 size 속성을 사용하여 픽셀 단위로 크기 고정 (예: 18px)
+            icon: <FaRegClock size={18} />,
             className: 'bg-blue-100 text-blue-800',
         },
         {
-            label: '승인됨',
+            label: 'Approved',
             value: 'approved',
-            icon: <BsCheck2Circle />,
+            // 💡 size 속성 적용
+            icon: <BsCheck2Circle size={18} />,
             className: 'bg-emerald-100 text-emerald-800',
         },
         {
-            label: '거부됨',
+            label: 'Rejected',
             value: 'rejected',
-            icon: <GoXCircle />,
+            // 💡 size 속성 적용
+            icon: <GoXCircle size={18} />,
             className: 'bg-red-100 text-red-800',
         },
     ];
@@ -109,30 +112,30 @@ export default function AdminSchemaRequests({
             {/* ... (테이블 및 모달 렌더링 코드는 변경 없음) ... */}
             <div className="flex flex-col gap-10 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                 <div>
-                    <h1 className="text-2xl font-black font-normal">신청 목록</h1>
+                    <h1 className="text-2xl font-black font-normal">Application List</h1>
                     <span className="text-sm text-gray-900 font-medium">
-                        사용자들의 데이터 접근 권한 신청 현황입니다.
+                        This is the status of users applications for data access rights.
                     </span>
                 </div>
                 <table className="w-full table-fixed">
                     <thead>
                         <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
-                            <th className="w-[5%]">신청자</th>
-                            <th className="w-[5%]">요청자</th>
-                            <th className="w-[15%]">코호트</th>
-                            <th className="w-[25%]">선택 테이블</th>
-                            <th className="w-[20%]">스키마명</th>
-                            <th className="w-[10%]">신청일</th>
-                            <th className="w-[5%]">상태</th>
-                            <th className="w-[5%]">유형</th>
-                            <th className="w-[10%]">액션</th>
+                            <th className="w-[6%]">Applicant</th> {/* 신청자 */}
+                            <th className="w-[6%]">Requester</th> {/* 요청자 */}
+                            <th className="w-[15%]">Cohort name</th> {/* 코호트 */}
+                            <th className="w-[25%]">Selected Tables</th> {/* 선택 테이블 */}
+                            <th className="w-[17%]">Schema Name</th> {/* 스키마명 */}
+                            <th className="w-[10%]">Application Date</th> {/* 신청일 */}
+                            <th className="w-[7%]">Status</th> {/* 상태 */}
+                            <th className="w-[6%]">Type</th> {/* 유형 */}
+                            <th className="w-[10%]">Action</th> {/* 액션 */}
                         </tr>
                     </thead>
                     <tbody>
                         {applications.length === 0 ? (
                             <tr>
                                 <td colSpan={8} className="text-center text-gray-500 py-4">
-                                    신청 정보가 존재하지 않습니다.
+                                    No Data.
                                 </td>
                             </tr>
                         ) : (
@@ -150,7 +153,7 @@ export default function AdminSchemaRequests({
                                             {application.tables.length > 2 && (
                                                 <span className="text-gray-500">
                                                     {' '}
-                                                    외 {application.tables.length - 2}개
+                                                    and {application.tables.length - 2} more
                                                 </span>
                                             )}
                                         </div>
@@ -180,9 +183,7 @@ export default function AdminSchemaRequests({
                                     <td>
                                         <div className="inline font-bold text-emerald-900 items-center px-2 py-1.5 rounded-xl bg-emerald-100">
                                             <span className="text-xs text-nowrap">
-                                                {application.applicant
-                                                    ? '권한 신청'
-                                                    : '스키마 신청'}
+                                                {application.applicant ? 'Schema' : 'Permission'}
                                             </span>
                                         </div>
                                     </td>
@@ -205,7 +206,7 @@ export default function AdminSchemaRequests({
                                                         setSelectedApplication(application);
                                                     }}
                                                 >
-                                                    검토
+                                                    Review
                                                 </button>
                                             )}
                                         </div>

@@ -26,9 +26,7 @@ export default function SchemaRequests({
     const [isConnectionInfoModalOpen, setIsConnectionInfoModalOpen] = useState(false);
 
     const navigator = useNavigate();
-    useEffect(() => {
-        console.log(approvedApplications);
-    });
+
     if (isLoading) {
         return <LoadingSpinner />;
     }
@@ -36,9 +34,9 @@ export default function SchemaRequests({
     return (
         <div className="flex flex-col gap-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div>
-                <h1 className="font-bold text-2xl text-gray-900">스키마 신청 현황</h1>
+                <h1 className="font-bold text-2xl text-gray-900">Schema Applications Status</h1>
                 <span className="text-sm font-regular">
-                    신청한 스키마의 승인 상태와 접근 정보를 확인할 수 있습니다.
+                    You can check the approval status and access information of the applied schema.
                 </span>
             </div>
             <div className="grid w-full grid-cols-2 bg-gray-100 py-1">
@@ -48,7 +46,7 @@ export default function SchemaRequests({
                 >
                     <IoMdCheckmarkCircleOutline className="h-5 w-5" />
                     <span className="font-bold">
-                        승인된 스키마 ({approvedPagination.totalItems})
+                        Approved Schema ({approvedPagination.totalItems})
                     </span>{' '}
                     {/* 💡 totalItems 표시 */}
                 </div>
@@ -58,7 +56,7 @@ export default function SchemaRequests({
                 >
                     <GoClock className="h-5 w-5" />
                     <span className="font-bold ">
-                        대기중/반려된 스키마 ({pendingPagination.totalItems}){' '}
+                        Pending/Rejected Schema ({pendingPagination.totalItems}){' '}
                         {/* 💡 totalItems 표시 */}
                     </span>
                 </div>
@@ -68,10 +66,10 @@ export default function SchemaRequests({
                 approvedApplications.length === 0 ? (
                     <div className="text-center py-12">
                         <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                            승인된 스키마가 없습니다
-                        </h3>
-                        <p className="text-gray-500">스키마 신청 후 승인되면 여기에 표시됩니다.</p>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Data.</h3>
+                        <p className="text-gray-500">
+                            After applying for a schema, if it is approved, it will appear hear.
+                        </p>
                     </div>
                 ) : (
                     <>
@@ -97,7 +95,7 @@ export default function SchemaRequests({
                                                                 transition-all duration-200 
                                                                 pointer-events-none z-10 whitespace-nowrap"
                                                 >
-                                                    동기화가 필요합니다
+                                                    Needs synchronization
                                                 </div>
                                             </div>
                                         )}
@@ -106,14 +104,12 @@ export default function SchemaRequests({
                                         </h1>
                                         <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                             <span className="text-xs">
-                                                {app.source === 'mine'
-                                                    ? '스키마 신청'
-                                                    : '권한 신청'}
+                                                {app.source === 'mine' ? 'Schema' : 'Permission'}
                                             </span>
                                         </div>
                                         <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                             <IoMdCheckmarkCircleOutline />
-                                            <span className="text-xs">승인됨</span>
+                                            <span className="text-xs">Approved</span>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
@@ -125,7 +121,7 @@ export default function SchemaRequests({
                                                 }}
                                             >
                                                 <BiSolidEdit size={20} />
-                                                <span>수정</span>
+                                                <span>Edit</span>
                                             </button>
                                         )}
                                         <button
@@ -136,26 +132,24 @@ export default function SchemaRequests({
                                             }}
                                         >
                                             <span>{'< >'}</span>
-                                            <span>접속 정보</span>
+                                            <span>Connection</span>
                                         </button>
                                     </div>
                                 </div>
                                 <span className="text-sm">{app.schemaInfo.description}</span>
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
-                                        <span className="text-gray-500">코호트 이름:</span>
+                                        <span className="text-gray-500">Cohort Name:</span>
                                         <span className="ml-2 font-medium">{app.name}</span>
                                     </div>
                                     <div>
-                                        <span className="text-gray-500">코호트 타입:</span>
+                                        <span className="text-gray-500">Cohort Type:</span>
                                         <span className="ml-2 font-medium">{app.origin}</span>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
-                                        <span className="text-gray-500">
-                                            {app.source === 'mine' ? '신청일:' : '권한 요청일'}
-                                        </span>
+                                        <span className="text-gray-500">Application Date</span>
                                         <span className="ml-2 font-medium">
                                             {(() => {
                                                 const dateString =
@@ -169,12 +163,12 @@ export default function SchemaRequests({
                                                         'yyyy-MM-dd hh:mm'
                                                     );
                                                 }
-                                                return '날짜 정보 없음';
+                                                return '-';
                                             })()}
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="text-gray-500">승인일:</span>
+                                        <span className="text-gray-500">Approval Date:</span>
                                         <span className="ml-2 font-medium">
                                             {(() => {
                                                 const dateString =
@@ -188,19 +182,19 @@ export default function SchemaRequests({
                                                         'yyyy-MM-dd hh:mm'
                                                     );
                                                 }
-                                                return '날짜 정보 없음';
+                                                return '-';
                                             })()}
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="text-gray-500">선택 테이블:</span>
+                                        <span className="text-gray-500">Selected Tables:</span>
                                         <span className="ml-2 font-medium">
-                                            {app.tables.length}개
+                                            {app.tables.length} tables
                                         </span>
                                     </div>
                                 </div>
                                 <div className="flex">
-                                    <span className="text-sm text-gray-500">승인된 테이블:</span>
+                                    <span className="text-sm text-gray-500">Approved Tables:</span>
                                     <div className="ml-2 flex flex-wrap gap-1">
                                         {app.tables.map((table, idx) => (
                                             <div
@@ -222,10 +216,8 @@ export default function SchemaRequests({
             pendingApplications.length === 0 ? (
                 <div className="text-center py-12">
                     <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        신청된 스키마가 없습니다
-                    </h3>
-                    <p className="text-gray-500">스키마 신청 후 여기에 표시됩니다.</p>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Data.</h3>
+                    <p className="text-gray-500">If you apply for a schema, it will appear hear.</p>
                 </div>
             ) : (
                 <>
@@ -239,7 +231,7 @@ export default function SchemaRequests({
                                     <h1 className="text-lg font-semibold">{app.schemaInfo.name}</h1>
                                     <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                         <span className="text-xs">
-                                            {app.source === 'mine' ? '스키마 신청' : '권한 신청'}
+                                            {app.source === 'mine' ? 'Schema' : 'Permission'}
                                         </span>
                                     </div>
                                     <div
@@ -252,8 +244,8 @@ export default function SchemaRequests({
                                         )}
                                         <span className="text-xs">
                                             {app.status === 'rejected' || app.rejectReason !== null
-                                                ? '반려됨'
-                                                : '대기중'}
+                                                ? 'Rejected'
+                                                : 'Pending'}
                                         </span>
                                     </div>
                                 </div>
@@ -266,30 +258,30 @@ export default function SchemaRequests({
                                         }}
                                     >
                                         <IoEyeOutline className="h-4 w-4" />
-                                        <span>반려 사유</span>
+                                        <span>Reason for rejection</span>
                                     </button>
                                 )}
                             </div>
                             <span className="text-sm">{app.schemaInfo.description}</span>
                             <div className="grid grid-cols-3 gap-4 text-sm">
                                 <div>
-                                    <span className="text-gray-500">코호트 이름:</span>
+                                    <span className="text-gray-500">Cohort Name:</span>
                                     <span className="ml-2 font-medium">{app.name}</span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">코호트 타입:</span>
+                                    <span className="text-gray-500">Cohort Type:</span>
                                     <span className="ml-2 font-medium">{app.origin}</span>
                                 </div>
                             </div>
                             <div className="grid grid-cols-3 gap-4 text-sm">
                                 <div>
-                                    <span className="text-gray-500">신청일:</span>
+                                    <span className="text-gray-500">Application Date:</span>
                                     <span className="ml-2 font-medium">
                                         {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">검토일:</span>
+                                    <span className="text-gray-500">Review Date:</span>
                                     <span className="ml-2 font-medium">
                                         {app.resolvedDate
                                             ? format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')
@@ -297,13 +289,15 @@ export default function SchemaRequests({
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">선택 테이블:</span>
-                                    <span className="ml-2 font-medium">{app.tables.length}개</span>
+                                    <span className="text-gray-500">Selected Tables:</span>
+                                    <span className="ml-2 font-medium">
+                                        {app.tables.length} tables
+                                    </span>
                                 </div>
                             </div>
                             <div className="flex items-center">
                                 <span className="whitespace-nowrap self-start text-sm text-gray-500 mr-1">
-                                    승인된 테이블:
+                                    Approved Tables:
                                 </span>
                                 <div className="flex flex-wrap gap-1">
                                     {app.tables.map((table, idx) => (
