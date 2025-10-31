@@ -10,9 +10,9 @@ export const fetchUnstructApplies = async () => {
     return res.data;
 };
 
-export const postApplyApprove = async ({ cohort_id, review }) => {
+export const postApplyApprove = async ({ cohort_id }) => {
     const res = await axiosInstance.post(`/api/admin/struct/id/${cohort_id}/approve`, {
-        review: review,
+        review: '',
     });
     return res.data;
 };

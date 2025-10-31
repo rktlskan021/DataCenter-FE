@@ -11,7 +11,7 @@ import { FaSearch, FaUser, FaChevronDown } from 'react-icons/fa';
 export default function InputBox({
     selected,
     setSelected,
-    cohortType,
+    placeholder,
     searchTerm,
     setSearchTerm,
     filters,
@@ -27,7 +27,7 @@ export default function InputBox({
             >
                 <FaSearch />
                 <input
-                    placeholder={`${cohortType.toUpperCase()} 코호트 이름 또는 설명으로 검색...`}
+                    placeholder={placeholder}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onFocus={() => setIsInputFocused(true)}

@@ -18,6 +18,7 @@ export default function AdminSchemaRequests({
     data,
     fullData, // 전체 데이터
     currentPage, // 현재 페이지 번호
+    refetch,
 }) {
     const [statusFilter, setStatusFilter] = useState('all');
     const [isAppDetailModalOpen, setIsAppDetailModalOpen] = useState(false);
@@ -122,7 +123,7 @@ export default function AdminSchemaRequests({
                             <th className="w-[5%]">요청자</th>
                             <th className="w-[15%]">코호트</th>
                             <th className="w-[25%]">선택 테이블</th>
-                            <th className="w-[20%]">스키마</th>
+                            <th className="w-[20%]">스키마명</th>
                             <th className="w-[10%]">신청일</th>
                             <th className="w-[10%]">상태</th>
                             <th className="w-[10%]">액션</th>
@@ -221,6 +222,7 @@ export default function AdminSchemaRequests({
                     application={selectedApplication}
                     reviewComment={reviewComment}
                     setReviewComment={setReviewComment}
+                    refetch={refetch}
                 />
             )}
         </>

@@ -34,6 +34,30 @@ export const postApplyCohort = async ({
     return res.data;
 };
 
+export const postApplyCohortModify = async ({
+    struct_id,
+    schemaName,
+    schemaDescription,
+    selectedTables,
+    selectedFiles,
+}) => {
+    const formData = new FormData();
+
+    formData.append('schema_name', schemaName);
+    formData.append('schema_description', schemaDescription);
+
+    selectedTables.forEach((table) => {
+        formData.append('tables', table);
+    });
+
+    selectedFiles.forEach((file) => {
+        formData.append('files', file);
+    });
+
+    const res = await axiosInstance.post(`/api/struct/id/${struct_id}/modify/`, formData);
+    return res.data;
+};
+
 export const postApplyUnstruct = async ({
     cohort_id,
     data_type,

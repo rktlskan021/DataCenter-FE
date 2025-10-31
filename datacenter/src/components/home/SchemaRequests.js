@@ -80,7 +80,7 @@ export default function SchemaRequests({
                             >
                                 <div className="flex items-center justify-between">
                                     <div className="flex gap-2">
-                                        {!app.isSynced && (
+                                        {!app.isSynced && app.source === 'mine' && (
                                             <div className="relative group flex items-center">
                                                 <AiFillExclamationCircle
                                                     className="text-red-500"
@@ -103,7 +103,11 @@ export default function SchemaRequests({
                                             {app.schemaInfo.name}
                                         </h1>
                                         <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
-                                            <span className="text-xs">스키마 신청</span>
+                                            <span className="text-xs">
+                                                {app.source === 'mine'
+                                                    ? '스키마 신청'
+                                                    : '권한 신청'}
+                                            </span>
                                         </div>
                                         <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                             <IoMdCheckmarkCircleOutline />
@@ -111,15 +115,17 @@ export default function SchemaRequests({
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
-                                        <button
-                                            className="flex justify-center items-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
-                                            onClick={() => {
-                                                navigator(`/structured/modify/${app.id}`);
-                                            }}
-                                        >
-                                            <BiSolidEdit size={20} />
-                                            <span>수정</span>
-                                        </button>
+                                        {app.source === 'mine' && (
+                                            <button
+                                                className="flex justify-center items-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
+                                                onClick={() => {
+                                                    navigator(`/structured/modify/${app.id}`);
+                                                }}
+                                            >
+                                                <BiSolidEdit size={20} />
+                                                <span>수정</span>
+                                            </button>
+                                        )}
                                         <button
                                             className="flex gap-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg text-gray-900 font-bold text-sm px-2 py-2 transition-all duration-200"
                                             onClick={() => {
@@ -145,27 +151,43 @@ export default function SchemaRequests({
                                 </div>
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
-                                        <span className="text-gray-500">신청일:</span>
+                                        <span className="text-gray-500">
+                                            {app.source === 'mine' ? '신청일:' : '권한 요청일'}
+                                        </span>
                                         <span className="ml-2 font-medium">
-                                            {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
+                                            {format(
+                                                new Date(
+                                                    app.source === 'mine'
+                                                        ? app.appliedDate
+                                                        : app.accessAppliedAt
+                                                ),
+                                                'yyyy-MM-dd hh:mm'
+                                            )}
                                         </span>
                                     </div>
                                     <div>
                                         <span className="text-gray-500">승인일:</span>
                                         <span className="ml-2 font-medium">
-                                            {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
+                                            {format(
+                                                new Date(
+                                                    app.source === 'mine'
+                                                        ? app.resolvedDate
+                                                        : app?.accessResolvedAt
+                                                ),
+                                                'yyyy-MM-dd hh:mm'
+                                            )}
                                         </span>
                                     </div>
                                     <div>
                                         <span className="text-gray-500">선택 테이블:</span>
                                         <span className="ml-2 font-medium">
-                                            {app.tables.filter((table) => table.checked).length}개
+                                            {app.tables.length}개
                                         </span>
                                     </div>
                                 </div>
                                 <div className="flex">
                                     <span className="text-sm text-gray-500">승인된 테이블:</span>
-                                    <div className="flex flex-wrap gap-1">
+                                    <div className="ml-2 flex flex-wrap gap-1">
                                         {app.tables.map((table, idx) => (
                                             <div
                                                 key={idx}

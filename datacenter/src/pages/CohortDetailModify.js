@@ -8,7 +8,7 @@ import { FiInfo } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
 import CheckboxCard from '../components/table/CheckboxCard';
 import { useParams } from 'react-router-dom';
-import { useApplyCohort } from '../hooks/queries/useCohorts';
+import { useApplyCohortModify } from '../hooks/queries/useCohorts';
 import { useStruct } from '../hooks/queries/useUsers';
 import { fetchIrbDrbData } from '../api/users/users';
 import { format } from 'date-fns';
@@ -66,7 +66,7 @@ export default function CohortDetailModify() {
     const [isDisabledSchemaInfo, setIsDisabledSchemaInfo] = useState(false);
     const struct_id = useParams().id;
 
-    const { mutate } = useApplyCohort();
+    const { mutate } = useApplyCohortModify();
     const { data, isLoading } = useStruct(struct_id);
 
     const [withPersonId, setWithPersonId] = useState([]);
@@ -143,7 +143,7 @@ export default function CohortDetailModify() {
 
     const clickApplyBtn = () => {
         const cohortData = {
-            cohort_id: struct_id,
+            struct_id,
             schemaName,
             schemaDescription,
             selectedTables,

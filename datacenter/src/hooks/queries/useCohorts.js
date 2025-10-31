@@ -4,6 +4,7 @@ import {
     fetchCohortDetail,
     postApplyCohort,
     postApplyUnstruct,
+    postApplyCohortModify,
 } from '../../api/cohorts/cohorts';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +30,23 @@ export const useApplyCohort = () => {
         mutationFn: postApplyCohort,
         onSuccess: () => {
             toast(`성공적으로 신청되었습니다.`, {
+                className: 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
+                bodyClassName: 'text-sm whitespace-nowrap max-w-full',
+            });
+            navigate('/home');
+        },
+        onError: (err) => {
+            console.log(err);
+        },
+    });
+};
+
+export const useApplyCohortModify = () => {
+    const navigate = useNavigate();
+    return useMutation({
+        mutationFn: postApplyCohortModify,
+        onSuccess: () => {
+            toast(`성공적으로 수정 후 신청되었습니다.`, {
                 className: 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',
             });

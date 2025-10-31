@@ -15,7 +15,7 @@ export default function AdminPage() {
     const [activeTab, setActiveTab] = useState('cohort-requests');
     const [currentPage, setCurrentPage] = useState(1); // 💡 페이지네이션: 현재 페이지 상태
 
-    const { data, isLoading } = useApplies();
+    const { data, isLoading, refetch } = useApplies();
 
     // 💡 페이지네이션 로직을 useMemo로 구현하여 totalPages와 현재 페이지 데이터를 계산
     const { totalPages, currentApplicationsForDisplay } = useMemo(() => {
@@ -155,6 +155,7 @@ export default function AdminPage() {
                             fullData={localData}
                             // 💡 추가: 페이지가 변경되면 필터 상태도 초기화되도록, 현재 페이지 상태를 전달합니다.
                             currentPage={currentPage}
+                            refetch={refetch}
                         />
                         {/* 💡 페이지네이션 컴포넌트 렌더링 */}
                         <Pagination
