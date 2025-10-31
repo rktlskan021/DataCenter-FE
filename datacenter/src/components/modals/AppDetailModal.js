@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { FaFileAlt, FaTimes } from 'react-icons/fa';
 import { IoMdDownload } from 'react-icons/io';
+import { format } from 'date-fns';
 
 export default function AppDetailModal({ isModalOpen, setIsModalOpen, application }) {
     useEffect(() => {
@@ -30,29 +31,47 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         <div>
                             <h1 className="font-bold text-xl">신청 상세 정보</h1>
                             <span className="text-gray-700">
-                                {application.creator}님의 데이터 접근 권한 신청 내용입니다.
+                                {application?.accessId
+                                    ? `${application.applicant}님의 스키마 접근 권한 신청 내용입니다.`
+                                    : `${application.creator}님의 데이터 접근 권한 신청 내용입니다.`}
                             </span>
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">신청자 정보</h1>
-                            <span className="text-gray-700">이름 : {application.creator}</span>
+                            <span className="text-gray-700">
+                                이름 :{' '}
+                                {application?.accessId
+                                    ? application.applicant
+                                    : application.creator}
+                            </span>
                         </div>
 
                         <div>
-                            <h1 className="font-bold text-lg">코호트 정보</h1>
-                            <span className="text-gray-700">이름 : {application.name}</span>
-                        </div>
-
-                        <div>
-                            <h1 className="font-bold text-lg">스키마 정보</h1>
-                            <span className="text-gray-700">
-                                이름 : {application.schemaInfo.name}
-                            </span>
-                            <br />
-                            <span className="text-gray-700">
-                                설명 : {application.schemaInfo.description}
-                            </span>
+                            {application.applicant ? (
+                                <>
+                                    <h1 className="font-bold text-lg">스키마 정보</h1>
+                                    <p className="text-gray-700">
+                                        이름 : {application?.schemaInfo?.name}
+                                    </p>
+                                    <p className="text-gray-700">소유자 : {application?.creator}</p>
+                                    <p className="text-gray-700">
+                                        원본 승인일 :{' '}
+                                        {format(
+                                            new Date(application?.appliedDate),
+                                            'yyyy-MM-dd HH:mm'
+                                        )}
+                                    </p>
+                                    <p className="text-gray-700">
+                                        설명 : {application?.schemaInfo?.description}
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <h1 className="font-bold text-lg">코호트 정보</h1>
+                                    <span className="text-gray-700">이름 : {application.name}</span>
+                                </>
+                            )}
                         </div>
 
                         <div>
@@ -115,6 +134,14 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                                 ))}
                             </div>
                         </div>
+                        {application.accessId && (
+                            <div>
+                                <h1 className="font-bold text-lg">신청 사유</h1>
+                                <p className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                                    {application.purpose}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

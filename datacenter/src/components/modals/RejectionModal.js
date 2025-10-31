@@ -28,18 +28,22 @@ export default function RejectionModal({ isModalOpen, setIsModalOpen, app }) {
                         <p className="text-gray-600 mb-5">{app.name} 신청이 반려된 사유입니다.</p>
                         <h2 className="text-gray-900 font-bold text-lg">반려 사유</h2>
                         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                            <p className="text-sm text-red-800 text-justify">{app.review}</p>
+                            <p className="text-sm text-red-800 text-justify">
+                                {app.source === 'mine' ? app.review : app.rejectReason}
+                            </p>
                         </div>
                         <div className="mt-4 flex justify-end gap-2 font-bold text-xm">
-                            <button
-                                onClick={() => {
-                                    setIsModalOpen(false);
-                                    navigate(`/structured/${app.id}`);
-                                }}
-                                className="px-4 py-2 bg-white border border-gray-200 rounded hover:bg-gray-100"
-                            >
-                                수정 후 재신청
-                            </button>
+                            {app.source === 'mine' && (
+                                <button
+                                    onClick={() => {
+                                        setIsModalOpen(false);
+                                        navigate(`/structured/${app.id}`);
+                                    }}
+                                    className="px-4 py-2 bg-white border border-gray-200 rounded hover:bg-gray-100"
+                                >
+                                    수정 후 재신청
+                                </button>
+                            )}
                             <button
                                 onClick={() => setIsModalOpen(false)}
                                 className="px-4 py-2 bg-black text-white rounded hover:bg-black/70"

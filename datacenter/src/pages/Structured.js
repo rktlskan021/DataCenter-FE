@@ -46,7 +46,7 @@ export default function Structured() {
                 : bentoCohorts;
 
         const filtered = base
-            .filter((c) => (filterType === 'my' ? c.author === id : true))
+            .filter((c) => (filterType === 'my' ? c.creator === id : true))
             .filter((c) => {
                 const target = c[selected.value]?.toLowerCase?.();
                 return target?.includes(searchTerm.toLowerCase());

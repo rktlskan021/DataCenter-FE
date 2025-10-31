@@ -24,8 +24,6 @@ export default function AdminSchemaRequests({
     const [isAppDetailModalOpen, setIsAppDetailModalOpen] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [isAppReviewModalOpen, setIsAppReviewModalOpen] = useState(false);
-    const [reviewComment, setReviewComment] = useState('');
-
     const [isLoading, setIsLoading] = useState(true);
 
     const statusButtons = [
@@ -125,7 +123,8 @@ export default function AdminSchemaRequests({
                             <th className="w-[25%]">선택 테이블</th>
                             <th className="w-[20%]">스키마명</th>
                             <th className="w-[10%]">신청일</th>
-                            <th className="w-[10%]">상태</th>
+                            <th className="w-[5%]">상태</th>
+                            <th className="w-[5%]">유형</th>
                             <th className="w-[10%]">액션</th>
                         </tr>
                     </thead>
@@ -143,7 +142,7 @@ export default function AdminSchemaRequests({
                                     className="hover:bg-gray-50 border-b border-gray-200 text-sm text-gray-800"
                                 >
                                     <td className="py-4">{application.creator}</td>
-                                    <td>{application.modifier ? application.modifier : '-'}</td>
+                                    <td>{application.applicant ? application.applicant : '-'}</td>
                                     <td className="font-bold">{application.name}</td>
                                     <td className="font-medium">
                                         <div className="text-sm">
@@ -177,6 +176,15 @@ export default function AdminSchemaRequests({
                                                 />
                                             );
                                         })()}
+                                    </td>
+                                    <td>
+                                        <div className="inline font-bold text-emerald-900 items-center px-2 py-1.5 rounded-xl bg-emerald-100">
+                                            <span className="text-xs text-nowrap">
+                                                {application.applicant
+                                                    ? '권한 신청'
+                                                    : '스키마 신청'}
+                                            </span>
+                                        </div>
                                     </td>
                                     <td>
                                         <div className="flex gap-2">
@@ -220,8 +228,6 @@ export default function AdminSchemaRequests({
                     isModalOpen={isAppReviewModalOpen}
                     setIsModalOpen={setIsAppReviewModalOpen}
                     application={selectedApplication}
-                    reviewComment={reviewComment}
-                    setReviewComment={setReviewComment}
                     refetch={refetch}
                 />
             )}

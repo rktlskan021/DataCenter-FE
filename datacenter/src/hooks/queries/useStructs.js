@@ -20,5 +20,12 @@ export const useApplySchema = () => {
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',
             });
         },
+        onError: (error) => {
+            toast(`${error.response.data.detail}`, {
+                className:
+                    'border border-gray-200 bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
+                bodyClassName: 'text-sm whitespace-nowrap max-w-full',
+            });
+        },
     });
 };

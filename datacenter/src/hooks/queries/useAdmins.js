@@ -4,6 +4,7 @@ import {
     postApplyApprove,
     postApplyReject,
     fetchUnstructApplies,
+    postStructAccess,
 } from '../../api/admins/admins';
 
 export const useApplies = () => {
@@ -29,5 +30,11 @@ export const useApplyApproce = () => {
 export const useApplyReject = () => {
     return useMutation({
         mutationFn: postApplyReject,
+    });
+};
+
+export const useStructAccess = () => {
+    return useMutation({
+        mutationFn: postStructAccess,
     });
 };

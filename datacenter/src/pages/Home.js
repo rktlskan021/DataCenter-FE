@@ -11,9 +11,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 const ITEMS_PER_PAGE = 5; // Home 페이지에서는 항목을 5개씩 표시한다고 가정합니다.
 
 export default function Home() {
-    const [allApplications, setAllApplications] = useState([]); // 모든 정형 신청 데이터
-    const [allUnstructApplications, setAllUnstructApplications] = useState([]); // 모든 비정형 신청 데이터
-
     // 💡 탭별 페이지 상태 관리
     const [currentPages, setCurrentPages] = useState({
         'cohort-requests-approved': 1,
@@ -28,27 +25,19 @@ export default function Home() {
     const { data: UAData, isLoading: UAisLoading } = useUnstructApplies();
     const { id, name } = useAuthStore();
 
-    // 💡 데이터를 상태별로 필터링하고 local state에 저장
-    useEffect(() => {
-        if (!AisLoading && AData) {
-            setAllApplications(AData);
-        }
-        if (!UAisLoading && UAData) {
-            setAllUnstructApplications(UAData);
-        }
-    }, [AisLoading, UAisLoading, AData, UAData]);
-
     // 💡 useMemo를 사용하여 데이터 필터링 및 페이지네이션 로직을 통합
     const { approvedApplications, pendingApplications, paginationProps } = useMemo(() => {
-        const data = activeTab === 'cohort-requests' ? allApplications : allUnstructApplications;
+        const data = activeTab === 'cohort-requests' ? AData || [] : UAData || [];
 
         // 1. 상태별 필터링 및 정렬
         const approved = data
-            .filter((app) => app.status === 'approved')
+            .filter((app) => app.status === 'approved' || app?.isAccessApproved)
             .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate));
         const pending = data
-            .filter((app) => app.status !== 'approved')
+            .filter((app) => app.status !== 'approved' && !app?.isAccessApproved)
             .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate));
+
+        console.log(approved);
 
         const approvedKey = `${activeTab}-approved`;
         const pendingKey = `${activeTab}-pending`;
@@ -98,7 +87,7 @@ export default function Home() {
                 },
             },
         };
-    }, [activeTab, allApplications, allUnstructApplications, currentPages]);
+    }, [activeTab, AData, UAData, currentPages]);
 
     if (AisLoading || UAisLoading) return <LoadingSpinner />;
 
@@ -123,13 +112,13 @@ export default function Home() {
                     <div className="flex items-center gap-6 text-sm">
                         <div className="text-center">
                             <div className="text-3xl font-bold text-emerald-600">
-                                {allApplications.filter((app) => app.status === 'approved').length}
+                                {AData.filter((app) => app.status === 'approved').length}
                             </div>
                             <div className="text-gray-600">승인된 스키마</div>
                         </div>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-blue-600">
-                                {allApplications.filter((app) => app.status !== 'approved').length}
+                                {AData.filter((app) => app.status !== 'approved').length}
                             </div>
                             <div className="text-gray-600">대기중 신청</div>
                         </div>

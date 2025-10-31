@@ -26,7 +26,9 @@ export default function SchemaRequests({
     const [isConnectionInfoModalOpen, setIsConnectionInfoModalOpen] = useState(false);
 
     const navigator = useNavigate();
-
+    useEffect(() => {
+        console.log(approvedApplications);
+    });
     if (isLoading) {
         return <LoadingSpinner />;
     }
@@ -155,27 +157,39 @@ export default function SchemaRequests({
                                             {app.source === 'mine' ? '신청일:' : '권한 요청일'}
                                         </span>
                                         <span className="ml-2 font-medium">
-                                            {format(
-                                                new Date(
+                                            {(() => {
+                                                const dateString =
                                                     app.source === 'mine'
                                                         ? app.appliedDate
-                                                        : app.accessAppliedAt
-                                                ),
-                                                'yyyy-MM-dd hh:mm'
-                                            )}
+                                                        : app.accessAppliedAt;
+
+                                                if (dateString && !isNaN(Date.parse(dateString))) {
+                                                    return format(
+                                                        new Date(dateString),
+                                                        'yyyy-MM-dd hh:mm'
+                                                    );
+                                                }
+                                                return '날짜 정보 없음';
+                                            })()}
                                         </span>
                                     </div>
                                     <div>
                                         <span className="text-gray-500">승인일:</span>
                                         <span className="ml-2 font-medium">
-                                            {format(
-                                                new Date(
+                                            {(() => {
+                                                const dateString =
                                                     app.source === 'mine'
                                                         ? app.resolvedDate
-                                                        : app?.accessResolvedAt
-                                                ),
-                                                'yyyy-MM-dd hh:mm'
-                                            )}
+                                                        : app?.accessResolvedAt;
+
+                                                if (dateString && !isNaN(Date.parse(dateString))) {
+                                                    return format(
+                                                        new Date(dateString),
+                                                        'yyyy-MM-dd hh:mm'
+                                                    );
+                                                }
+                                                return '날짜 정보 없음';
+                                            })()}
                                         </span>
                                     </div>
                                     <div>
@@ -218,24 +232,28 @@ export default function SchemaRequests({
                     {pendingApplications.map((app) => (
                         <div
                             key={app.id}
-                            className={`flex flex-col gap-2 border rounded-lg p-6 text-gray-900 ${app.status === 'rejected' ? 'border-red-200 bg-red-50/30' : 'border-blue-200 bg-blue-50/30'}`}
+                            className={`flex flex-col gap-2 border rounded-lg p-6 text-gray-900 ${app.status === 'rejected' || app.rejectReason !== null ? 'border-red-200 bg-red-50/30' : 'border-blue-200 bg-blue-50/30'}`}
                         >
                             <div className="relative flex items-center justify-between">
                                 <div className="flex gap-2">
-                                    <h1 className="text-lg font-semibold">{app.name}</h1>
+                                    <h1 className="text-lg font-semibold">{app.schemaInfo.name}</h1>
                                     <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
-                                        <span className="text-xs">스키마 신청</span>
+                                        <span className="text-xs">
+                                            {app.source === 'mine' ? '스키마 신청' : '권한 신청'}
+                                        </span>
                                     </div>
                                     <div
                                         className={`flex gap-1 font-bold items-center px-2 rounded-xl ${app.status === 'rejected' ? 'text-red-900 bg-red-100' : 'text-blue-900 bg-blue-100'}`}
                                     >
-                                        {app.status === 'rejected' ? (
+                                        {app.status === 'rejected' || app.rejectReason !== null ? (
                                             <FaRegTimesCircle />
                                         ) : (
                                             <GoClock />
                                         )}
                                         <span className="text-xs">
-                                            {app.status === 'rejected' ? '반려됨' : '대기중'}
+                                            {app.status === 'rejected' || app.rejectReason !== null
+                                                ? '반려됨'
+                                                : '대기중'}
                                         </span>
                                     </div>
                                 </div>
