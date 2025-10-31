@@ -29,7 +29,7 @@ export const useApplyCohort = () => {
     return useMutation({
         mutationFn: postApplyCohort,
         onSuccess: () => {
-            toast(`성공적으로 신청되었습니다.`, {
+            toast(`Your application has been successfully submitted.`, {
                 className: 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',
             });
@@ -46,7 +46,7 @@ export const useApplyCohortModify = () => {
     return useMutation({
         mutationFn: postApplyCohortModify,
         onSuccess: () => {
-            toast(`성공적으로 수정 후 신청되었습니다.`, {
+            toast(`Your application has been successfully submitted.`, {
                 className: 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',
             });
@@ -63,7 +63,7 @@ export const useApplyUnstruct = () => {
     return useMutation({
         mutationFn: postApplyUnstruct,
         onSuccess: () => {
-            toast(`성공적으로 신청되었습니다.`, {
+            toast(`Your application has been successfully submitted.`, {
                 className: 'bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',
             });

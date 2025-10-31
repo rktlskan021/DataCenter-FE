@@ -120,15 +120,15 @@ export default function AdminSchemaRequests({
                 <table className="w-full table-fixed">
                     <thead>
                         <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
-                            <th className="w-[6%]">Applicant</th> {/* 신청자 */}
-                            <th className="w-[6%]">Requester</th> {/* 요청자 */}
-                            <th className="w-[15%]">Cohort name</th> {/* 코호트 */}
-                            <th className="w-[25%]">Selected Tables</th> {/* 선택 테이블 */}
-                            <th className="w-[17%]">Schema Name</th> {/* 스키마명 */}
-                            <th className="w-[10%]">Application Date</th> {/* 신청일 */}
-                            <th className="w-[7%]">Status</th> {/* 상태 */}
-                            <th className="w-[6%]">Type</th> {/* 유형 */}
-                            <th className="w-[10%]">Action</th> {/* 액션 */}
+                            <th className="w-[6%]">Applicant</th>
+                            <th className="w-[6%]">Requester</th>
+                            <th className="w-[15%]">Cohort name</th>
+                            <th className="w-[25%]">Selected Tables</th>
+                            <th className="w-[17%]">Schema Name</th>
+                            <th className="w-[10%]">Application Date</th>
+                            <th className="w-[7%]">Status</th>
+                            <th className="w-[6%]">Type</th>
+                            <th className="w-[10%]">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,7 +200,7 @@ export default function AdminSchemaRequests({
                                             </button>
                                             {application.status === 'applied' && (
                                                 <button
-                                                    className="border border-gray-200 font-bold py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                                                    className="border border-gray-200 font-bold py-1.5 px-2 rounded flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
                                                     onClick={() => {
                                                         setIsAppReviewModalOpen(true);
                                                         setSelectedApplication(application);

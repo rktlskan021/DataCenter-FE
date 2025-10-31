@@ -68,7 +68,7 @@ export default function SchemaApplyModal({
                                 className="text-white bg-blue-600 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-blue-700"
                                 onClick={() => {
                                     if (purpose.length === 0) {
-                                        toast(`신청 목적을 작성해주세요.`, {
+                                        toast(`Please write the purpose of application`, {
                                             className:
                                                 'border border-gray-200 bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                                             bodyClassName: 'text-sm whitespace-nowrap max-w-full',

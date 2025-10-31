@@ -14,7 +14,7 @@ export const useApplySchema = () => {
     return useMutation({
         mutationFn: postApplySchema,
         onSuccess: () => {
-            toast(`스키마 권한 신청 성공`, {
+            toast(`Schema permission application successful`, {
                 className:
                     'border border-gray-200 bg-gray-100 text-gray-800 font-medium rounded-md shadow-sm',
                 bodyClassName: 'text-sm whitespace-nowrap max-w-full',

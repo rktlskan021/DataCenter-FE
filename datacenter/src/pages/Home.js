@@ -31,10 +31,18 @@ export default function Home() {
 
         // 1. 상태별 필터링 및 정렬
         const approved = data
-            .filter((app) => app.status === 'approved' || app?.isAccessApproved)
+            .filter(
+                (app) =>
+                    (app.status === 'approved' && app.source === 'mine') ||
+                    (app?.isAccessApproved && app.source === 'access')
+            )
             .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate));
         const pending = data
-            .filter((app) => app.status !== 'approved' && !app?.isAccessApproved)
+            .filter(
+                (app) =>
+                    (app.status !== 'approved' && app.source === 'mine') ||
+                    (!app?.isAccessApproved && app.source === 'access')
+            )
             .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate));
 
         const approvedKey = `${activeTab}-approved`;
