@@ -100,8 +100,8 @@ export default function AdminPage() {
     if (isLoading) return <LoadingSpinner />;
 
     return (
-        <div>
-            <div className="flex flex-col max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
+        <div className="min-h-[calc(100vh-60px)] bg-gradient-to-b from-blue-50 to-white">
+            <div className="flex flex-col max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-10">
                     <h1 className="font-bold text-3xl">Manage data access rights applications</h1>
                     <span>

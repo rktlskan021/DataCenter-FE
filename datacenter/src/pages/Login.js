@@ -78,10 +78,10 @@ export default function Login() {
 
     return (
         // ✅ 화면을 2칸으로 나눔 (모바일 1칸, md 이상 2칸)
-        <div className="h-[calc(100vh-96px)] w-screen grid grid-cols-1 md:grid-cols-2">
+        <div className="h-[calc(100vh-60px)] w-screen grid grid-cols-1 md:grid-cols-2 bg-gradient-to-b from-blue-50 to-white">
             {/* 왼쪽 칸: 카드 가운데 정렬 */}
-            <div className="flex items-center justify-center p-6 bg-white">
-                <div className="w-full max-w-md p-10 rounded-2xl shadow-xl border border-gray-100">
+            <div className="flex items-center justify-center p-6">
+                <div className="w-full max-w-md p-10 rounded-2xl shadow-xl border border-gray-100 bg-white">
                     {/* 로고 및 브랜딩 */}
                     <div className="text-center mb-8">
                         <img src={bmiLogo} alt="BMI Lab" className="mx-auto mb-4" />

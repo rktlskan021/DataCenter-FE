@@ -66,6 +66,162 @@ export default function StructuredRequest() {
     };
 
     return (
+        <main className="bg-gradient-to-b from-blue-50 to-white">
+            <section>
+                <div className="mx-auto max-w-7xl py-8">
+                    <h1 className="font-bold text-4xl mb-5">Structured Data Application</h1>
+                    <p className="text-xl">
+                        You can apply for permission to use the requestred structured data.
+                    </p>
+                </div>
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl py-8">
+                    <div className="flex font-bold jusfify-between items-center">
+                        <button
+                            className={`flex items-center gap-2 px-3 py-2 rounded-l-lg transition duration-200 ease-in-out ${
+                                filterType === 'all'
+                                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                    : 'bg-gray-300 hover:bg-gray-400'
+                            }`}
+                            onClick={() => handleChangeFilter('all')}
+                        >
+                            All
+                        </button>
+                        <button
+                            className={`flex items-center gap-2 rounded-r-lg px-3 py-2 transition duration-200 ease-in-out ${
+                                filterType === 'my'
+                                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                    : 'bg-gray-300 hover:bg-gray-400'
+                            }`}
+                            onClick={() => handleChangeFilter('my')}
+                        >
+                            My
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl py-8">
+                    <InputBox
+                        selected={selected}
+                        setSelected={setSelected}
+                        searchTerm={searchTerm}
+                        placeholder={'Search by schema name or description...'}
+                        setSearchTerm={setSearchTerm}
+                        filters={filters}
+                    />
+                </div>
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl py-8 bg-white rounded-lg shadow-sm border border-gray-200">
+                    <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
+                        Schema List
+                    </h1>
+                    <table className="w-full table-fixed divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
+                                    Schema Name
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[25%]">
+                                    description
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
+                                    creator
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
+                                    number of patients
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
+                                    number of tables
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
+                                    action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentCohorts.length > 0 ? (
+                                currentCohorts.map((schema) => (
+                                    <tr key={schema.id} className="border-b border-gray-200">
+                                        <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
+                                            {schema.schema_name}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-800 truncate">
+                                            {schema.schema_description}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-800">
+                                            <div className="flex items-center gap-2">
+                                                <FaUser />
+                                                <span>{schema.creator_name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                                            {schema.patient_count}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-600">
+                                            {schema.tables?.length} tables
+                                        </td>
+                                        <td className="px-6 py-4 text-sm">
+                                            <div className="flex gap-2">
+                                                <button
+                                                    className="text-nowrap gap-1 border border-gray-200 text-gray-800 py-1.5 px-2 rounded-lg flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                                                    onClick={() => {
+                                                        setIsModalOpen(true);
+                                                        setSelectedSchema(schema);
+                                                    }}
+                                                >
+                                                    <FaRegEye className="w-4 h-4" />
+                                                    View
+                                                </button>
+                                                <button
+                                                    className="text-nowrap bg-blue-600 py-1.5 px-2 text-white rounded-lg flex justify-center items-center hover:bg-blue-700 transition duration-200 ease-in-out"
+                                                    onClick={() => {
+                                                        setIsApplyModalOpen(true);
+                                                        setSelectedSchema(schema);
+                                                    }}
+                                                >
+                                                    Request
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={6} className="text-center text-gray-500 py-4">
+                                        No search results.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        setCurrentPage={setCurrentPage}
+                    />
+                </div>
+            </section>
+            <SchemaDetailModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                schema={selectedSchema}
+            />
+            <SchemaApplyModal
+                isModalOpen={isApplyModalOpen}
+                setIsModalOpen={setIsApplyModalOpen}
+                schema={selectedSchema}
+                purpose={purpose}
+                setPurpose={setPurpose}
+                refetch={refetch}
+            />
+        </main>
+    );
+
+    return (
         <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
             <div>
                 <h1 className="font-bold text-4xl mb-5">Structured Data Application</h1>

@@ -2,27 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root{
-  --background: #FAFAF9;
-}
-
-@theme {
-  --background: #FAFAF9;
-}
-/* 커스텀 global style */
-html, body {
-  @apply bg-[--background] text-gray-800;
-  @apply font-sans;
-}
-
-body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}

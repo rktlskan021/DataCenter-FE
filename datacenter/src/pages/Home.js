@@ -98,7 +98,7 @@ export default function Home() {
     if (AisLoading || UAisLoading) return <LoadingSpinner />;
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-[calc(100vh-60px)] bg-gradient-to-b from-blue-50 to-white">
             <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
                 {/* ... (유저 정보 박스 그대로 유지) ... */}
                 <div className="flex gap-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
