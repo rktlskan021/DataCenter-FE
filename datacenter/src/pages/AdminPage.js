@@ -100,74 +100,81 @@ export default function AdminPage() {
     if (isLoading) return <LoadingSpinner />;
 
     return (
-        <div className="min-h-[calc(100vh-60px)] bg-gradient-to-b from-blue-50 to-white">
-            <div className="flex flex-col max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="mb-10">
-                    <h1 className="font-bold text-3xl">Manage data access rights applications</h1>
-                    <span>
+        <main className="bg-gradient-to-b from-blue-50 to-white">
+            <section>
+                <div className="mx-auto max-w-7xl pt-8 pb-4">
+                    <h1 className="font-bold text-gray-900 text-2xl mb-2">
+                        Manage data access rights applications
+                    </h1>
+                    <span className="text-lg text-gray-600">
                         You can review and approve/reject users applications for data access rights.
                     </span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl pt-8 pb-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
                     {summaries[activeTab]?.map((item) => (
                         <SummaryBox key={item.label} {...item} />
                     ))}
                 </div>
-
-                {/* Tab Navigation */}
-                <div className="mb-6">
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl pt-8 pb-4">
                     <div className="border-b border-gray-200">
-                        <nav className="-mb-px flex space-x-8">
-                            <button
+                        <ul className="-mb-px flex space-x-8">
+                            <li
                                 onClick={() => setActiveTab('cohort-requests')}
-                                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                                className={`py-2 px-1 border-b-2 font-medium text-sm cursor-default transition-all ${
                                     activeTab === 'cohort-requests'
                                         ? 'border-blue-600 text-blue-600'
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
                                 Structured Data Application
-                            </button>
-                            <button
+                            </li>
+                            <li
                                 onClick={() => setActiveTab('unstructured-data')}
-                                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                                className={`py-2 px-1 border-b-2 font-medium text-sm cursor-default transition-all ${
                                     activeTab === 'unstructured-data'
                                         ? 'border-blue-600 text-blue-600'
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
                                 Unstructured Data Application
-                            </button>
-                        </nav>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-
-                {activeTab === 'cohort-requests' && (
-                    <>
-                        <AdminSchemaRequests
-                            applications={applications}
-                            setApplications={setApplications}
-                            // 💡 localData Prop에 페이지네이션된 데이터 전달
-                            localData={currentApplicationsForDisplay}
-                            setLocalData={setLocalData}
-                            data={data}
-                            // 💡 추가: 필터링을 위한 전체 데이터 Prop을 새로 정의 (AdminSchemaRequests에서 필터링에 사용)
-                            fullData={localData}
-                            // 💡 추가: 페이지가 변경되면 필터 상태도 초기화되도록, 현재 페이지 상태를 전달합니다.
-                            currentPage={currentPage}
-                            refetch={refetch}
-                        />
-                        {/* 💡 페이지네이션 컴포넌트 렌더링 */}
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            setCurrentPage={setCurrentPage}
-                        />
-                    </>
-                )}
-                {/* {activeTab === 'unstructured-data' && <AdminUnstructuredData />} */}
-                {activeTab === 'unstructured-data' && <></>}
-            </div>
-        </div>
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl pt-8 pb-4">
+                    {activeTab === 'cohort-requests' && (
+                        <>
+                            <AdminSchemaRequests
+                                applications={applications}
+                                setApplications={setApplications}
+                                // 💡 localData Prop에 페이지네이션된 데이터 전달
+                                localData={currentApplicationsForDisplay}
+                                setLocalData={setLocalData}
+                                data={data}
+                                // 💡 추가: 필터링을 위한 전체 데이터 Prop을 새로 정의 (AdminSchemaRequests에서 필터링에 사용)
+                                fullData={localData}
+                                // 💡 추가: 페이지가 변경되면 필터 상태도 초기화되도록, 현재 페이지 상태를 전달합니다.
+                                currentPage={currentPage}
+                                refetch={refetch}
+                            />
+                            {/* 💡 페이지네이션 컴포넌트 렌더링 */}
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        </>
+                    )}
+                    {/* {activeTab === 'unstructured-data' && <AdminUnstructuredData />} */}
+                    {activeTab === 'unstructured-data' && <></>}
+                </div>
+            </section>
+        </main>
     );
 }

@@ -6,6 +6,9 @@ module.exports = {
             fontFamily: {
                 sans: ['Pretendard', 'sans-serif'],
             },
+            colors: {
+                primary: 'var(--primary)',
+            },
         },
     },
     safelist: [

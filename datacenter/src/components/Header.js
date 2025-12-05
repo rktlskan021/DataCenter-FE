@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import useAuthStore from '../stores/useAuthStore';
-import Dropdown from './Dropdown';
 
 export default function Header() {
     const { name, isLoggedIn, logout, isAdmin } = useAuthStore();
@@ -84,7 +83,7 @@ export default function Header() {
                                     </>
                                 ) : (
                                     <Link
-                                        to="/login"
+                                        to="/"
                                         className="flex h-[60px] items-center px-6 text-[15px] hover:font-semibold hover:text-slate-900"
                                     >
                                         Login

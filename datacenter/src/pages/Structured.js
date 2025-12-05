@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaUser, FaRegCalendarAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -160,92 +160,84 @@ export default function Structured() {
                 </div>
             </section>
             <section>
-                <div className="mx-auto max-w-7xl py-8 bg-white rounded-lg shadow-sm border border-gray-200">
-                    <h1 className="font-bold text-xl border-b border-gray-200 px-6 py-4">
+                <div className="mx-auto max-w-7xl px-5 py-6 bg-white rounded-lg shadow-sm border border-gray-200 space-y-3">
+                    <h1 className="font-semibold text-xl">
                         {cohortType === 'atlas' ? 'ATLAS ' : 'Bento '}
                         Cohort List
                     </h1>
-                    <table className="w-full table-fixed divide-y divide-gray-200">
-                        <thead>
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[20%]">
-                                    Cohort name
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[30%]">
-                                    Description
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                    Number of patients
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[10%]">
-                                    Creator
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
-                                    Creation date
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[15%]">
-                                    Modification date
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentCohorts.length > 0 ? (
-                                currentCohorts.map((cohort) => (
-                                    <tr
-                                        key={cohort.id}
-                                        className="hover:bg-gray-50 cursor-pointer border-b border-gray-200"
-                                        onClick={() => navigator(`/structured/${cohort.id}`)}
-                                    >
-                                        <td className="px-6 py-4 text-sm text-gray-800 font-semibold">
-                                            {cohort.name}
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-800 truncate">
-                                            {cohort.description}
-                                        </td>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                                            {cohort.patientCount}
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-800">
-                                            <div className="flex items-center gap-2">
-                                                <FaUser />
-                                                <span>{cohort.creator}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-600">
-                                            <div className="flex items-center gap-2">
-                                                <FaRegCalendarAlt />
-                                                <span>
-                                                    {format(
-                                                        new Date(cohort.createdDate),
-                                                        'yyyy-MM-dd hh:mm'
-                                                    )}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-max table-fixed divide-y divide-gray-200">
+                            <thead>
+                                <tr className="text-left text-sm text-gray-500 uppercase tracking-wider font-medium">
+                                    <th className="w-64">Cohort name</th>
+                                    <th className="w-96">Description</th>
+                                    <th className="w-24">Patients</th>
+                                    <th className="w-40">Creator</th>
+                                    <th className="w-48">Creation date</th>
+                                    <th className="w-48">Modification date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentCohorts.length > 0 ? (
+                                    currentCohorts.map((cohort) => (
+                                        <tr
+                                            key={cohort.id}
+                                            className="hover:bg-gray-50 cursor-pointer border-b border-gray-200 text-sm text-gray-800 font-normal"
+                                            onClick={() => navigator(`/structured/${cohort.id}`)}
+                                        >
+                                            <td className="py-4">
+                                                <span className="font-semibold block truncate w-64">
+                                                    {cohort.name}
                                                 </span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-600">
-                                            <div className="flex items-center gap-2">
-                                                <FaRegCalendarAlt />
-                                                <span>
-                                                    {cohort.modifiedDate
-                                                        ? format(
-                                                              new Date(cohort.modifiedDate),
-                                                              'yyyy-MM-dd hh:mm'
-                                                          )
-                                                        : '-'}
+                                            </td>
+                                            <td>
+                                                <span className="block truncate w-96">
+                                                    {cohort.description}
                                                 </span>
-                                            </div>
+                                            </td>
+                                            <td>{cohort.patientCount}</td>
+                                            <td>
+                                                <div className="flex items-center gap-2">
+                                                    <FaUser />
+                                                    <span>{cohort.creator}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className="flex items-center gap-2">
+                                                    <FaRegCalendarAlt />
+                                                    <span>
+                                                        {format(
+                                                            new Date(cohort.createdDate),
+                                                            'yyyy-MM-dd hh:mm'
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className="flex items-center gap-2">
+                                                    <FaRegCalendarAlt />
+                                                    <span>
+                                                        {cohort.modifiedDate
+                                                            ? format(
+                                                                  new Date(cohort.modifiedDate),
+                                                                  'yyyy-MM-dd hh:mm'
+                                                              )
+                                                            : '-'}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={6} className="text-center text-gray-500 py-4">
+                                            No search results.
                                         </td>
                                     </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={6} className="text-center text-gray-500 py-4">
-                                        No search results.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
 
                     <Pagination
                         currentPage={currentPage}

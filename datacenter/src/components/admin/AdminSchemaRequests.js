@@ -1,4 +1,4 @@
-import { FaFileAlt, FaRegClock } from 'react-icons/fa';
+import { FaRegClock } from 'react-icons/fa';
 import { GoXCircle } from 'react-icons/go';
 import { BsCheck2Circle } from 'react-icons/bs';
 import { FaRegEye } from 'react-icons/fa6';
@@ -98,10 +98,10 @@ export default function AdminSchemaRequests({
                 {statusButtons.map((button) => (
                     <button
                         key={button.value}
-                        className={`px-3 py-1.5 rounded border border-gray-300 ${
+                        className={`px-3 py-1.5 rounded border border-gray-300 font-medium transition-all hover:bg-gray-100  ${
                             statusFilter === button.value
-                                ? 'bg-blue-600 hover:bg-blue-700 text-white font-bold'
-                                : 'bg-white text-black font-medium'
+                                ? 'bg-primary text-white border-primary'
+                                : 'bg-white text-black'
                         }`}
                         onClick={() => setStatusFilter(button.value)}
                     >
@@ -112,110 +112,134 @@ export default function AdminSchemaRequests({
             {/* ... (테이블 및 모달 렌더링 코드는 변경 없음) ... */}
             <div className="flex flex-col gap-10 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                 <div>
-                    <h1 className="text-2xl font-black font-normal">Application List</h1>
+                    <h1 className="text-2xl font-normal">Application List</h1>
                     <span className="text-sm text-gray-900 font-medium">
                         This is the status of users applications for data access rights.
                     </span>
                 </div>
-                <table className="w-full table-fixed">
-                    <thead>
-                        <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
-                            <th className="w-[6%]">Applicant</th>
-                            <th className="w-[6%]">Requester</th>
-                            <th className="w-[15%]">Cohort name</th>
-                            <th className="w-[25%]">Selected Tables</th>
-                            <th className="w-[17%]">Schema Name</th>
-                            <th className="w-[10%]">Application Date</th>
-                            <th className="w-[7%]">Status</th>
-                            <th className="w-[6%]">Type</th>
-                            <th className="w-[10%]">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {applications.length === 0 ? (
-                            <tr>
-                                <td colSpan={8} className="text-center text-gray-500 py-4">
-                                    No Data.
-                                </td>
+                <div className="overflow-x-auto">
+                    <table className="table-fixed min-w-max">
+                        <thead>
+                            <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
+                                <th className="w-32">Applicant</th>
+                                <th className="w-32">Requester</th>
+                                <th className="w-48">Cohort name</th>
+                                <th className="w-96">Selected Tables</th>
+                                <th className="w-48">Schema Name</th>
+                                <th className="w-48">Application Date</th>
+                                <th className="w-32">Status</th>
+                                <th className="w-32">Type</th>
+                                <th className="w-32">Action</th>
                             </tr>
-                        ) : (
-                            applications.map((application, idx) => (
-                                <tr
-                                    key={idx}
-                                    className="hover:bg-gray-50 border-b border-gray-200 text-sm text-gray-800"
-                                >
-                                    <td className="py-4">{application.creator}</td>
-                                    <td>{application.applicant ? application.applicant : '-'}</td>
-                                    <td className="font-bold">{application.name}</td>
-                                    <td className="font-medium">
-                                        <div className="text-sm">
-                                            {application.tables.slice(0, 2).join(', ')}
-                                            {application.tables.length > 2 && (
-                                                <span className="text-gray-500">
-                                                    {' '}
-                                                    and {application.tables.length - 2} more
-                                                </span>
-                                            )}
-                                        </div>
+                        </thead>
+                        <tbody>
+                            {applications.length === 0 ? (
+                                <tr>
+                                    <td colSpan={9} className="text-center text-gray-500 py-8">
+                                        No Data.
                                     </td>
-                                    <td className="font-medium">{application.schemaInfo.name}</td>
-                                    <td className="font-medium">
-                                        {format(
-                                            new Date(application.appliedDate),
-                                            'yyyy-MM-dd HH:mm'
-                                        )}
-                                    </td>
-                                    <td>
-                                        {(() => {
-                                            const statusInfo = statusButtons.find(
-                                                (status) => status.value === application.status
-                                            );
-                                            if (!statusInfo) return null;
-                                            return (
-                                                <StatusBadge
-                                                    icon={statusInfo.icon}
-                                                    label={statusInfo.label}
-                                                    className={statusInfo.className}
-                                                />
-                                            );
-                                        })()}
-                                    </td>
-                                    <td>
-                                        <div className="inline font-bold text-emerald-900 items-center px-2 py-1.5 rounded-xl bg-emerald-100">
-                                            <span className="text-xs text-nowrap">
-                                                {application.applicant ? 'Schema' : 'Permission'}
+                                </tr>
+                            ) : (
+                                applications.map((application, idx) => (
+                                    <tr
+                                        key={idx}
+                                        className="hover:bg-gray-50 border-b border-gray-200 text-sm text-gray-800"
+                                    >
+                                        <td className="py-4">
+                                            <span className="w-32 truncate block">
+                                                {application.creator}
                                             </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="flex gap-2">
-                                            <button
-                                                className="border border-gray-200 py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
-                                                onClick={() => {
-                                                    setIsAppDetailModalOpen(true);
-                                                    setSelectedApplication(application);
-                                                }}
-                                            >
-                                                <FaRegEye className="w-4 h-4" />
-                                            </button>
-                                            {application.status === 'applied' && (
+                                        </td>
+                                        <td>
+                                            <span className="truncate block w-32">
+                                                {application.applicant
+                                                    ? application.applicant
+                                                    : '-'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="font-bold truncate block w-48">
+                                                {application.name}
+                                            </span>
+                                        </td>
+                                        <td className="font-medium">
+                                            <div className="block text-sm truncate w-96">
+                                                {application.tables.slice(0, 2).join(', ')}
+                                                {application.tables.length > 2 && (
+                                                    <span className="text-gray-500">
+                                                        {' '}
+                                                        and {application.tables.length - 2} more
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span className="font-medium truncate block w-48">
+                                                {application.schemaInfo.name}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="font-medium truncate block w-32">
+                                                {format(
+                                                    new Date(application.appliedDate),
+                                                    'yyyy-MM-dd HH:mm'
+                                                )}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {(() => {
+                                                const statusInfo = statusButtons.find(
+                                                    (status) => status.value === application.status
+                                                );
+                                                if (!statusInfo) return null;
+                                                return (
+                                                    <StatusBadge
+                                                        icon={statusInfo.icon}
+                                                        label={statusInfo.label}
+                                                        className={statusInfo.className}
+                                                    />
+                                                );
+                                            })()}
+                                        </td>
+                                        <td>
+                                            <div className="inline font-bold text-emerald-900 items-center px-2 py-1.5 rounded-xl bg-emerald-100">
+                                                <span className="text-xs text-nowrap">
+                                                    {application.applicant
+                                                        ? 'Schema'
+                                                        : 'Permission'}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="flex gap-2">
                                                 <button
-                                                    className="border border-gray-200 font-bold py-1.5 px-2 rounded flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                                                    className="border border-gray-200 py-1.5 rounded w-12 flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
                                                     onClick={() => {
-                                                        setIsAppReviewModalOpen(true);
+                                                        setIsAppDetailModalOpen(true);
                                                         setSelectedApplication(application);
                                                     }}
                                                 >
-                                                    Review
+                                                    <FaRegEye className="w-4 h-4" />
                                                 </button>
-                                            )}
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                                                {application.status === 'applied' && (
+                                                    <button
+                                                        className="border border-gray-200 font-bold py-1.5 px-2 rounded flex justify-center items-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                                                        onClick={() => {
+                                                            setIsAppReviewModalOpen(true);
+                                                            setSelectedApplication(application);
+                                                        }}
+                                                    >
+                                                        Review
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             {isAppDetailModalOpen && (
                 <AppDetailModal

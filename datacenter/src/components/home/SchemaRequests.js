@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import { format } from 'date-fns';
@@ -149,7 +149,7 @@ export default function SchemaRequests({
                                 </div>
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
-                                        <span className="text-gray-500">Application Date</span>
+                                        <span className="text-gray-500">Application Date:</span>
                                         <span className="ml-2 font-medium">
                                             {(() => {
                                                 const dateString =
@@ -194,8 +194,10 @@ export default function SchemaRequests({
                                     </div>
                                 </div>
                                 <div className="flex">
-                                    <span className="text-sm text-gray-500">Approved Tables:</span>
-                                    <div className="ml-2 flex flex-wrap gap-1">
+                                    <span className="text-sm text-gray-500 mr-1">
+                                        Approved Tables:
+                                    </span>
+                                    <div className="flex flex-wrap gap-1">
                                         {app.tables.map((table, idx) => (
                                             <div
                                                 key={idx}
@@ -226,7 +228,7 @@ export default function SchemaRequests({
                             key={app.id}
                             className={`flex flex-col gap-2 border rounded-lg p-6 text-gray-900 ${app.status === 'rejected' || app.rejectReason !== null ? 'border-red-200 bg-red-50/30' : 'border-blue-200 bg-blue-50/30'}`}
                         >
-                            <div className="relative flex items-center justify-between">
+                            <div className="relative flex items-center justify-between h-[38px]">
                                 <div className="flex gap-2">
                                     <h1 className="text-lg font-semibold">{app.schemaInfo.name}</h1>
                                     <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">

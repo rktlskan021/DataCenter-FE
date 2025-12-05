@@ -42,7 +42,7 @@ export default function Login() {
             logout();
             alert('You have been logout');
         }
-    }, []);
+    }, [isLoggedIn, logout]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -55,6 +55,7 @@ export default function Login() {
         setError('');
 
         try {
+            await logout();
             const response = await postLogin(userId, userPw);
             const user = response;
             const userInfo = {

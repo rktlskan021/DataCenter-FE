@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'; // 💡 useMemo 추가
+import { useState, useMemo } from 'react'; // 💡 useMemo 추가
 import useAuthStore from '../stores/useAuthStore';
 import { LuUser } from 'react-icons/lu';
 import { useApplies } from '../hooks/queries/useUsers';
@@ -98,87 +98,93 @@ export default function Home() {
     if (AisLoading || UAisLoading) return <LoadingSpinner />;
 
     return (
-        <div className="min-h-[calc(100vh-60px)] bg-gradient-to-b from-blue-50 to-white">
-            <div className="flex flex-col gap-10 max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
-                {/* ... (유저 정보 박스 그대로 유지) ... */}
-                <div className="flex gap-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div className="w-16 h-16 rounded-full bg-cyan-600 flex items-center justify-center shadow-sm border border-gray-200">
-                        <span className="text-xl font-bold text-white">{name.charAt(0)}</span>
-                    </div>
-                    <div className="flex-1">
-                        <h1 className="text-2xl font-bold text-gray-900">{name}</h1>
-                        <div className="flex items-center gap-2 text-gray-900">
-                            <LuUser className="h-4 w-4" />
-                            <span className="text-sm font-regular bg-gray-100 px-2 py-1 rounded">
-                                {id}
-                            </span>
+        <main className="bg-gradient-to-b from-blue-50 to-white">
+            <section>
+                <div className="mx-auto max-w-7xl pt-8 pb-4">
+                    <div className="flex gap-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <div className="w-16 h-16 rounded-full bg-cyan-600 flex items-center justify-center shadow-sm border border-gray-200">
+                            <span className="text-xl font-bold text-white">{name.charAt(0)}</span>
                         </div>
-                    </div>
-                    {/* Summary Count (페이지네이션 없이 전체 데이터 기준으로 계산) */}
-                    <div className="flex items-center gap-6 text-sm">
-                        <div className="text-center">
-                            <div className="text-3xl font-bold text-emerald-600">
-                                {approvedApplications.length}
+                        <div className="flex-1">
+                            <h1 className="text-2xl font-bold text-gray-900">{name}</h1>
+                            <div className="flex items-center gap-2 text-gray-900">
+                                <LuUser className="h-4 w-4" />
+                                <span className="text-sm font-regular bg-gray-100 px-2 py-1 rounded">
+                                    {id}
+                                </span>
                             </div>
-                            <div className="text-gray-600">Approved Application</div>
                         </div>
-                        <div className="text-center">
-                            <div className="text-3xl font-bold text-blue-600">
-                                {pendingApplications.length}
+                        {/* Summary Count (페이지네이션 없이 전체 데이터 기준으로 계산) */}
+                        <div className="flex items-center gap-6 text-sm">
+                            <div className="text-center">
+                                <div className="text-3xl font-bold text-emerald-600">
+                                    {approvedApplications.length}
+                                </div>
+                                <div className="text-gray-600">Approved Application</div>
                             </div>
-                            <div className="text-gray-600">Pending Application</div>
+                            <div className="text-center">
+                                <div className="text-3xl font-bold text-blue-600">
+                                    {pendingApplications.length}
+                                </div>
+                                <div className="text-gray-600">Pending Application</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {/* Tab Navigation */}
-                <div className="mb-6">
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl pt-8 pb-4">
                     <div className="border-b border-gray-200">
-                        <nav className="-mb-px flex space-x-8">
-                            <button
+                        <ul className="-mb-px flex space-x-8">
+                            <li
                                 onClick={() => setActiveTab('cohort-requests')}
-                                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                                className={`py-2 px-1 border-b-2 font-medium text-sm transition-all cursor-default ${
                                     activeTab === 'cohort-requests'
                                         ? 'border-blue-600 text-blue-600'
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
                                 Schema Application
-                            </button>
-                            <button
+                            </li>
+                            <li
                                 onClick={() => setActiveTab('unstructured-data')}
-                                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                                className={`py-2 px-1 border-b-2 font-medium text-sm transition-all cursor-default ${
                                     activeTab === 'unstructured-data'
                                         ? 'border-blue-600 text-blue-600'
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
                                 Unstructured Data Application
-                            </button>
-                        </nav>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                {activeTab === 'cohort-requests' && (
-                    <SchemaRequests
-                        approvedApplications={approvedApplications} // 💡 페이지네이션된 데이터
-                        pendingApplications={pendingApplications} // 💡 페이지네이션된 데이터
-                        isLoading={AisLoading}
-                        // 💡 페이지네이션 Props 전달
-                        approvedPagination={paginationProps.approved}
-                        pendingPagination={paginationProps.pending}
-                    />
-                )}
+            </section>
+            <section>
+                <div className="mx-auto max-w-7xl pt-8 pb-4">
+                    {activeTab === 'cohort-requests' && (
+                        <SchemaRequests
+                            approvedApplications={approvedApplications} // 💡 페이지네이션된 데이터
+                            pendingApplications={pendingApplications} // 💡 페이지네이션된 데이터
+                            isLoading={AisLoading}
+                            // 💡 페이지네이션 Props 전달
+                            approvedPagination={paginationProps.approved}
+                            pendingPagination={paginationProps.pending}
+                        />
+                    )}
 
-                {activeTab === 'unstructured-data' && (
-                    <UnstructuredData
-                        approvedApplications={approvedApplications} // 💡 페이지네이션된 데이터
-                        pendingApplications={pendingApplications} // 💡 페이지네이션된 데이터
-                        isLoading={UAisLoading}
-                        // 💡 페이지네이션 Props 전달
-                        approvedPagination={paginationProps.approved}
-                        pendingPagination={paginationProps.pending}
-                    />
-                )}
-            </div>
-        </div>
+                    {activeTab === 'unstructured-data' && (
+                        <UnstructuredData
+                            approvedApplications={approvedApplications} // 💡 페이지네이션된 데이터
+                            pendingApplications={pendingApplications} // 💡 페이지네이션된 데이터
+                            isLoading={UAisLoading}
+                            // 💡 페이지네이션 Props 전달
+                            approvedPagination={paginationProps.approved}
+                            pendingPagination={paginationProps.pending}
+                        />
+                    )}
+                </div>
+            </section>
+        </main>
     );
 }
