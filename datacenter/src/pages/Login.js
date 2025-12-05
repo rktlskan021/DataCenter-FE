@@ -4,6 +4,7 @@ import useAuthStore from '../stores/useAuthStore';
 import bmiLogo from '../assets/imgs/bmiLabLogo.svg';
 import { postLogin } from '../api/users/users';
 import { Database, Shield, Users, BarChart3 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
     const [userId, setUserId] = useState('');
@@ -11,29 +12,29 @@ export default function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { login, logout, isLoggedIn } = useAuthStore();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const features = [
         {
             icon: Database,
-            title: 'OMOP CDM Data', // OMOP CDM 데이터
-            description: 'Secure data access through a standardized medical data model.', // 표준화된 의료 데이터 모델을 통한 안전한 데이터 접근
+            title: t('login.features.omop_cdm.title'), // OMOP CDM 데이터
+            description: t('login.features.omop_cdm.description'), // 표준화된 의료 데이터 모델을 통한 안전한 데이터 접근
         },
         {
             icon: Shield,
-            title: 'Enhanced Security', // 보안 강화
-            description: 'Strict data security management through IRB/DRB approval.', // IRB/DRB 승인을 통한 엄격한 데이터 보안 관리
+            title: t('login.features.security.title'), // 보안 강화
+            description: t('login.features.security.description'), // IRB/DRB 승인을 통한 엄격한 데이터 보안 관리
         },
         {
             icon: Users,
-            title: 'Cohort Management', // 코호트 관리
-            description:
-                'Creation and management of patient cohorts suitable for research purposes.', // 연구 목적에 맞는 환자 코호트 생성 및 관리
+            title: t('login.features.cohort_management.title'), // 코호트 관리
+            description: t('login.features.cohort_management.description'), // 연구 목적에 맞는 환자 코호트 생성 및 관리
         },
         {
             icon: BarChart3,
-            title: 'Data Analysis', // 데이터 분석
-            description: 'Provision of advanced analysis tools utilizing approved data.', // 승인된 데이터를 활용한 고급 분석 도구 제공
+            title: t('login.features.data_analysis.title'), // 데이터 분석
+            description: t('login.features.data_analysis.description'), // 승인된 데이터를 활용한 고급 분석 도구 제공
         },
     ];
 
@@ -42,7 +43,7 @@ export default function Login() {
             logout();
             alert('You have been logout');
         }
-    }, [isLoggedIn, logout]);
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -149,10 +150,10 @@ export default function Login() {
             {/* 오른쪽 칸: 파란 배경 (그냥 절반 차지) */}
             <div className="flex justify-start items-center bg-gradient-to-br from-blue-600 to-blue-700">
                 <div className="px-20 text-white ">
-                    <h2 className="text-4xl font-bold mb-6">Medical Data Research Platform</h2>{' '}
+                    <h2 className="text-4xl font-bold mb-6">{t('login.platform.title')}</h2>{' '}
                     {/* 의료 데이터 연구 플랫폼 */}
                     <p className="text-xl font-medium text-blue-100 mb-12">
-                        Access standardized and secure medical data to conduct innovative research.{' '}
+                        {t('login.platform.subtitle')}{' '}
                         {/* 안전하고 표준화된 의료 데이터에 접근하여 혁신적인 연구를 수행하세요 */}
                     </p>
                     <div className="space-y-8">
@@ -171,11 +172,10 @@ export default function Login() {
                         ))}
                     </div>
                     <div className="mt-12 p-6 bg-white/10 rounded-lg backdrop-blur-sm">
-                        <h3 className="text-lg font-bold mb-2">Compliance with Research Ethics</h3>{' '}
+                        <h3 className="text-lg font-bold mb-2">{t('login.compliance.title')}</h3>{' '}
                         {/* 연구 윤리 준수 */}
                         <p className="text-blue-100 text-sm font-medium">
-                            All data access is strictly managed through approval from the IRB
-                            (Institutional Review Board) or DRB (Data Review Board).{' '}
+                            {t('login.compliance.description')}{' '}
                             {/* 모든 데이터 접근은 IRB(기관생명윤리위원회) 또는 DRB(데이터심의위원회) 승인을 통해 엄격하게 관리됩니다. */}
                         </p>
                     </div>

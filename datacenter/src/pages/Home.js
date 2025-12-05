@@ -3,6 +3,7 @@ import useAuthStore from '../stores/useAuthStore';
 import { LuUser } from 'react-icons/lu';
 import { useApplies } from '../hooks/queries/useUsers';
 import { useUnstructApplies } from '../hooks/queries/useUsers';
+import { useTranslation } from 'react-i18next';
 
 import SchemaRequests from '../components/home/SchemaRequests';
 import UnstructuredData from '../components/home/UnstructuredData';
@@ -24,6 +25,7 @@ export default function Home() {
     const { data: AData, isLoading: AisLoading } = useApplies();
     const { data: UAData, isLoading: UAisLoading } = useUnstructApplies();
     const { id, name } = useAuthStore();
+    const { t } = useTranslation();
 
     // 💡 useMemo를 사용하여 데이터 필터링 및 페이지네이션 로직을 통합
     const { approvedApplications, pendingApplications, paginationProps } = useMemo(() => {
@@ -120,13 +122,17 @@ export default function Home() {
                                 <div className="text-3xl font-bold text-emerald-600">
                                     {approvedApplications.length}
                                 </div>
-                                <div className="text-gray-600">Approved Application</div>
+                                <div className="text-gray-600">
+                                    {t('home.summary_count.approved_application')}
+                                </div>
                             </div>
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-blue-600">
                                     {pendingApplications.length}
                                 </div>
-                                <div className="text-gray-600">Pending Application</div>
+                                <div className="text-gray-600">
+                                    {t('home.summary_count.pending_application')}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,7 +150,7 @@ export default function Home() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                Schema Application
+                                {t('home.tab.schema_application')}
                             </li>
                             <li
                                 onClick={() => setActiveTab('unstructured-data')}
@@ -154,7 +160,7 @@ export default function Home() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                Unstructured Data Application
+                                {t('home.tab.unstructured_application')}
                             </li>
                         </ul>
                     </div>

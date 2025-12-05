@@ -6,6 +6,7 @@ import { useApplies } from '../hooks/queries/useAdmins';
 import LoadingSpinner from '../components/LoadingSpinner';
 // 💡 페이지네이션 컴포넌트를 불러옵니다. (경로를 확인해주세요!)
 import Pagination from '../components/Pagination';
+import { useTranslation } from 'react-i18next';
 
 const ITEMS_PER_PAGE = 10; // 💡 페이지당 표시할 항목 수 정의
 
@@ -16,6 +17,7 @@ export default function AdminPage() {
     const [currentPage, setCurrentPage] = useState(1); // 💡 페이지네이션: 현재 페이지 상태
 
     const { data, isLoading, refetch } = useApplies();
+    const { t } = useTranslation();
 
     // 💡 페이지네이션 로직을 useMemo로 구현하여 totalPages와 현재 페이지 데이터를 계산
     const { totalPages, currentApplicationsForDisplay } = useMemo(() => {
@@ -48,22 +50,22 @@ export default function AdminPage() {
 
     const summaryList = [
         {
-            label: 'Total Applications', // 전체 신청
+            label: t('admin.info.total_applications'), // 전체 신청
             color: 'text-gray-800',
             count: localData.length,
         },
         {
-            label: 'Pending', // 대기중
+            label: t('admin.info.pending'), // 대기중
             color: 'text-blue-600',
             count: localData.filter((app) => app.status === 'applied').length,
         },
         {
-            label: 'Approved', // 승인됨
+            label: t('admin.info.approved'), // 승인됨
             color: 'text-emerald-600',
             count: localData.filter((app) => app.status === 'approved').length,
         },
         {
-            label: 'Rejected', // 거부됨
+            label: t('admin.info.rejected'), // 거부됨
             color: 'text-red-600',
             count: localData.filter((app) => app.status === 'rejected').length,
         },
@@ -71,22 +73,22 @@ export default function AdminPage() {
 
     const summaryUnstructuredList = [
         {
-            label: 'Total Applications', // 전체 신청
+            label: t('admin.info.total_applications'), // 전체 신청
             color: 'text-gray-800',
             count: 0,
         },
         {
-            label: 'Pending', // 대기중
+            label: t('admin.info.pending'), // 대기중
             color: 'text-blue-600',
             count: 0,
         },
         {
-            label: 'Approved', // 승인됨
+            label: t('admin.info.approved'), // 승인됨
             color: 'text-emerald-600',
             count: 0,
         },
         {
-            label: 'Rejected', // 거부됨
+            label: t('admin.info.rejected'), // 거부됨
             color: 'text-red-600',
             count: 0,
         },
@@ -104,11 +106,9 @@ export default function AdminPage() {
             <section>
                 <div className="mx-auto max-w-7xl pt-8 pb-4">
                     <h1 className="font-bold text-gray-900 text-2xl mb-2">
-                        Manage data access rights applications
+                        {t('admin.info.title')}
                     </h1>
-                    <span className="text-lg text-gray-600">
-                        You can review and approve/reject users applications for data access rights.
-                    </span>
+                    <span className="text-lg text-gray-600">{t('admin.info.subtitle')}</span>
                 </div>
             </section>
             <section>
@@ -130,7 +130,7 @@ export default function AdminPage() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                Structured Data Application
+                                {t('admin.tab.structured')}
                             </li>
                             <li
                                 onClick={() => setActiveTab('unstructured-data')}
@@ -140,7 +140,7 @@ export default function AdminPage() {
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                             >
-                                Unstructured Data Application
+                                {t('admin.tab.unstructured')}
                             </li>
                         </ul>
                     </div>

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { GoDatabase } from 'react-icons/go';
 import { MdContentCopy } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const TOAST_ID = 'clipboard-toast';
 
@@ -89,6 +90,8 @@ ORDER BY visit_year;
 };
 
 export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }) {
+    const { t } = useTranslation();
+
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
         if (!toast.isActive(TOAST_ID)) {
@@ -121,18 +124,23 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                         <div className="flex items-center text-gray-900 gap-2">
                             <GoDatabase className="h-5 w-5" />
                             <h2 className="text-lg font-semibold">
-                                {app.name} - Data Access Infomation
+                                {app.name} - {t('home.schema_requests.connection_info_modal.title')}
                             </h2>
                         </div>
                         <p className="text-gray-600 mb-5">
-                            Information and example code for accessing an approved schema.
+                            {t('home.schema_requests.connection_info_modal.subtitle')}
                         </p>
                         <h2 className="text-gray-900 font-bold text-lg">
-                            Database Connection Infomation
+                            {t('home.schema_requests.connection_info_modal.database_info.title')}
                         </h2>
                         <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mb-5">
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Host:</span>
+                                <span className="text-sm text-gray-600">
+                                    {t(
+                                        'home.schema_requests.connection_info_modal.database_info.host'
+                                    )}
+                                    :
+                                </span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.host}
@@ -143,7 +151,12 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Port:</span>
+                                <span className="text-sm text-gray-600">
+                                    {t(
+                                        'home.schema_requests.connection_info_modal.database_info.port'
+                                    )}
+                                    :
+                                </span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.port}
@@ -151,7 +164,12 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Database:</span>
+                                <span className="text-sm text-gray-600">
+                                    {t(
+                                        'home.schema_requests.connection_info_modal.database_info.database'
+                                    )}
+                                    :
+                                </span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.database}
@@ -159,7 +177,12 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Schema:</span>
+                                <span className="text-sm text-gray-600">
+                                    {t(
+                                        'home.schema_requests.connection_info_modal.database_info.schema'
+                                    )}
+                                    :
+                                </span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.schema}
@@ -170,7 +193,12 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Username:</span>
+                                <span className="text-sm text-gray-600">
+                                    {t(
+                                        'home.schema_requests.connection_info_modal.database_info.username'
+                                    )}
+                                    :
+                                </span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.username}
@@ -183,7 +211,12 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 </div>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Password:</span>
+                                <span className="text-sm text-gray-600">
+                                    {t(
+                                        'home.schema_requests.connection_info_modal.database_info.password'
+                                    )}
+                                    :
+                                </span>
                                 <div className="flex items-center gap-2">
                                     <div className="bg-white px-2 py-1 rounded">
                                         {app.connectInfo.password}
@@ -197,7 +230,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                             </div>
                         </div>
                         <h2 className="text-gray-900 font-bold text-lg">
-                            Python connection example code
+                            {t('home.schema_requests.connection_info_modal.python')}
                         </h2>
                         <div className="relative mb-3">
                             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
@@ -210,7 +243,9 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 <MdContentCopy className="h-4 w-4" />
                             </button>
                         </div>
-                        <h2 className="text-gray-900 font-bold text-lg">SQL query example</h2>
+                        <h2 className="text-gray-900 font-bold text-lg">
+                            {t('home.schema_requests.connection_info_modal.sql')}
+                        </h2>
                         <div className="relative">
                             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
                                 <code>{generateSQLCode(app)}</code>
@@ -227,7 +262,7 @@ export default function ConnectionInfoModal({ isModalOpen, setIsModalOpen, app }
                                 onClick={() => setIsModalOpen(false)}
                                 className="px-4 py-2 bg-black text-white rounded hover:bg-black/70"
                             >
-                                Close
+                                {t('home.schema_requests.connection_info_modal.close')}
                             </button>
                         </div>
                     </div>

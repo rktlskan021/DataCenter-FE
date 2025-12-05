@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import useAuthStore from '../stores/useAuthStore';
 
 export default function Header() {
     const { name, isLoggedIn, logout, isAdmin } = useAuthStore();
+    const { i18n, t } = useTranslation();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeMenu, setActiveMenu] = useState(null);
@@ -21,6 +23,10 @@ export default function Header() {
             setIsMenuOpen(false);
             setActiveMenu(null);
         }, 0);
+    };
+
+    const changeLanguage = (language) => {
+        i18n.changeLanguage(language);
     };
 
     const navigator = useNavigate();
@@ -47,21 +53,21 @@ export default function Header() {
                                     onMouseEnter={() => handleMouseEnter('structured')}
                                     className={`flex h-[60px] w-[180px] items-center px-6 text-[15px] hover:text-slate-900 ${activeMenu === 'structured' ? 'font-semibold text-slate-900' : 'font-medium text-slate-700'}`}
                                 >
-                                    Structured
+                                    {t('header.nav.structured')}
                                 </Link>
                                 <Link
                                     to="/unstructured"
                                     onMouseEnter={() => handleMouseLeave()}
                                     className={`flex h-[60px] w-[180px] items-center px-6 text-[15px] hover:font-semibold hover:text-slate-900 `}
                                 >
-                                    Unstructured
+                                    {t('header.nav.unstructured')}
                                 </Link>
                             </div>
                             <div className="flex w-full justify-end">
                                 {isLoggedIn ? (
                                     <>
                                         <span className="flex h-[60px] items-center px-6 text-[15px]">
-                                            Welcome, {name}
+                                            {t('header.user_greeting', { username: name })}
                                         </span>
                                         {isAdmin && (
                                             <Link
@@ -82,13 +88,31 @@ export default function Header() {
                                         </button>
                                     </>
                                 ) : (
-                                    <Link
-                                        to="/"
-                                        className="flex h-[60px] items-center px-6 text-[15px] hover:font-semibold hover:text-slate-900"
-                                    >
-                                        Login
-                                    </Link>
+                                    <>
+                                        <Link
+                                            to="/"
+                                            className="flex h-[60px] items-center px-6 text-[15px] hover:font-semibold hover:text-slate-900"
+                                        >
+                                            Login
+                                        </Link>
+                                    </>
                                 )}
+                                <div className="flex h-[60px] items-center px-6 text-[15px]">
+                                    <div className="flex bg-gray-300 rounded-full p-0.5">
+                                        <button
+                                            className={`px-1 text-center rounded-full rounded-r-none ${i18n.language === 'en' ? 'bg-white' : null}`}
+                                            onClick={() => changeLanguage('en')}
+                                        >
+                                            en
+                                        </button>
+                                        <button
+                                            className={`px-1 text-center rounded-full rounded-l-none ${i18n.language === 'ko' ? 'bg-white' : null}`}
+                                            onClick={() => changeLanguage('ko')}
+                                        >
+                                            ko
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </nav>
                     </div>
@@ -111,7 +135,7 @@ export default function Header() {
                                                 to="/structured"
                                                 className="block px-6 text-sm text-slate-600 hover:text-blue-600"
                                             >
-                                                New Schema
+                                                {t('header.nav.content1')}
                                             </Link>
                                         </li>
                                         <li>
@@ -119,7 +143,7 @@ export default function Header() {
                                                 to="/schema"
                                                 className="block px-6 text-sm text-slate-600 hover:text-blue-600"
                                             >
-                                                Schema Permission
+                                                {t('header.nav.content2')}
                                             </Link>
                                         </li>
                                     </ul>

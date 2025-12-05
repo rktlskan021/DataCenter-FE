@@ -7,6 +7,7 @@ import { AiFillExclamationCircle } from 'react-icons/ai';
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import RejectionModal from '../../components/modals/RejectionModal';
 import ConnectionInfoModal from '../../components/modals/ConnectionInfoModal';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -25,6 +26,8 @@ export default function SchemaRequests({
     const [isRejectionModalOpen, setIsRejectionModalOpen] = useState(false);
     const [isConnectionInfoModalOpen, setIsConnectionInfoModalOpen] = useState(false);
 
+    const { t } = useTranslation();
+
     const navigator = useNavigate();
 
     if (isLoading) {
@@ -34,10 +37,10 @@ export default function SchemaRequests({
     return (
         <div className="flex flex-col gap-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div>
-                <h1 className="font-bold text-2xl text-gray-900">Schema Applications Status</h1>
-                <span className="text-sm font-regular">
-                    You can check the approval status and access information of the applied schema.
-                </span>
+                <h1 className="font-bold text-2xl text-gray-900">
+                    {t('home.schema_requests.title')}
+                </h1>
+                <span className="text-sm font-regular">{t('home.schema_requests.subtitle')}</span>
             </div>
             <div className="grid w-full grid-cols-2 bg-gray-100 py-1">
                 <div
@@ -46,7 +49,8 @@ export default function SchemaRequests({
                 >
                     <IoMdCheckmarkCircleOutline className="h-5 w-5" />
                     <span className="font-bold">
-                        Approved Schema ({approvedPagination.totalItems})
+                        {t('home.schema_requests.tab.approved_schema')} (
+                        {approvedPagination.totalItems})
                     </span>{' '}
                     {/* 💡 totalItems 표시 */}
                 </div>
@@ -56,8 +60,8 @@ export default function SchemaRequests({
                 >
                     <GoClock className="h-5 w-5" />
                     <span className="font-bold ">
-                        Pending/Rejected Schema ({pendingPagination.totalItems}){' '}
-                        {/* 💡 totalItems 표시 */}
+                        {t('home.schema_requests.tab.pending_schema')} (
+                        {pendingPagination.totalItems}) {/* 💡 totalItems 표시 */}
                     </span>
                 </div>
             </div>
@@ -66,9 +70,11 @@ export default function SchemaRequests({
                 approvedApplications.length === 0 ? (
                     <div className="text-center py-12">
                         <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Data.</h3>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                            {t('home.schema_requests.approved_no_data.title')}
+                        </h3>
                         <p className="text-gray-500">
-                            After applying for a schema, if it is approved, it will appear hear.
+                            {t('home.schema_requests.approved_no_data.content')}
                         </p>
                     </div>
                 ) : (
@@ -95,7 +101,7 @@ export default function SchemaRequests({
                                                                 transition-all duration-200 
                                                                 pointer-events-none z-10 whitespace-nowrap"
                                                 >
-                                                    Needs synchronization
+                                                    {t('home.schema_requests.sync')}
                                                 </div>
                                             </div>
                                         )}
@@ -104,12 +110,22 @@ export default function SchemaRequests({
                                         </h1>
                                         <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                             <span className="text-xs">
-                                                {app.source === 'mine' ? 'Schema' : 'Permission'}
+                                                {app.source === 'mine'
+                                                    ? t(
+                                                          'home.schema_requests.approved_schema_info.type.schema'
+                                                      )
+                                                    : t(
+                                                          'home.schema_requests.approved_schema_info.type.permission'
+                                                      )}
                                             </span>
                                         </div>
                                         <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                             <IoMdCheckmarkCircleOutline />
-                                            <span className="text-xs">Approved</span>
+                                            <span className="text-xs">
+                                                {t(
+                                                    'home.schema_requests.approved_schema_info.approved'
+                                                )}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
@@ -121,7 +137,11 @@ export default function SchemaRequests({
                                                 }}
                                             >
                                                 <BiSolidEdit size={20} />
-                                                <span>Edit</span>
+                                                <span>
+                                                    {t(
+                                                        'home.schema_requests.approved_schema_info.edit'
+                                                    )}
+                                                </span>
                                             </button>
                                         )}
                                         <button
@@ -132,24 +152,43 @@ export default function SchemaRequests({
                                             }}
                                         >
                                             <span>{'< >'}</span>
-                                            <span>Connection</span>
+                                            <span>
+                                                {t(
+                                                    'home.schema_requests.approved_schema_info.connection'
+                                                )}
+                                            </span>
                                         </button>
                                     </div>
                                 </div>
                                 <span className="text-sm">{app.schemaInfo.description}</span>
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
-                                        <span className="text-gray-500">Cohort Name:</span>
+                                        <span className="text-gray-500">
+                                            {t(
+                                                'home.schema_requests.approved_schema_info.info.cohort_name'
+                                            )}
+                                            :
+                                        </span>
                                         <span className="ml-2 font-medium">{app.name}</span>
                                     </div>
                                     <div>
-                                        <span className="text-gray-500">Cohort Type:</span>
+                                        <span className="text-gray-500">
+                                            {t(
+                                                'home.schema_requests.approved_schema_info.info.cohort_type'
+                                            )}
+                                            :
+                                        </span>
                                         <span className="ml-2 font-medium">{app.origin}</span>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
-                                        <span className="text-gray-500">Application Date:</span>
+                                        <span className="text-gray-500">
+                                            {t(
+                                                'home.schema_requests.approved_schema_info.info.application_date'
+                                            )}
+                                            :
+                                        </span>
                                         <span className="ml-2 font-medium">
                                             {(() => {
                                                 const dateString =
@@ -168,7 +207,12 @@ export default function SchemaRequests({
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="text-gray-500">Approval Date:</span>
+                                        <span className="text-gray-500">
+                                            {t(
+                                                'home.schema_requests.approved_schema_info.info.approval_date'
+                                            )}
+                                            :
+                                        </span>
                                         <span className="ml-2 font-medium">
                                             {(() => {
                                                 const dateString =
@@ -187,15 +231,26 @@ export default function SchemaRequests({
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="text-gray-500">Selected Tables:</span>
+                                        <span className="text-gray-500">
+                                            {t(
+                                                'home.schema_requests.approved_schema_info.info.selected_tables'
+                                            )}
+                                            :
+                                        </span>
                                         <span className="ml-2 font-medium">
-                                            {app.tables.length} tables
+                                            {app.tables.length}{' '}
+                                            {t(
+                                                'home.schema_requests.approved_schema_info.info.tables'
+                                            )}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="flex">
                                     <span className="text-sm text-gray-500 mr-1">
-                                        Approved Tables:
+                                        {t(
+                                            'home.schema_requests.approved_schema_info.info.approved_tables'
+                                        )}
+                                        :
                                     </span>
                                     <div className="flex flex-wrap gap-1">
                                         {app.tables.map((table, idx) => (
@@ -218,8 +273,12 @@ export default function SchemaRequests({
             pendingApplications.length === 0 ? (
                 <div className="text-center py-12">
                     <IoMdCheckmarkCircleOutline className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Data.</h3>
-                    <p className="text-gray-500">If you apply for a schema, it will appear hear.</p>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        {t('home.schema_requests.pending_no_data.title')}
+                    </h3>
+                    <p className="text-gray-500">
+                        {t('home.schema_requests.pending_no_data.content')}
+                    </p>
                 </div>
             ) : (
                 <>
@@ -233,7 +292,13 @@ export default function SchemaRequests({
                                     <h1 className="text-lg font-semibold">{app.schemaInfo.name}</h1>
                                     <div className="flex gap-1 font-bold text-emerald-900 items-center px-2 rounded-xl bg-emerald-100">
                                         <span className="text-xs">
-                                            {app.source === 'mine' ? 'Schema' : 'Permission'}
+                                            {app.source === 'mine'
+                                                ? t(
+                                                      'home.schema_requests.pending_schema_info.type.schema'
+                                                  )
+                                                : t(
+                                                      'home.schema_requests.pending_schema_info.type.permission'
+                                                  )}
                                         </span>
                                     </div>
                                     <div
@@ -246,8 +311,12 @@ export default function SchemaRequests({
                                         )}
                                         <span className="text-xs">
                                             {app.status === 'rejected' || app.rejectReason !== null
-                                                ? 'Rejected'
-                                                : 'Pending'}
+                                                ? t(
+                                                      'home.schema_requests.pending_schema_info.rejected'
+                                                  )
+                                                : t(
+                                                      'home.schema_requests.pending_schema_info.pending'
+                                                  )}
                                         </span>
                                     </div>
                                 </div>
@@ -260,30 +329,54 @@ export default function SchemaRequests({
                                         }}
                                     >
                                         <IoEyeOutline className="h-4 w-4" />
-                                        <span>Reason for rejection</span>
+                                        <span>
+                                            {t(
+                                                'home.schema_requests.pending_schema_info.reject_btn'
+                                            )}
+                                        </span>
                                     </button>
                                 )}
                             </div>
                             <span className="text-sm">{app.schemaInfo.description}</span>
                             <div className="grid grid-cols-3 gap-4 text-sm">
                                 <div>
-                                    <span className="text-gray-500">Cohort Name:</span>
+                                    <span className="text-gray-500">
+                                        {t(
+                                            'home.schema_requests.pending_schema_info.info.cohort_name'
+                                        )}
+                                        :
+                                    </span>
                                     <span className="ml-2 font-medium">{app.name}</span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">Cohort Type:</span>
+                                    <span className="text-gray-500">
+                                        {t(
+                                            'home.schema_requests.pending_schema_info.info.cohort_type'
+                                        )}
+                                        :
+                                    </span>
                                     <span className="ml-2 font-medium">{app.origin}</span>
                                 </div>
                             </div>
                             <div className="grid grid-cols-3 gap-4 text-sm">
                                 <div>
-                                    <span className="text-gray-500">Application Date:</span>
+                                    <span className="text-gray-500">
+                                        {t(
+                                            'home.schema_requests.pending_schema_info.info.application_date'
+                                        )}
+                                        :
+                                    </span>
                                     <span className="ml-2 font-medium">
                                         {format(new Date(app.appliedDate), 'yyyy-MM-dd hh:mm')}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">Review Date:</span>
+                                    <span className="text-gray-500">
+                                        {t(
+                                            'home.schema_requests.pending_schema_info.info.review_date'
+                                        )}
+                                        :
+                                    </span>
                                     <span className="ml-2 font-medium">
                                         {app.resolvedDate
                                             ? format(new Date(app.resolvedDate), 'yyyy-MM-dd hh:mm')
@@ -291,15 +384,24 @@ export default function SchemaRequests({
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">Selected Tables:</span>
+                                    <span className="text-gray-500">
+                                        {t(
+                                            'home.schema_requests.pending_schema_info.info.selected_tables'
+                                        )}
+                                        :
+                                    </span>
                                     <span className="ml-2 font-medium">
-                                        {app.tables.length} tables
+                                        {app.tables.length}{' '}
+                                        {t('home.schema_requests.pending_schema_info.info.tables')}
                                     </span>
                                 </div>
                             </div>
                             <div className="flex items-center">
                                 <span className="whitespace-nowrap self-start text-sm text-gray-500 mr-1">
-                                    Approved Tables:
+                                    {t(
+                                        'home.schema_requests.pending_schema_info.info.approved_tables'
+                                    )}
+                                    :
                                 </span>
                                 <div className="flex flex-wrap gap-1">
                                     {app.tables.map((table, idx) => (

@@ -1,0 +1,185 @@
+{
+    "login": {
+        "platform": {
+            "title": "Medical Data Research Platform",
+            "subtitle": "Access standardized and secure medical data to conduct innovative research."
+        },
+        "features": {
+            "omop_cdm": {
+                "title": "OMOP CDM Data",
+                "description": "Secure data access through a standardized medical data model."
+            },
+            "security": {
+                "title": "Enhanced Security",
+                "description": "Strict data security management through IRB/DRB approval."
+            },
+            "cohort_management": {
+                "title": "Cohort Management",
+                "description": "Creation and management of patient cohorts suitable for research purposes."
+            },
+            "data_analysis": {
+                "title": "Data Analysis",
+                "description": "Provision of advanced analysis tools utilizing approved data."
+            }
+        },
+        "compliance": {
+            "title": "Compliance with Research Ethics",
+            "description": "All data access is strictly managed through approval from the IRB (Institutional Review Board) or DRB (Data Review Board)."
+        }
+    },
+    "header": {
+        "nav": {
+            "structured": "Structured",
+            "content1": "New Schema",
+            "content2": "Schema Permission",
+            "unstructured": "Unstructured"
+        },
+        "user_greeting": "Welcome, {{username}}"
+    },
+    "admin": {
+        "info": {
+            "title": "Manage data access rights applications",
+            "subtitle": "You can review and approve/reject users applications for data access rights.",
+            "total_applications": "Total Applications",
+            "pending": "Pending",
+            "approved": "Approved",
+            "rejected": "Rejected"
+        },
+        "tab": {
+            "structured": "Structured Data Application",
+            "unstructured": "Unstructured Data Application"
+        },
+        "table": {
+            "title": "Application List",
+            "subtitle": "This is the status of users applications for data access rights.",
+            "applicant": "APPLICANT",
+            "requester": "REQUESTER",
+            "cohort_name": "COHORT NAME",
+            "selected_tables": "SELECTED TABLES",
+            "schema_name": "SCHEMA NAME",
+            "application_date": "APPLICATION DATE",
+            "status": "STATUS",
+            "type": {
+                "title": "TYPE",
+                "schema": "SCHEMA",
+                "permission": "PERMISSION"
+            },
+            "action": {
+                "title": "ACTOIN",
+                "review_btn": "Review"
+            }
+        },
+        "app_detail_modal": {
+            "title": "Application Details",
+            "application_info": {
+                "title": "Application Information",
+                "name": "name"
+            },
+            "schema_info": {
+                "title": "Schema Information",
+                "name": "Name",
+                "creator": "Creator",
+                "approval_date": "Approval Date",
+                "description": "Description"
+            },
+            "selected_tables": "SELECTED TABLES",
+            "irb": "IRB/DRB File",
+            "reason": "Reason for Application"
+        },
+        "app_review_modal": {
+            "title": "Review Application",
+            "subtitle": "Review Comments",
+            "btns": {
+                "close": "Close",
+                "reject": "Reject",
+                "approve": "Approve"
+            },
+            "placeholder": "Please enter your review comments..."
+        }
+    },
+    "home": {
+        "summary_count": {
+            "approved_application": "Approved Application",
+            "pending_application": "Pending Application"
+        },
+        "tab": {
+            "schema_application": "Schema Application",
+            "unstructured_application": "Unstructured Application"
+        },
+        "schema_requests": {
+            "title": "Schema Applications Status",
+            "subtitle": "You can check the approval status and access information of the applied schema.",
+            "tab": {
+                "approved_schema": "Approved Schema",
+                "pending_schema": "Pending/Rejected Schema"
+            },
+            "sync": "Needs Synchronization",
+            "approved_no_data": {
+                "title": "No Data",
+                "content": "After applying for a schema, if it is approved, it will appear hear."
+            },
+            "approved_schema_info": {
+                "type": {
+                    "schema": "SCHEMA",
+                    "permission": "PERMISSION"
+                },
+                "approved": "Approved",
+                "edit": "Edit",
+                "connection": "Connection",
+                "info": {
+                    "cohort_name": "Cohort Name",
+                    "cohort_type": "Cohort Type",
+                    "application_date": "Application Date",
+                    "approval_date": "Approval Date",
+                    "selected_tables": "Selected Tables",
+                    "tables": "tables",
+                    "approved_tables": "Approved Tables"
+                }
+            },
+            "pending_no_data": {
+                "title": "No Data",
+                "content": "If you apply for a schema, it will appear hear."
+            },
+            "pending_schema_info": {
+                "type": {
+                    "schema": "SCHEMA",
+                    "permission": "PERMISSION"
+                },
+                "rejected": "Rejected",
+                "pending": "Pending",
+                "reject_btn": "Reason for Rejection",
+                "info": {
+                    "cohort_name": "Cohort Name",
+                    "cohort_type": "Cohort Type",
+                    "application_date": "Application Date",
+                    "approval_date": "Approval Date",
+                    "review_date": "Review Date",
+                    "selected_tables": "Selected Tables",
+                    "tables": "tables",
+                    "application_tables": "Application Tables"
+                }
+            },
+            "reject_modal": {
+                "reason": "Reason for Application",
+                "re_apply": "Re-Apply",
+                "close": "Close"
+            },
+            "connection_info_modal": {
+                "title": "Data Access Information",
+                "subtitle": "Information and example code for accessing an approved schema.",
+                "database_info": {
+                    "title": "Database Connection Information",
+                    "host": "Host",
+                    "port": "Port",
+                    "database": "Database",
+                    "schema": "Schema",
+                    "username": "Username",
+                    "password": "Password"
+                },
+                "python": "Python Connection Example Code",
+                "sql": "SQL Query Example",
+                "close": "Close"
+            }
+        }
+    }
+}

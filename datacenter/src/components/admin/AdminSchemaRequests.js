@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import AppDetailModal from '../modals/AppDetailModal';
 import AppReviewModal from '../modals/AppReviewModal';
 import { fetchIrbDrbData } from '../../api/users/users';
+import { useTranslation } from 'react-i18next';
 import LoadingSpinner from '../LoadingSpinner';
 
 export default function AdminSchemaRequests({
@@ -26,24 +27,26 @@ export default function AdminSchemaRequests({
     const [isAppReviewModalOpen, setIsAppReviewModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
+    const { t } = useTranslation();
+
     const statusButtons = [
-        { label: 'All', value: 'all' },
+        { label: t('admin.info.total_applications'), value: 'all' },
         {
-            label: 'Pending',
+            label: t('admin.info.pending'),
             value: 'applied',
             // 💡 size 속성을 사용하여 픽셀 단위로 크기 고정 (예: 18px)
             icon: <FaRegClock size={18} />,
             className: 'bg-blue-100 text-blue-800',
         },
         {
-            label: 'Approved',
+            label: t('admin.info.approved'),
             value: 'approved',
             // 💡 size 속성 적용
             icon: <BsCheck2Circle size={18} />,
             className: 'bg-emerald-100 text-emerald-800',
         },
         {
-            label: 'Rejected',
+            label: t('admin.info.rejected'),
             value: 'rejected',
             // 💡 size 속성 적용
             icon: <GoXCircle size={18} />,
@@ -98,10 +101,10 @@ export default function AdminSchemaRequests({
                 {statusButtons.map((button) => (
                     <button
                         key={button.value}
-                        className={`px-3 py-1.5 rounded border border-gray-300 font-medium transition-all hover:bg-gray-100  ${
+                        className={`px-3 py-1.5 rounded border border-gray-300 font-medium transition-all ${
                             statusFilter === button.value
                                 ? 'bg-primary text-white border-primary'
-                                : 'bg-white text-black'
+                                : 'bg-white text-black hover:bg-gray-100'
                         }`}
                         onClick={() => setStatusFilter(button.value)}
                     >
@@ -112,31 +115,31 @@ export default function AdminSchemaRequests({
             {/* ... (테이블 및 모달 렌더링 코드는 변경 없음) ... */}
             <div className="flex flex-col gap-10 bg-white border border-gray-200 px-5 py-6 rounded-xl">
                 <div>
-                    <h1 className="text-2xl font-normal">Application List</h1>
+                    <h1 className="text-2xl font-normal">{t('admin.table.title')}</h1>
                     <span className="text-sm text-gray-900 font-medium">
-                        This is the status of users applications for data access rights.
+                        {t('admin.table.subtitle')}
                     </span>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="table-fixed min-w-max">
                         <thead>
                             <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
-                                <th className="w-32">Applicant</th>
-                                <th className="w-32">Requester</th>
-                                <th className="w-48">Cohort name</th>
-                                <th className="w-96">Selected Tables</th>
-                                <th className="w-48">Schema Name</th>
-                                <th className="w-48">Application Date</th>
-                                <th className="w-32">Status</th>
-                                <th className="w-32">Type</th>
-                                <th className="w-32">Action</th>
+                                <th className="w-32">{t('admin.table.applicant')}</th>
+                                <th className="w-32">{t('admin.table.requester')}</th>
+                                <th className="w-48">{t('admin.table.cohort_name')}</th>
+                                <th className="w-96">{t('admin.table.selected_tables')}</th>
+                                <th className="w-48">{t('admin.table.schema_name')}</th>
+                                <th className="w-48">{t('admin.table.application_date')}</th>
+                                <th className="w-32">{t('admin.table.status')}</th>
+                                <th className="w-32">{t('admin.table.type.title')}</th>
+                                <th className="w-32">{t('admin.table.action.title')}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {applications.length === 0 ? (
                                 <tr>
                                     <td colSpan={9} className="text-center text-gray-500 py-8">
-                                        No Data.
+                                        No Data
                                     </td>
                                 </tr>
                             ) : (
@@ -205,8 +208,8 @@ export default function AdminSchemaRequests({
                                             <div className="inline font-bold text-emerald-900 items-center px-2 py-1.5 rounded-xl bg-emerald-100">
                                                 <span className="text-xs text-nowrap">
                                                     {application.applicant
-                                                        ? 'Schema'
-                                                        : 'Permission'}
+                                                        ? t('admin.table.type.schema')
+                                                        : t('admin.table.type.permission')}
                                                 </span>
                                             </div>
                                         </td>
@@ -229,7 +232,7 @@ export default function AdminSchemaRequests({
                                                             setSelectedApplication(application);
                                                         }}
                                                     >
-                                                        Review
+                                                        {t('admin.table.action.review_btn')}
                                                     </button>
                                                 )}
                                             </div>

@@ -3,11 +3,13 @@ import { FaTimes } from 'react-icons/fa';
 import { useApplyApproce, useApplyReject } from '../../hooks/queries/useAdmins';
 import { toast } from 'react-toastify';
 import { useStructAccess } from '../../hooks/queries/useAdmins';
+import { useTranslation } from 'react-i18next';
 
 export default function AppReviewModal({ isModalOpen, setIsModalOpen, application, refetch }) {
     const { mutate: Approve } = useApplyApproce();
     const { mutate: Reject } = useApplyReject();
     const { mutate: Access } = useStructAccess();
+    const { t } = useTranslation();
 
     const [reviewComment, setReviewComment] = useState('');
 
@@ -38,20 +40,17 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                         </button>
 
                         <div>
-                            <h1 className="font-bold text-lg">Review Application</h1>{' '}
-                            {/* 신청 검토 */}
-                            <span className="text-gray-700">
-                                {/* {applicant/creator}'s application is ready for review. Approve or reject it. */}
-                                Review the application submitted by{' '}
-                                {application.accessId ? application.applicant : application.creator}{' '}
-                                and approve or reject it.
-                            </span>
+                            <h1 className="font-bold text-xl">
+                                {t('admin.app_review_modal.title')}
+                            </h1>{' '}
                         </div>
 
                         <div>
-                            <h1 className="text-gray-900">Review Comments</h1>
+                            <h1 className="text-gray-900">
+                                {t('admin.app_review_modal.subtitle')}
+                            </h1>
                             <textarea
-                                placeholder="Please enter your review comments..."
+                                placeholder={t('admin.app_review_modal.placeholder')}
                                 value={reviewComment}
                                 onChange={(e) => setReviewComment(e.target.value)}
                                 className="mt-1 w-full h-20 border border-gray-300 p-2 rounded-lg min-h-[40px]"
@@ -65,7 +64,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                     setIsModalOpen(false);
                                 }}
                             >
-                                close
+                                {t('admin.app_review_modal.btns.close')}
                             </button>
                             <button
                                 className="border border-gray-300 text-white bg-red-600 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-red-700"
@@ -116,7 +115,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                     }
                                 }}
                             >
-                                Reject
+                                {t('admin.app_review_modal.btns.reject')}
                             </button>
                             <button
                                 className="border border-gray-300 text-white bg-green-600 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-green-700"
@@ -160,7 +159,7 @@ export default function AppReviewModal({ isModalOpen, setIsModalOpen, applicatio
                                     }
                                 }}
                             >
-                                Approve
+                                {t('admin.app_review_modal.btns.approve')}
                             </button>
                         </div>
                     </div>

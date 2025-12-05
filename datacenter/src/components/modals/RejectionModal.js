@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function RejectionModal({ isModalOpen, setIsModalOpen, app }) {
     const navigate = useNavigate();
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         const handleEsc = (e) => {
@@ -23,7 +26,9 @@ export default function RejectionModal({ isModalOpen, setIsModalOpen, app }) {
                     <div className="space-y-2 bg-white rounded-lg shadow-lg max-w-xl w-full p-6">
                         <div className="flex items-center text-red-700 gap-2">
                             <FaRegTimesCircle className="h-5 w-5" />
-                            <h2 className="text-lg font-semibold">Reason for rejection</h2>
+                            <h2 className="text-lg font-semibold">
+                                {t('home.schema_request.reject_modal.reason')}
+                            </h2>
                         </div>
                         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                             <p className="text-sm text-red-800 text-justify">
@@ -39,14 +44,14 @@ export default function RejectionModal({ isModalOpen, setIsModalOpen, app }) {
                                     }}
                                     className="px-4 py-2 bg-white border border-gray-200 rounded hover:bg-gray-100"
                                 >
-                                    Re-Apply
+                                    {t('home.schema_request.reject_modal.re_apply')}
                                 </button>
                             )}
                             <button
                                 onClick={() => setIsModalOpen(false)}
                                 className="px-4 py-2 bg-black text-white rounded hover:bg-black/70"
                             >
-                                Close
+                                {t('home.schema_request.reject_modal.close')}
                             </button>
                         </div>
                     </div>

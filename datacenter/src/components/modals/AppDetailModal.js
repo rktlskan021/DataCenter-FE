@@ -2,8 +2,11 @@ import { useEffect } from 'react';
 import { FaFileAlt, FaTimes } from 'react-icons/fa';
 import { IoMdDownload } from 'react-icons/io';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 export default function AppDetailModal({ isModalOpen, setIsModalOpen, application }) {
+    const { t } = useTranslation();
+
     useEffect(() => {
         const handleEsc = (e) => {
             if (e.key === 'Escape') {
@@ -29,18 +32,17 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         </button>
 
                         <div>
-                            <h1 className="font-bold text-xl">Application Details</h1>
-                            <span className="text-gray-700">
-                                {application?.accessId
-                                    ? `This is the schema access request submitted by ${application.applicant}.`
-                                    : `This is the data access request submitted by ${application.creator}.`}
-                            </span>
+                            <h1 className="font-bold text-2xl">
+                                {t('admin.app_detail_modal.title')}
+                            </h1>
                         </div>
 
                         <div>
-                            <h1 className="font-bold text-lg">Application Information</h1>
+                            <h1 className="font-bold text-lg">
+                                {t('admin.app_detail_modal.application_info.title')}
+                            </h1>
                             <span className="text-gray-700">
-                                Name :{' '}
+                                {t('admin.app_detail_modal.application_info.name')}:{' '}
                                 {application?.accessId
                                     ? application.applicant
                                     : application.creator}
@@ -50,35 +52,46 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         <div>
                             {application.applicant ? (
                                 <>
-                                    <h1 className="font-bold text-lg">Schema Infomation</h1>
+                                    <h1 className="font-bold text-lg">
+                                        {t('admin.app_detail_modal.schema_info.title')}
+                                    </h1>
                                     <p className="text-gray-700">
-                                        Name : {application?.schemaInfo?.name}
+                                        {t('admin.app_detail_modal.schema_info.name')} :{' '}
+                                        {application?.schemaInfo?.name}
                                     </p>
                                     <p className="text-gray-700">
-                                        Creator : {application?.creator}
+                                        {t('admin.app_detail_modal.schema_info.creator')} :{' '}
+                                        {application?.creator}
                                     </p>
                                     <p className="text-gray-700">
-                                        Approval Date :{' '}
+                                        {t('admin.app_detail_modal.schema_info.approval_date')} :{' '}
                                         {format(
                                             new Date(application?.appliedDate),
                                             'yyyy-MM-dd HH:mm'
                                         )}
                                     </p>
                                     <p className="text-gray-700">
-                                        Description : {application?.schemaInfo?.description}
+                                        {t('admin.app_detail_modal.schema_info.description')} :{' '}
+                                        {application?.schemaInfo?.description}
                                     </p>
                                 </>
                             ) : (
                                 <>
-                                    <h1 className="font-bold text-lg">Cohort Information</h1>
-                                    <span className="text-gray-700">Name : {application.name}</span>
+                                    <h1 className="font-bold text-lg">
+                                        {t('admin.app_detail_modal.cohort_info.title')}
+                                    </h1>
+                                    <span className="text-gray-700">
+                                        {t('admin.app_detail_modal.cohort_info.name')} :{' '}
+                                        {application.name}
+                                    </span>
                                 </>
                             )}
                         </div>
 
                         <div>
                             <h1 className="font-bold text-lg">
-                                Selected Tables ({application.tables.length})
+                                {t('admin.app_detail_modal.selected_tables')} (
+                                {application.tables.length})
                             </h1>
                             <div className="flex flex-wrap gap-1">
                                 {application.tables.map((table, idx) => (
@@ -93,7 +106,7 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         </div>
 
                         <div>
-                            <h1 className="font-bold text-lg">IRB/DRB File</h1>
+                            <h1 className="font-bold text-lg">{t('admin.app_detail_modal.irb')}</h1>
                             <div className="flex flex-col gap-2">
                                 {application.files.map((file, idx) => (
                                     <div
@@ -138,7 +151,9 @@ export default function AppDetailModal({ isModalOpen, setIsModalOpen, applicatio
                         </div>
                         {application.accessId && (
                             <div>
-                                <h1 className="font-bold text-lg">Reason for application</h1>
+                                <h1 className="font-bold text-lg">
+                                    {t('admin.app_detail_modal.reason')}
+                                </h1>
                                 <p className="p-4 bg-amber-50 rounded-lg border border-amber-200">
                                     {application.purpose}
                                 </p>

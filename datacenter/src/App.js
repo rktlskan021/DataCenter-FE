@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from './components/Header';
 import AppRoutes from './routes/AppRoutes';
 import { ToastContainer, Slide } from 'react-toastify';
+import './i18n';
 
 const App = () => {
     return (

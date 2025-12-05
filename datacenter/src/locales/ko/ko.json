@@ -1,0 +1,188 @@
+{
+    "login": {
+        "platform": {
+            "title": "의료 데이터 연구 플랫폼",
+            "subtitle": "안전하고 표준화된 의료 데이터에 접근하여 혁신적인 연구를 수행하세요."
+        },
+        "features": {
+            "omop_cdm": {
+                "title": "OMOP CDM 데이터",
+                "description": "표준화된 의료 데이터 모델을 통한 안전한 데이터 접근."
+            },
+            "security": {
+                "title": "보안 강화",
+                "description": "IRB/DRB 승인을 통한 엄격한 데이터 보안 관리."
+            },
+            "cohort_management": {
+                "title": "코호트 관리",
+                "description": "연구 목적에 맞는 환자 코호트 생성 및 관리."
+            },
+            "data_analysis": {
+                "title": "데이터 분석",
+                "description": "승인된 데이터를 활용한 고급 분석 도구 제공."
+            }
+        },
+        "compliance": {
+            "title": "연구 윤리 준수",
+            "description": "모든 데이터 접근은 IRB(기관생명윤리위원회) 또는 DRB(데이터심의위원회) 승인을 통해 엄격하게 관리됩니다."
+        }
+    },
+    "header": {
+        "nav": {
+            "structured": "정형 데이터",
+            "content1": "스키마 생성",
+            "content2": "스키마 권한 신청",
+            "unstructured": "비정형 데이터"
+        },
+        "user_greeting": "환영합니다, {{username}}님"
+    },
+    "admin": {
+        "info": {
+            "title": "데이터 접근 권한 신청 관리",
+            "subtitle": "사용자들의 데이터 접근 권한 신청을 검토하고 승인/거부할 수 있습니다.",
+            "total_applications": "전체 신청",
+            "pending": "대기중",
+            "approved": "승인됨",
+            "rejected": "거부됨"
+        },
+        "tab": {
+            "structured": "정형 데이터 신청 관리",
+            "unstructured": "비정형 데이터 신청 관리"
+        },
+        "table": {
+            "title": "신청 목록",
+            "subtitle": "사용자들의 신청 현황입니다.",
+            "applicant": "신청자",
+            "requester": "요청자",
+            "cohort_name": "코호트 이름",
+            "selected_tables": "선택 테이블",
+            "schema_name": "스키마 이름",
+            "application_date": "신청 날짜",
+            "status": "상태",
+            "type": {
+                "title": "타입",
+                "schema": "스키마",
+                "permission": "권한"
+            },
+            "action": {
+                "title": "액션",
+                "review_btn": "검토"
+            }
+        },
+        "app_detail_modal": {
+            "title": "신청 상세 정보",
+            "application_info": {
+                "title": "신청자 정보",
+                "name": "이름"
+            },
+            "schema_info": {
+                "title": "스키마 정보",
+                "name": "이름",
+                "creator": "생성자",
+                "approval_date": "승인 날짜",
+                "description": "설명"
+            },
+            "cohort_info": {
+                "title": "코호트 정보",
+                "name": "이름"
+            },
+            "selected_tables": "선택 테이블",
+            "irb": "IRB/DRB 파일",
+            "reason": "신청 사유"
+        },
+        "app_review_modal": {
+            "title": "신청 검토",
+            "subtitle": "검토 의견",
+            "btns": {
+                "close": "닫기",
+                "reject": "거부",
+                "approve": "승인"
+            },
+            "placeholder": "검토 의견을 작성해 주세요..."
+        }
+    },
+    "home": {
+        "summary_count": {
+            "approved_application": "승인된 스키마",
+            "pending_application": "대기중 스키마"
+        },
+        "tab": {
+            "schema_application": "스키마 신청",
+            "unstructured_application": "비정형 데이터"
+        },
+        "schema_requests": {
+            "title": "신청 스키마 상태",
+            "subtitle": "신청한 스키마의 승인 상태와 접근 정보를 확인할 수 있습니다.",
+            "tab": {
+                "approved_schema": "신청된 스키마",
+                "pending_schema": "대기중/거부된 스키마"
+            },
+            "sync": "동기화 필요",
+            "approved_no_data": {
+                "title": "승인된 스키마 없음",
+                "content": "스키마 신청 후 승인되면 여기에 표시됩니다."
+            },
+            "approved_schema_info": {
+                "type": {
+                    "schema": "스키마",
+                    "permission": "권한"
+                },
+                "approved": "승인됨",
+                "edit": "수정",
+                "connection": "접속 정보",
+                "info": {
+                    "cohort_name": "코호트 이름",
+                    "cohort_type": "코호트 타입",
+                    "application_date": "신청일",
+                    "approval_date": "승인일",
+                    "selected_tables": "테이블 수",
+                    "tables": "개",
+                    "approved_tables": "승인된 테이블"
+                }
+            },
+            "pending_no_data": {
+                "title": "신청된 스키마 없음",
+                "content": "스키마 신청 후 여기에 표시됩니다."
+            },
+            "pending_schema_info": {
+                "type": {
+                    "schema": "스키마",
+                    "permission": "권한"
+                },
+                "rejected": "거부됨",
+                "pending": "대기중",
+                "reject_btn": "거부 사유",
+                "info": {
+                    "cohort_name": "코호트 이름",
+                    "cohort_type": "코호트 타입",
+                    "application_date": "신청일",
+                    "review_date": "검토일",
+                    "selected_tables": "테이블 수",
+                    "tables": "개",
+                    "approved_tables": "신청한 테이블"
+                }
+            },
+            "reject_modal": {
+                "reason": "신청 사유",
+                "re_apply": "재신청",
+                "close": "닫기"
+            },
+            "connection_info_modal": {
+                "title": "데이터 접속 정보",
+                "subtitle": "승인된 스키마에 접속하기 위한 정보와 예시 코드입니다.",
+                "database_info": {
+                    "title": "데이터베이스 연결 정보",
+                    "host": "호스트",
+                    "port": "포트",
+                    "database": "데이터베이스",
+                    "schema": "스키마",
+                    "username": "사용자명",
+                    "password": "비밀번호"
+                },
+                "python": "Python 접속 예시 코드",
+                "sql": "SQL 쿼리 예시",
+                "close": "닫기"
+            }
+        }
+    }
+}
