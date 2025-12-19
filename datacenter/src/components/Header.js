@@ -98,15 +98,15 @@ export default function Header() {
                                     </>
                                 )}
                                 <div className="flex h-[60px] items-center px-6 text-[15px]">
-                                    <div className="flex bg-gray-300 rounded-full p-0.5">
+                                    <div className="flex bg-white border border-blue-200 rounded-lg">
                                         <button
-                                            className={`px-1 text-center rounded-full rounded-r-none ${i18n.language === 'en' ? 'bg-white' : null}`}
+                                            className={`px-1 text-center rounded-lg rounded-r-none px-4 ${i18n.language === 'en' ? 'bg-blue-200 text-blue-600 font-semibold' : 'bg-white text-blue-200'}`}
                                             onClick={() => changeLanguage('en')}
                                         >
                                             en
                                         </button>
                                         <button
-                                            className={`px-1 text-center rounded-full rounded-l-none ${i18n.language === 'ko' ? 'bg-white' : null}`}
+                                            className={`px-1 text-center rounded-lg rounded-l-none px-4 ${i18n.language === 'ko' ? 'bg-blue-200 text-blue-600 font-semibold' : 'bg-white text-blue-200'}`}
                                             onClick={() => changeLanguage('ko')}
                                         >
                                             ko
